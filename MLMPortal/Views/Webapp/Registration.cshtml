@@ -1,0 +1,681 @@
+﻿@model IFortuneMLM.Models.PropertyClass
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@using System.Data;
+@using System.Data.SqlClient;
+<style>
+
+        .modal-dialog {
+  top: calc(100% - 250px) !important;
+}
+        .animate-bottom {
+  position: relative;
+  animation: animatebottom 0.4s;
+}
+
+@@keyframes animatebottom {
+  from {
+    bottom: -300px;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 1;
+  }
+}
+</style>
+
+<link rel='stylesheet' href='~/App/js/sweetalert2.min.css' />
+<script src="~/App/js/sweetalert2.all.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script language="javascript">
+
+
+        function SuccessMsg(txt) {
+               Swal.fire("Register", txt, "success");
+        };
+        function FailedMsg(txt) {
+            Swal.fire("Register", txt, "error");
+        };
+
+</script>
+
+<script language="javascript">
+        function onlyNumbers(event) {
+            var charCode = (event.which) ? event.which : event.keyCode
+            if (charCode >= 37 && charCode <= 40) {
+                return true;
+            }
+
+            if (charCode == 127) {
+                return true;
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+</script>
+<script>
+
+        $(document).ready(function(){
+
+            if ($("#hdnsponserid").val() != "") {
+                $("#txtintroid13").val($("#hdnsponserid").val());
+                getintroid();
+               // $("#txtintroid13").prop("disabled", true);
+                $('#txtintroid13').attr('disabled', 'disabled');
+            }
+
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+
+        $('#cmd').click(function () {
+            doc.fromHTML($('#content').html(), 15, 15, {
+                'width': 170,
+                'elementHandlers': specialElementHandlers
+            });
+            doc.save('sample-file.pdf');
+        });
+
+
+        })
+
+
+</script>
+<style>
+    @@media(min-width:991px)
+    {
+      .bg { 
+    padding: 40px 0 5% 0 !important;
+}
+    }
+    </style>
+<script>
+    $(document).ready(function () {
+        $("#txtusername").attr("autocomplete", "off");
+    $("#show_hide_password a").on('click', function(event) {
+        event.preventDefault();
+        if($('#show_hide_password input').attr("type") == "text"){
+            $('#show_hide_password input').attr('type', 'password');
+            $('#show_hide_password i').addClass( "fa-eye-slash" );
+            $('#show_hide_password i').removeClass( "fa-eye" );
+        }else if($('#show_hide_password input').attr("type") == "password"){
+            $('#show_hide_password input').attr('type', 'text');
+            $('#show_hide_password i').removeClass( "fa-eye-slash" );
+            $('#show_hide_password i').addClass( "fa-eye" );
+        }
+    });
+
+    $("#show_hide_Cpassword a").on('click', function (event) {
+        event.preventDefault();
+        if ($('#show_hide_Cpassword input').attr("type") == "text") {
+            $('#show_hide_Cpassword input').attr('type', 'password');
+            $('#show_hide_Cpassword i').addClass("fa-eye-slash");
+            $('#show_hide_Cpassword i').removeClass("fa-eye");
+        }
+        else if ($('#show_hide_Cpassword input').attr("type") == "password") {
+            $('#show_hide_Cpassword input').attr('type', 'text');
+            $('#show_hide_Cpassword i').removeClass("fa-eye-slash");
+            $('#show_hide_Cpassword i').addClass("fa-eye");
+        }
+    });
+
+    });
+
+
+    function getintroid() {
+        if ($("#txtintroid13").val() == "") {
+            alert("Please Enter Sponsor Id. !!!");
+            $("#txtintroid13").focus();
+            return;
+        }
+
+        var data = new FormData;
+        data.append("Action", "1");
+        data.append("SponsorId", $("#txtintroid13").val());
+        $("#showSpinner").show();
+
+        $.ajax({
+            url: "/User/GetSponsorNamedetail",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+                if (r.SponsorName != "") {
+                    $("#txtsponsorename").val(r.SponsorName);
+                }
+                else {
+                    alert("Member id is not exists!")
+                }
+               
+                $("#showSpinner").hide();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                $("#showSpinner").hide();
+            }
+        });
+    }
+
+
+    function GetUserNameExists() {
+       
+        if ($("#txtusername").val() == "") {
+            alert("Please Enter User Name. !!!");
+            $("#txtusername").focus();
+            return;
+        }
+        else {
+            var data = new FormData;
+            data.append("Action", "1");
+            data.append("MemberCode", $("#txtusername").val());
+            $("#showSpinner").show();
+
+            $.ajax({
+                url: "/User/Useralreadyexistsornot",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (r) {
+                    if (r.Id == "2") {
+                        $("#txtusername").val("");
+                        alert("Space not allowed in User Name !");
+                        //window.location.reload();
+                        //return;
+
+                    }
+                    else if (r.Id == "0") {
+                        $("#txtusername").val("");
+                        alert("User Name Already Exists !");
+                        //window.location.reload();
+                        //return false;
+                    }
+                    else if (r.Id == "1") {
+
+                    }
+                    else {
+                        $("#txtusername").val("");
+                        alert("Member id is not exists!")
+                    }
+
+                    $("#showSpinner").hide();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    $("#showSpinner").hide();
+                }
+            });
+        }
+    }
+
+
+    function SaveUserdetail() {
+        if ($("#txtintroid13").val() == "") {
+            alert("Please Enter Sponsor Id !!!");
+            $("#txtintroid13").focus();
+            return;
+        }
+        if ($("#txtsponsorename").val() == "") {
+            alert("Please Enter Sponsor Name !!!");
+            $("#txtsponsorename").focus();
+            return;
+        }
+        if ($("#ddlCountryCode").val() == "") {
+            alert("Please Select Country Code !!!");
+            $("#ddlCountryCode").focus();
+            return;
+        }
+        if ($("#txtphoneno").val() == "") {
+            alert("Please Enter Phone !!!");
+            $("#txtphoneno").focus();
+            return;
+        }
+
+        if ($("#txtName").val() == "") {
+            alert("Please Enter Name !!!");
+            $("#txtName").focus();
+            return;
+        }
+
+        if ($("#txtEmailId").val() == "") {
+            alert("Please Enter EmailId !!!");
+            $("#txtEmailId").focus();
+            return;
+        }
+
+        if ($("#txtusername").val() == "") {
+            alert("Please Enter User Name !!!");
+            $("#txtusername").focus();
+            return;
+        }
+
+        if ($("#txtpassword").val() == "") {
+            alert("Please Enter Password !!!");
+            $("#txtpassword").focus();
+            return;
+        }
+
+
+        //if ($("#txtpassword").val()== "") {
+        //    alert("Please Enter Password !!!");
+        //    $("#txtpassword").focus();
+        //    return;
+        //}
+
+        if ($("#txtTransPass").val() == "") {
+            alert("Please Enter Confirm Password !!!");
+            $("#txtTransPass").focus();
+            return;
+        }
+        //if ($("#txtotp").val() == "") {
+        //    alert("Please Enter OTP !!!");
+        //    $("#txtotp").focus();
+        //    return;
+        //}
+
+        var data = new FormData;
+        data.append("Action", "1");
+        data.append("Branch", "LUCKNOW");
+        data.append("Intro_id", $("#txtintroid13").val());
+        data.append("Countrycode", $("#ddlCountryCode").val());
+        data.append("MobileNo", $("#txtphoneno").val());
+        data.append("Email", $("#txtEmailId").val());
+        data.append("Name", $("#txtName").val());
+        data.append("TransPassword", $("#txtTransPass").val());
+        data.append("Password", $("#txtpassword").val());
+        data.append("Member_Id", $("#txtusername").val());
+        data.append("BTCAddress", $("#txtBTCAddress").val());
+        data.append("OTP", $("#txtotp").val());
+      
+       
+        $("#showSpinner").show();
+
+        $.ajax({
+            url: "/User/InsertUserDetail",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+               
+                if (r.Id == "4") {
+                    //$("#txtsponsorename").val("");
+                    alert("Password and confirm password is not Same !");
+                }
+                else if (r.Id == "1") {
+                    alert(r.Msg);
+                    window.location.reload();
+                }
+                else if (r.Id == "3") {
+                    alert("OTP Not Match!");
+                }
+                else {
+                    alert("Some Error Occured!")
+                }
+
+                $("#showSpinner").hide();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                $("#showSpinner").hide();
+            }
+        });
+    }
+
+
+
+    function Sendotptouser() {
+        if ($("#txtintroid13").val() == "") {
+            alert("Please Enter Sponsor Id !!!");
+            $("#txtintroid13").focus();
+            return;
+        }
+        if ($("#txtsponsorename").val() == "") {
+            alert("Please Enter Sponsor Name !!!");
+            $("#txtsponsorename").focus();
+            return;
+        }
+        if ($("#ddlCountryCode").val() == "") {
+            alert("Please Select Country Code !!!");
+            $("#ddlCountryCode").focus();
+            return;
+        }
+        if ($("#txtphoneno").val() == "") {
+            alert("Please Enter Phone !!!");
+            $("#txtphoneno").focus();
+            return;
+        }
+
+        if ($("#txtName").val() == "") {
+            alert("Please Enter Name !!!");
+            $("#txtName").focus();
+            return;
+        }
+
+        if ($("#txtEmailId").val() == "") {
+            alert("Please Enter EmailId !!!");
+            $("#txtEmailId").focus();
+            return;
+        }
+
+        if ($("#txtusername").val() == "") {
+            alert("Please Enter User Name !!!");
+            $("#txtusername").focus();
+            return;
+        }
+        var pass = $("#txtpassword").val()
+        if ($("#txtpassword").val() == "") {
+            alert("Please Enter Password !!!");
+            $("#txtpassword").focus();
+            return;
+        }
+        //if ($("#txtTransPass").val() != pass) {
+        //    alert("Please Enter Transaction Password !!!");
+        //    $("#txtTransPass").focus();
+        //    return;
+        //}
+        //GetUserNameExists();
+
+        var data = new FormData;
+        data.append("Action", "1");
+     
+        data.append("MobileNo", $("#txtphoneno").val());
+        data.append("Email", $("#txtEmailId").val());
+     
+        data.append("Password", $("#txtpassword").val());
+        data.append("TransPassword", $("#txtTransPass").val());
+
+
+        $("#showSpinner").show();
+
+      
+        $.ajax({
+            url: "/User/SendOtpOnPhone",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+               
+                if (r.resOTP == "1") {
+                    $('#txtphoneno').attr('disabled', 'disabled');
+                   /* $('#txtEmailId').attr('disabled', 'disabled');*/
+                   
+                    $("#txtpassword").hide();
+                    $("#Button1").hide();
+                    $("#Button2").show();
+                    $("#txtotp").show();
+                    /*  $("#btnresend").show();*/
+                    alert("Send Otp on your Email Id  .")
+                   
+                }              
+                else {
+                    $("#btnresend").show();
+                    alert("'There was an error in sending the OTP to the given Email. \n Please Try Again or contact site Admin..!'!")
+                }
+
+                $("#showSpinner").hide();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                $("#showSpinner").hide();
+            }
+        });
+    }
+
+
+
+
+    function Resendotp() {
+        var data = new FormData;
+        data.append("Action", "1");
+
+       
+        data.append("Email", $("#txtEmailId").val());
+
+        $("#showSpinner").show();
+
+        $.ajax({
+            url: "/User/OtpResend",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+                if (r.Id == "1") {
+                    $('#txtphoneno').attr('disabled', 'disabled');
+                    $('#txtEmailId').attr('disabled', 'disabled');
+
+                    $("#txtpassword").hide();
+                    $("#Button1").hide();
+                    $("#Button2").show();
+                    $("#txtotp").show();
+                    $("#btnresend").show();
+                    alert(r.Msg);
+
+                }
+                else  {
+
+                    alert(r.Msg);
+                }
+                
+
+                $("#showSpinner").hide();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                $("#showSpinner").hide();
+            }
+        });
+    }
+
+
+</script>
+
+<script>
+    function checkPasswordStrength() {
+        var number = /([0-9])/;
+        var alphabets = /([a-zA-Z])/;
+        var special_characters = /([~,!,@@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
+        var password = $('#txtpassword').val().trim();
+        if (password.length < 8) {
+            $('#password-strength-status').removeClass();
+            $('#password-strength-status').addClass('weak-password');
+            $('#password-strength-status').html("Weak (should be atleast 8 characters.)");
+        } else {
+            if (password.match(number) && password.match(alphabets) && password.match(special_characters)) {
+                $('#password-strength-status').removeClass();
+                $('#password-strength-status').addClass('strong-password');
+                $('#password-strength-status').html("Strong");
+            }
+            else {
+                $('#password-strength-status').removeClass();
+                $('#password-strength-status').addClass('medium-password');
+                $('#password-strength-status').html("Medium (should include alphabets, numbers and special characters.)");
+            }
+        }
+    }
+</script>
+
+<my-spinner>
+    <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+        <div class="spinner-border m-2" role="status" style="position: absolute; top: 30%; left: 50%; margin-top: -25px; margin-left: -25px;"></div>
+    </div>
+</my-spinner>
+
+
+<div class="container-fluid bg">
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <div class="logo text-center">
+                <img src="~/App/gone.PNG" class="img-fluid img-responsive" style="width: 87px; ">
+
+            </div>
+
+
+            <div class="registrationnn">
+                <div class="form-box">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input id="txtintroid13" class="form-control" placeholder="Enter Sponsor ID" onchange="getintroid()">
+                                <span id="RequiredFieldValidator41" style="color:Red;display:none;">Please Fill</span>
+                                <input type="hidden" id="hdnsponserid" value="@Model.SponsorId" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input name="ctl00$ContentPlaceHolder1$txtsponsorename" type="text" readonly="readonly" id="txtsponsorename" class="form-control">
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group mb-3 input-group-sm">
+                                @*<div class="input-group-prepend">
+                                    @Html.DropDownList("ddlCountryCode", (List<SelectListItem>)ViewBag.CountryList, new
+                           {
+                               @id = "ddlCountryCode",
+                               @class = "form-control",
+                               @style = "width: 200px"
+                           })
+
+
+
+
+                                </div>*@
+                                <input name="ctl00$ContentPlaceHolder1$txtphoneno" type="text" maxlength="10" id="txtphoneno" class="form-control" placeholder="Enter Phone Number" onkeypress="return onlyNumbers(event)">
+                                <span id="RequiredFieldValidator1" style="color:Red;display:none;">Please Fill</span>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input name="ctl00$ContentPlaceHolder1$txtName" type="text" maxlength="50" id="txtName" class="form-control" placeholder="Enter Your Name">
+                                <span id="RequiredFieldValidator4" style="color:Red;display:none;">Please Fill</span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 hidden-lg hidden-xs">
+                            <div class="form-group">
+                                <input name="ctl00$ContentPlaceHolder1$txtEmailId" type="text" maxlength="50" id="txtEmailId" class="form-control" placeholder="Enter Your Email Id">
+                                <span id="RequiredFieldValidator3" style="color:Red;display:none;">Please Fill Email Id</span>
+                                <span id="regexp11" style="display:none;">Enter Correct Email Id</span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" style="display:none">
+                            <div class="form-group">
+                                <input name="ctl00$ContentPlaceHolder1$txtBTCAddress" type="text" id="txtBTCAddress" class="form-control" placeholder="Enter Digital Address">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input autocomplete="off" name="ctl00$ContentPlaceHolder1$txtusername" type="text" id="txtusername" placeholder="Enter Username"  onchange="GetUserNameExists()"  class="form-control">
+                                <span id="RequiredFieldValidator9" style="color:Red;display:none;">* Please Fill User Name</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group" id="show_hide_password">
+                                <input name="ctl00$ContentPlaceHolder1$txtpassword" type="password" maxlength="50" id="txtpassword" class="form-control" placeholder="Create Password" onKeyUp="checkPasswordStrength();">
+                                <div id="password-strength-status"></div>
+
+
+                                <div class="input-group-addon prr"> <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a> </div>
+
+                                <span id="RequiredFieldValidator2" style="color:Red;display:none;">Please Fill</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group" id="show_hide_Cpassword">
+                                <input name="ctl00$ContentPlaceHolder1$txtTransPass" type="password" maxlength="50" id="txtTransPass" class="form-control" placeholder="Confirm Password1">
+                                <div class="input-group-addon prr">
+                                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                </div>
+                                <span id="RequiredFieldValidator5" style="color:Red;display:none;">Please Fill</span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input name="ctl00$ContentPlaceHolder1$txtotp" type="text" maxlength="6" id="txtotp" class="form-control" placeholder="Enter OTP" style="display:none;">
+
+                                <span id="RequiredFieldValidator311" style="color:Red;font-weight:bold;display:none;">Please Fill</span>
+
+                                <input type="button" id="btnresend" value="Resend OTP" class="btn send-btn btn-primary" style="display:none;" onclick="Resendotp()" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="button" id="Button1" value="Send Otp" class="btn send-btn btn-primary" onclick="Sendotptouser()"  />
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <input type="button" id="Button2" value="Sign Up Now" class="btn send-btn btn-primary" style="display:none;" onclick="SaveUserdetail()"/>
+
+                        </div>
+
+                        <div class="col-md-12" align="center">
+                            <a href="../User/login" style=" text-align:center">Already have an account, Log in now!</a>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <!-- The Modal -->
+                    <div class="modal bottom-modal animate" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content animate-bottom">
+
+                                <!-- Modal Header -->
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p> You can choose to directly enter 5G in the future or download the APP to use </p>
+                                    <ul class="app-login">
+                                        <li><a href="../User/Login">Login</a></li>
+                                        <li><a href="#">Android Download APP</a></li>
+                                        <li><a href="#">Google Download APP</a></li>
+                                    </ul>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,154 @@
+﻿@model MLMPortal.Models.clsDash
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using System.Data;
+
+
+<style>
+    .img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+@*<link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/assets/css_wr/main.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css_wr/style.css">  
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/Content/assets/wimg/favicon.png">
+
+    <link href="@Url.Content("/Content/assets/css/icons.css")" rel="stylesheet" />
+
+</head>
+<body>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel-content1">
+                    <h4 class="main-title">WELCOME TO ADMIN PANEL</h4>
+
+                    <div class="row merged20 mb-4">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Total Joining</h5>
+                                </div>
+                                <div class="d-widget-content">
+                                    <h5>@Model.TotalJoining</h5>
+                                    <i class="icofont-users-alt-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Total Active</h5>
+                                </div>
+                                <div class="d-widget-content">
+
+                                    <h5>@Model.TotalActiveMember</h5>
+                                    <i class="icofont-optic"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Total Deactive</h5>
+                                </div>
+                                <div class="d-widget-content">
+
+                                    <h5>@Model.TotalInactiveMember</h5>
+                                    <i class="icofont-computer"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row merged20 mb-4">
+
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Recharge Wallet</h5>
+                                </div>
+                                <div class="d-widget-content">
+
+                                    <h5>@Model.FundBal</h5>
+                                    <i class="icofont-computer"></i>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Payout Wallet</h5>
+                                </div>
+                                <div class="d-widget-content">
+
+                                    <h5>@Model.WalletBal</h5>
+                                    <i class="icofont-computer"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Total Withdroll</h5>
+                                </div>
+                                <div class="d-widget-content">
+
+                                    <h5>@Model.TotalWithdroll</h5>
+                                    <i class="icofont-computer"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row merged20 mb-4">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Pending Withdroll</h5>
+                                </div>
+                                <div class="d-widget-content">
+
+                                    <h5>@Model.PendingWithdroll</h5>
+                                    <i class="icofont-computer"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div><!-- main content -->
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+

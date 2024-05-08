@@ -1,0 +1,172 @@
+﻿@model MLMPortal.Models.PayoutReport
+
+@{
+    ViewBag.Title = "OfferReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+
+    .sty {
+        font-weight: bold;
+        font-size: 20px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[ 10, 20, 50, 100, 500, -1], [ 10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Offer Report</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i>Offer Report</div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                       
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label">Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label">From Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> To Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" style="margin-top:30px">
+                            @*<button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i> Search</button>*@
+                            <input type="submit" class="btn btn-primary" value="Search" />
+                        </div>
+                        <div class="col-sm-6" style="margin-top:30px">
+                            <label class="sty">@Model.msg</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </form>
+
+                <div class="table-responsive" id="divmain">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                <th scope="col">SNo.</th>
+                                <th scope="col">MemberId</th>
+                                <th scope="col">Rank</th>
+                                <th scope="col">Rank Name</th>
+                                <th scope="col">Left Member</th>
+                                <th scope="col">Right Member</th>
+                                <th scope="col">Matching Member</th>
+                                <th scope="col">Reward</th>
+                                <th scope="col">Direct Member</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">End Date</th>
+                                <th scope="col">Entry Date</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+                                    <tr>
+                                        <td>@i </td>
+                                        <td class="Member_ID">@item["Member_ID"]</td>
+                                        <td class="Rank">@item["Rank"]</td>
+                                        <td class="RankName">@item["RankName"]</td>
+                                        <td class="LBusiness">@item["LBusiness"]</td>
+                                        <td class="RBusiness">@item["RBusiness"]</td>
+                                        <td class="MBusiness">@item["MBusiness"]</td>
+                                        <td class="Reward">@item["Reward"]</td>
+                                        <td class="DirectMem">@item["DirectMem"]</td>
+                                        <td class="Sdate">@item["Sdate"]</td>
+                                        <td class="Ldate">@item["Ldate"]</td>
+                                        <td class="Entrydate">@item["Entrydate"]</td>
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

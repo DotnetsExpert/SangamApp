@@ -1,0 +1,362 @@
+﻿@model MLMPortal.Models.PayoutReport
+@{
+    ViewBag.Title = "WeeklyPaidUnPaidReport";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "AccumulatedIncome");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+            //if ($("#Action").val() == "Paid") {
+            //    $("#tableprint").show();
+            //    $("#tableprintunpaid").hide();
+            //}
+            //if ($("#Action").val() == "Unpaid") {
+            //    $("#tableprintunpaid").show();
+            //    $("#tableprint").hide();
+            //}
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Weekly Paid UnPaid Report</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i>Weekly Paid UnPaid Report</div>
+            <div class="card-body">
+                <div class="col-sm-3" style="margin-top:30px">
+
+                    @using (Html.BeginForm("ExportPaidUnPaidReport", "Admin", FormMethod.Post))
+                    {
+                        <input type="hidden" name="GridHtml" id="GridHtml" />
+                        <input type="hidden" name="Remark" id="Remark" />
+
+                                <input type="submit" onclick="return Exporttoexcel()" id="btnSubmit" value="Export To Excel" class="btn btn-success" />
+                                @*<input type="button" onclick="printBills()" id="btnPrint" class="btn btn-primary" value="Print" />*@
+                    }
+                </div>
+
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> From Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control",@type="date" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> To Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control",  @type = "date" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label">Status</label>
+                                <div class="col-lg-12">
+                                    @Html.DropDownListFor(m => m.Action, new List<SelectListItem>() { new SelectListItem { Text = "Paid", Value = "Paid" }, new SelectListItem { Text = "Unpaid", Value = "Unpaid" } }, "Select", new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-3" style="margin-top:30px">
+                            <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i> Search</button>
+                        </div>
+
+
+                    </div>
+
+
+
+                </form>
+                @if (Model.Action == "Paid")
+                {
+                    <div class="table-responsive" id="tableprint">
+                        <table id="default-datatable" class="table table-bordered">
+                            <thead>
+                                <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+
+                                    <th scope="col">SNo.</th>
+                                    <th scope="col">Distributor ID</th>
+                                    <th scope="col">Name</th>
+                                    @*<th scope="col">View Detail</th>*@
+                                    <th scope="col">Pan No</th>
+                                    <th scope="col">Bank Name</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Account No</th>
+                                    <th scope="col">IFSC</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">TDS</th>
+                                    <th scope="col">Admin Charge</th>
+                                    <th scope="col">Net Amount</th>
+                                    <th scope="col">Paid Date</th>
+                                    <th scope="col">Remark</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                            <tr>
+                                <td>@i </td>
+                                <td class="Distributor ID">@item["Member_Id"]</td>
+                                <td class="Name">@item["Name"]</td>
+                                <td class="Pan No">@item["Panno"]</td>
+                                <td class="Bank Name">@item["BankName"]</td>
+                                <td class="Branch">@item["BankBranch"]</td>
+                                <td class="Account No">@item["BankaccNo"]</td>
+                                <td class="IFSC">@item["BankIfscCode"]</td>
+                                <td class="Total">@item["Total"]</td>
+                                <td class="TDS">@item["TDS"]</td>
+                                <td class="Admin Charge">@item["AdminCharge"]</td>
+                                <td class="Net Amount">@item["Payable"]</td>
+                                <td class="Paid Date">@item["PayDate"]</td>
+                                <td class="Remark">@item["Remark"]</td>
+
+
+
+                            </tr>
+                                }
+                            }
+                            </tbody>
+
+
+
+                        </table>
+                    </div>
+                }
+                @if (Model.Action == "Unpaid")
+                {
+                    <div class="table-responsive" id="tableprintunpaid">
+                        <table id="tbl_unpaid_data" class="table table-bordered">
+                            <thead>
+                                <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+
+                                    <th scope="col">SNo.</th>
+                                    <th scope="col">Distributor ID</th>
+                                    <th scope="col">Name</th>
+                                    @*<th scope="col">View Detail</th>*@
+                                    <th scope="col">Pan No</th>
+                                    <th scope="col">Bank Name</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Account No</th>
+                                    <th scope="col">IFSC</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">TDS</th>
+                                    <th scope="col">Admin Charge</th>
+                                    <th scope="col">Net Amount</th>
+                                    <th scope="col">Paid Date</th>
+                                    <th scope="col">Remark</th>
+                                    <th>Check</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                            <tr empid="@item["Member_Id"]">
+                                <td>@i </td>
+                                <td class="Distributor ID">@item["Member_Id"]</td>
+                                <td class="Name">@item["Name"]</td>
+                                <td class="Pan No">@item["Panno"]</td>
+                                <td class="Bank Name">@item["BankName"]</td>
+                                <td class="Branch">@item["BankBranch"]</td>
+                                <td class="Account No">@item["BankaccNo"]</td>
+                                <td class="IFSC">@item["BankIfscCode"]</td>
+                                <td class="Total">@item["Total"]</td>
+                                <td class="TDS">@item["TDS"]</td>
+                                <td class="Admin Charge">@item["AdminCharge"]</td>
+                                <td class="Net Amount">@item["Payable"]</td>
+                                <td class="Paid Date">@item["PayDate"]</td>
+                                <td class="Remark"><input type="text" id="txt_@item["Member_Id"]" /></td>
+                                <td class="check"><input type="checkbox" /></td>
+
+
+                            </tr>
+                                }
+                            }
+                            </tbody>
+
+
+
+                        </table>
+                        <input type="button" class="btn btn-success" value="Submit Data" onclick="return SaveUnpaidData()" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SearchData() {
+        //debugger;
+        var MemberId = $('#MemberId').val();
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        $.post('/PayoutReport/AccumulatedIncome/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+            $('#divmain').html($(res).find('table'))
+
+        });
+    }
+
+    function Exporttoexcel() {
+        //debugger;
+        if ($("#Action").val() == "Paid") {
+            $('#GridHtml').val($('#tableprint').html());
+        }
+        if ($("#Action").val() == "Unpaid") {
+            $('#GridHtml').val($('#tableprintunpaid').html());
+        }
+        $("#Remark").val('Pending Payout Report');
+
+        return true;
+    }
+    function SaveUnpaidData()
+        {
+            //debugger;
+            var c = 0;
+            var grid = document.getElementById("tbl_unpaid_data");
+
+            //Reference the CheckBoxes in Table.
+            var checkBoxes = grid.getElementsByTagName("input");
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+                    c++;
+                }
+            }
+            if (c <= 0)
+            {
+                alert("Please checked any one record for saving.");
+                return false;
+            }
+            var payrolllst = [];
+            //Loop through the CheckBoxes.
+            for (var i = 0; i < checkBoxes.length; i++) {
+                var PayRollGen = {};
+                if (checkBoxes[i].checked) {
+                    var row = checkBoxes[i].parentNode.parentNode;
+                    var EmpId = $(row).attr("empid"); 
+                    var Remarks = $('#txt_' + EmpId).val() == "" ? 0 : $('#txt_'+ EmpId).val(); //$(row).children()[4].textContent == "" ? 0 : $(row).children()[4].textContent;
+                   
+                
+                    PayRollGen.MemberId = EmpId;
+                    PayRollGen.Remark = Remarks;
+                    payrolllst.push(PayRollGen);
+                }
+            }
+           // alert(payrolllst);
+            $('#preloaderModal').modal('show')
+            $.post('/Admin/Paid_unpaidPayout', { data: JSON.stringify(payrolllst) }, function (data) {
+                $('#preloaderModal').modal('hide')
+                if (data == '1') {
+                    alert('Member Payout Paid Successfully.');
+                    window.location.reload();
+                }
+                else {
+                }
+
+            });
+
+       
+        }
+</script>
+
+
+

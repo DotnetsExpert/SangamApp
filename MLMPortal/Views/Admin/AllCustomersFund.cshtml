@@ -1,0 +1,134 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "DeleteEPinsReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<style>
+    .panel-heading {
+        border-color: #eff2f7;
+        font-size: 16px;
+        font-weight: 400;
+        background: #f88e3f;
+        text-transform: uppercase;
+        padding: 15px;
+        color: #fff;
+        width: 100%;
+    }
+
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .btn-primary {
+        background-color: #1fb5ad;
+        border-color: #1fb5ad;
+        color: #FFFFFF;
+    }
+</style>
+<div class="row" style="background-color:white;">
+    <header class="panel-heading">
+
+        ALL CUSTOMER FUNDS
+        <span class="tools pull-right">
+            <a href="javascript:;" class="fa fa-chevron-down"></a>
+            <a href="javascript:;" class="fa fa-cog"></a>
+            <a href="javascript:;" class="fa fa-times"></a>
+        </span>
+
+
+        @using (Html.BeginForm("Export", "Admin", FormMethod.Post))
+        {
+            <input type="hidden" name="GridHtml" id="GridHtml" />
+            <input type="hidden" name="Remark" id="Remark" />
+
+            <input type="submit" onclick="return Exporttoexcel()" id="btnSubmit" value="Export To Excel" class="btn btn-success" />
+                                                    @*<input type="button" onclick="printBills()" id="btnPrint" class="btn btn-primary" value="Print" />*@
+        }
+
+    </header>
+
+    <form method="post">
+
+        <div class="row">
+
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="lab control-label"> Member Id</label>
+
+                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+
+                </div>
+            </div>
+
+
+            <div class="col-sm-3" style="margin-top:30px">
+                <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i> Search</button>
+            </div>
+        </div>
+
+
+
+    </form>
+
+
+
+    <div class="panel-body" style="width:100%;">
+        <section id="unseen">
+
+            <div id="tableprint">
+                <table cellspacing="0" cellpadding="4" rules="all" class="table table-bordered" id="ContentPlaceHolder1_GridView2" style="background-color:White;border-color:#CC9966;border-width:1px;border-style:None;font-size:11px;border-collapse:collapse;" >
+                    <tbody>
+                        <tr style="color:#FFFFCC;background-color:#990000;font-family:Verdana;font-weight:bold; width=" 100%"">
+                            <th scope="col">SNo.</th>
+                            <th scope="col">Member Id</th>
+
+                            <th scope="col">Name</th>
+                            <th scope="col">Mobile No.</th>
+                            <th scope="col">E-Wallet Amount</th>
+
+                            <th scope="col">Bank Wallet Amount</th>
+                            <th scope="col">Update_Date</th>
+
+                        </tr>
+                    </tbody>
+
+                        @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                        {
+                            int i = 0;
+                            foreach (DataRow item in Model.dt.Rows)
+                            {
+                                i++;
+
+                                <tr>
+                                    <td>@i </td>
+                                    <td class="Member_Id">@item["Member_Id"]</td>
+                                    <td class="Name">@item["Name"]</td>
+                                    <td class="mobile">@item["mobile"]</td>
+                                    <td class="MainWallet">@item["MainWallet"]</td>
+                                    <td class="MoneyWallet">@item["MoneyWallet"]</td>
+                                    <td class="Update_Date">@item["Update_Date"]</td>
+                                   
+
+                                </tr>
+                            }
+                        }
+                       
+                    </table>
+                </div>
+            </section>
+        </div>
+    <script>
+    function Exporttoexcel() {
+
+    $('#GridHtml').val($('#tableprint').html());
+    $("#Remark").val('Franchise Wallet');
+
+    return true;
+    }
+    </script>
+    </div>
+

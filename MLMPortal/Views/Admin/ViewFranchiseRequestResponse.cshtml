@@ -1,0 +1,114 @@
+﻿@model MLMPortal.Models.PayoutReport
+
+@{
+    ViewBag.Title = "ViewFranchiseRequestResponse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<div class="page-loader" id="page-loader1">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    <span>Loading...</span>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-content">
+
+                <div class="row merged20 mb-4">
+                    <div class="col-lg-12">
+                        <div class="d-widget">
+                            <div class="d-widget-title">
+                                <h5>Income Request Response</h5>
+                            </div>
+
+                            <div class="table-responsive dt-responsive" id="divtable">
+                                <table class="table-default table table-striped table-responsive-md" id="dom-jqry">
+                                    <thead>
+                                        <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                            <th scope="col">Sr</th>
+                                            <th scope="col">Invoice No</th>
+                                            <th scope="col">Reqest Amount</th>
+                                            <th scope="col">Transaction Id</th>
+                                            <th align="right" scope="col">Status</th>
+                                            <th align="right" scope="col">Receipt Image</th>
+                                            <th align="right" scope="col">Remark</th>
+                                            <th align="right" scope="col">EntryDate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                                        {
+                                            int i = 0;
+                                            foreach (DataRow item in Model.dt.Rows)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>@i </td>
+                                                    <td class="InvoiceNo">@item["InvoiceNo"]</td>
+                                                    <td class="Amount">@item["Amount"]</td>
+                                                    <td class="TransactionId" style="font-weight:bold;color:#003399;">@item["TransactionId"]</td>
+                                                    @if (@item["ReqStatus"].ToString() == "Approved")
+                                                    {
+                                                        <td class="ReqStatus" style="font-weight:bold;color:#2ab122;">@item["ReqStatus"]</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="ReqStatus" style="font-weight:bold;color:#e71138;">@item["ReqStatus"]</td>
+                                                    }
+                                                    <td class="image">
+                                                        <img src="@item["NewImagepath"]" width="150" height="150" />
+                                                    </td>
+
+                                                    <td class="Remark">@item["Remark"]</td>
+                                                    <td class="EntryDate">@item["EntryDate"]</td>
+
+
+
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/wrfiles/datatables/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $('#page-loader1').hide();
+
+        $('#dom-jqry').DataTable(
+            {
+                "dom": '<"dt-buttons"Bf><"clear">lirtp',
+                "paging": true,
+                "autoWidth": true,
+                "buttons": [
+                    'copyHtml5',
+                    'csvHtml5',
+                    'excelHtml5',
+
+                    'print'
+                ]
+            }
+        );
+
+    });
+
+</script>
+

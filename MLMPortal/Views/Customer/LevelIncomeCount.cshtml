@@ -1,0 +1,181 @@
+﻿@model MLMPortal.Models.PayoutReport
+
+@{
+    ViewBag.Title = "LevelIncomeCount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    @using System.Data
+
+<div class="page-loader" id="page-loader1">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    <span>Loading...</span>
+</div>
+<!-- page loader -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-content">
+
+                <div class="mb-12">
+
+                    <form method="post">
+                        <div class="col-lg-12">
+                            <div class="d-widget" style="margin-bottom:1%;">
+                                <div class="d-widget-title">
+                                    <h5>Filters</h5>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-12" >
+                                       
+                                      
+                                    <div class="col-lg-4">
+                                        <label class="control-label">Level</label>
+                                        <div class="controls">
+                                            @*@Html.TextBoxFor(m => m.Status, new { @class = "form-control", @type = "text" })*@
+                                            @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem() { Text = "--select--", Value = "" }, new SelectListItem() { Text = "Level 1", Value = "1" }, new SelectListItem() { Text = "Level 2", Value = "2" }, new SelectListItem() { Text = "Level 3", Value = "3" }, new SelectListItem() { Text = "Level 4", Value = "4" }, new SelectListItem() { Text = "Level 5", Value = "5" }, new SelectListItem() { Text = "Level 6", Value = "6" }, new SelectListItem() { Text = "Level 7", Value = "7" }, new SelectListItem() { Text = "Level 8", Value = "8" }, new SelectListItem() { Text = "Level 9", Value = "9" }, new SelectListItem() { Text = "Level 10", Value = "10" }, new SelectListItem() { Text = "Level 11", Value = "11" }, new SelectListItem() { Text = "Level 12", Value = "12" }, new SelectListItem() { Text = "Level 13", Value = "13" }, new SelectListItem() { Text = "Level 14", Value = "14" }, new SelectListItem() { Text = "Level 15", Value = "15" }, new SelectListItem() { Text = "Level 16", Value = "16" }, new SelectListItem() { Text = "Level 17", Value = "17" }, new SelectListItem() { Text = "Level 18", Value = "18" }, new SelectListItem() { Text = "Level 19", Value = "19" }, new SelectListItem() { Text = "Level 20", Value = "20" } }, new { @class = "form-control input-circle ng-valid ng-dirty ng-valid-parse ng-touched" })
+                                        </div>
+                                    </div>
+                                  
+
+
+                                    <div class="col-lg-3">
+                                        <label class="control-label">
+                                            &nbsp;
+                                        </label>
+
+                                        <div class="controls">
+                                            <input style="width:100%;" type="submit" id="btnSearch" class="btn btn-success" value="Search">
+
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                            </div>
+                    </form>
+                    <div class="col-lg-12">
+                        <div class="d-widget">
+                            <div class="d-widget-title">
+                               
+                            </div>
+
+                            <div class="table-responsive dt-responsive" id="divtable">
+                                <table class="table-default table table-striped table-responsive-md" id="dom-jqry">
+                                    <thead>
+                                        <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                          
+                                            <th scope="col">Level</th>
+                                            <th scope="col">Total Member</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.dt != null && Model.dt.Rows.Count > 0)
+            {
+                int i = 0;
+                foreach (DataRow item in Model.dt.Rows)
+                {
+                    i++;
+                                                <tr>
+                                                   
+                                                    <td>@item["Levels"]</td>
+                                                  
+                                                    <td>@item["LevelCount"]</td>
+                                                   
+                                                </tr>
+
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/wrfiles/datatables/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $('#page-loader1').hide();
+
+        $('#dom-jqry').DataTable(
+       {
+           "dom": '<"dt-buttons"Bf><"clear">lirtp',
+           "paging": true,
+           "autoWidth": true,
+           "buttons": [
+               'copyHtml5',
+       'csvHtml5',
+               'excelHtml5',
+
+               'print'
+           ]
+       }
+   );
+
+    });
+
+    function getDetails() {
+        $('#page-loader1').show();
+        $.ajax({
+            url: "../warehouse/rpt_pd_req",
+            type: "POST",
+
+            data: { 'FromDate': $('#FromDate').val(), 'ToDate': $('#ToDate').val(), 'p_Code': $('#InviceNo').val() },
+
+            datatype: "json",
+            success: function (data1) {
+                var htmlNew = data1;
+                $('#divtable').html($(htmlNew).find('#dom-jqry'));
+
+
+                $('#page-loader1').hide();
+
+                $('#dom-jqry').DataTable(
+       {
+           "dom": '<"dt-buttons"Bf><"clear">lirtp',
+           "paging": true,
+           "autoWidth": true,
+           "buttons": [
+               'copyHtml5',
+       'csvHtml5',
+               'excelHtml5',
+
+               'print'
+           ]
+       }
+   );
+
+
+            }
+        });
+    }
+
+
+
+</script>
+

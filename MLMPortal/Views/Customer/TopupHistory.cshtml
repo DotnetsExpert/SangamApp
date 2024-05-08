@@ -1,0 +1,188 @@
+﻿@model MLMPortal.Models.PayoutReport
+@{
+    ViewBag.Title = "TopupHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "DirectIncome");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">ROI INCOME</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i> ROI INCOME </div>
+            <div class="card-body">
+                <div class="row">
+                    @if (Convert.ToString(Session["Role"]) == "1")
+                    {
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @*<div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label">From Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> To Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="col-sm-3" style="margin-top:30px">
+                        <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach" onclick="SearchData()"><i class="icon-lock"></i> Search</button>
+                    </div>
+                </div>
+                <div class="table-responsive" id="divmain">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Member Id</th>
+                                <th>Name</th>
+                               
+                                <th>Package Amount</th>
+                                <th>Topup Date</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+
+
+                                        <td class="Member_Id">@item["Member_Id"]</td>
+                                        <td class="Name">@item["Name"]</td>
+                                        <td class="Income">@item["PackagePrice"]</td>
+                                        <td class="RegDate">@item["topupdate"]</td>
+                                    </tr>
+                                }
+                                <tr style="font-weight:bold;">
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@Model.dt.Compute("Sum(PackagePrice)", "").ToString()</td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SearchData() {
+        //debugger;
+        var MemberId = $('#MemberId').val();
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        $.post('/Customer/TopupHistory/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+            $('#divmain').html($(res).find('table'))
+
+        });
+    }
+
+
+
+</script>
+
+
+

@@ -1,0 +1,331 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+   
+    <link rel="stylesheet" href="~/Content/WebApp/js/bootstrap.min.css" />
+    <script src="~/Content/WebApp/js/jquery.min.js"></script>
+    <script src="~/Content/WebApp/js/popper.min.js"></script>
+    <script src="~/Content/WebApp/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <link href="~/Content/WebApp/globe-css/StyleSheet.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/WebApp/JS/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/WebApp/cssPB/style.css" rel="stylesheet" />
+
+    <link href="~/Content/WebApp/globe-css/responsive.css" rel="stylesheet" />
+    <link href="~/Content/WebApp/globe-css/favicon.png" rel="icon" type="image/x-icon" />
+    <link href="~/Content/WebApp/globe-css/sidemodal.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/WebApp/cssPB/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .mainbxx {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .mainbxx .bhh img {
+                width: 100%;
+                max-width: 30px;
+            }
+    </style>
+
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-sm basic-color navbar-dark">
+            <a class="navbar-brand" href="#">
+                <h2>
+                    <img src="~/Content/WebApp/gone.png" class="img-fluid" style="width: 27px" />
+
+                    ROYAL QUEUE
+                </h2>
+            </a>
+            <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="d-flex justify-content-between align-items-center w-100 px-4">
+                <div>
+                    @*<a class="navbar-brand" href="../User/Login">
+                            Logout
+                        </a>*@
+                    Member_Id : <label>@Session["MUserName"]</label> ,
+                    Name : <label>@Session["Name"]</label>
+                    &emsp;&emsp;
+                </div>
+                <div>
+                    <div class="text-xl-right">
+                        <a href="javascript:void(0)" onclick="Logout()">
+                            <div class="mainbxx m-0">
+                                <div class="bhh">
+                                    <img src="icon_187.8c398298.png" class="img-fluid img-responsive">
+                                </div>
+                                <div class="txtt m-0">
+                                    Sign Out
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Links -->
+            @* <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 3</a>
+                    </li>
+                </ul>*@
+        </nav>
+    </div>
+
+
+    <div id="loading" style="display:none;">
+
+        <div class="coin">
+            <div class="side heads"><img class="imageCoin" src="../Content/WebApp/picture21.png" alt="king_coin_1"></div>
+            <div class="side tails"><img class="imageCoin" src="../Content/WebApp/picture21.png" alt="King_coin_2"></div>
+        </div>
+
+    </div>
+    @RenderBody()
+
+    <div class="container-fluid fix-footer">
+        <div class="card-header footer-fix-icon">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="../Content/WebApp/Dashboard">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../Content/WebApp/Warehouse">
+                        <i class="fa fa-building" aria-hidden="true"></i>
+                        <p>Topup</p>
+                    </a>
+                </li>
+
+                @*<li class="nav-item">
+                        <a class="nav-link" href="../Content/WebApp/Staking">
+                            <i class="fa fa-building" aria-hidden="true"></i>
+                            <p>Staking</p>
+                        </a>
+                    </li>*@
+                <li class="nav-item">
+                    <a class="nav-link" href="../Content/WebApp/Media">
+                        @*<img src="../Content/WebApp/gone.png" class="img-responsive img-fluid" style="width: 71px; text-align: center; position: absolute; margin: -24px 0px 1px -32px;" />*@
+                        <i class="fa fa-diamond" aria-hidden="true"></i>
+                        <p>Media</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../Content/WebApp/MyTeam">
+                        <!--wealth.aspx -->
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                        <p>Team</p>
+                    </a>
+                </li>
+
+                @*<li class="nav-item">
+                        <a class="nav-link" href="../Content/WebApp/mine">
+                            <i class="fa fa-sun-o" aria-hidden="true"></i>
+                            <p>Account</p>
+                        </a>
+                    </li>*@
+                <li class="nav-item">
+                    <a class="nav-link" href="../Content/WebApp/TransferLazer">
+                        <i class="fa fa-sun-o" aria-hidden="true"></i>
+                        <p>Earn</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal left fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">RoyalEqueue</h4>
+                </div>
+                <div class="modal-body1 admin-nav">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/ViewProfile">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>View Profile</span></i>
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/Profile">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Update Bank</span></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/ChangePassword">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Change Password </span></i>
+                            </a>
+                        </li>
+
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start" style="display: none !important;">
+                            <a href="GeneratePinUser.aspx">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Generate Pin</span></i>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start" style="display: none !important;">
+                            <a href="MyPinLogDetails.aspx">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Transfer Log</span></i>
+
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start" style="display: none !important;">
+                            <a href="MyPinDetails.aspx">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Pin Bank</span></i>
+
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/DailyIncomeReport">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>ROI Income Report </span></i>
+
+                            </a>
+
+                        </li>
+
+                        @*<li class="list-group-item d-flex justify-content-between align-items-start" style="display:none;">
+                                <a href="~/Content/WebApp/DirectIncomeReport">
+                                    <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Direct Income Report</span></i>
+
+                                </a>
+
+                            </li>*@
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start" style="display:none !important;">
+                            <a href="~/Content/WebApp/LevelIncomeNew">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Advisory  Income Report</span></i>
+
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start" style="display: none !important;">
+                            <a href="~/Content/WebApp/Residual">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Residual  Income Report</span></i>
+
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/RefralIncome">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Level  Income Report</span></i>
+
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/MatchingIncomeReport">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Matching  Income Report</span></i>
+
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start" hidden>
+                            <a href="#">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Reward  Income Report</span></i>
+
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/LeaderShipIncomeReport">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>LeaderShip Income Report</span></i>
+
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/TransferLazer">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Ledger Report</span></i>
+
+                            </a>
+                        </li>
+                        @*<li class="list-group-item d-flex justify-content-between align-items-start" style="display:none;">
+                                <a href="~/Content/WebApp/BonusIncomeReport">
+                                    <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Bonus Income Report</span></i>
+                                </a>
+                            </li>*@
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="UpdateWinAddress">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Update Withdrawl Address </span></i>
+                            </a>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/FundRequestHistory">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Fund Report </span></i>
+
+                            </a>
+                        </li>
+
+                        @*
+                            <li><a href="ComposeMessage.aspx">Compose Message</a></li>
+                            <li><a href="SendMessage.aspx">Send Message </a></li>
+                            <li><a href="InboxMessage.aspx">Inbox Message </a></li>*@
+
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/ComposeMessage">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Compose Message </span></i>
+
+                            </a>
+                        </li>
+
+
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="~/Content/WebApp/SendMessage">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Sent Message </span></i>
+
+                            </a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <a href="InboxMessage">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Inbox Message </span></i>
+
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+    </div>
+    <!-- modal -->
+    <script>
+
+        function Logout() {
+            window.location.href = "../Content/WebApp/Logout";
+        }
+
+
+        jQuery(document).ready(function () {
+            jQuery('#loading').fadeOut(500);
+        });
+    </script>
+</body>
+</html>

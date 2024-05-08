@@ -1,0 +1,498 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "SMSTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="~/ckeditor/ckeditor.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+    });
+</script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "SMSTemplate");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">SMS TEMPLATE</div>
+                <hr>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Name</label>
+                                <div class="col-lg-12">
+                                    @Html.DropDownListFor(m => m.SubCategoryId, new List<SelectListItem>() {
+                                   new SelectListItem() { Text = "--Select--", Value = "0" },
+                                   new SelectListItem(){ Text = "Member", Value = "1"},
+                                   new SelectListItem(){ Text = "Depo", Value = "2"},
+                                   new SelectListItem(){ Text = "franchisee", Value = "3"},
+                               }, new { @id = "SubCategoryId", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-sm-4">
+                                <div class="form-group" id="ActiveId">
+                                    <label class="lab control-label">Status</label>
+                                    <div class="col-lg-12">
+                                        @Html.DropDownListFor(m => m.ActiveId, new List<SelectListItem>() {
+                                       new SelectListItem(){ Text = "Active", Value = "1"},
+                                       new SelectListItem(){ Text = "Non Active", Value = "0"},
+                                   }, new { @id = "ActiveIds", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="button" name="button" id="buttons" class="btn btn-primary shadow-primary px-5" onclick="return SendSms();" value="Send Sms" />
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-12" id="tbl1">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">FRANCHISEE DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th><INPUT type="checkbox" id="checkAll" name="chk[]" /> </th>
+                                <th>Franchise Id</th>
+                                <th>Name</th>
+                                <th>MobileNo</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12" id="tbl2">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">DIPO  DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable1" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th><INPUT type="checkbox" id="checkAll" name="chk[]" /> </th>
+                                <th>DIPO Code</th>
+                                <th>Name</th>
+                                <th>MobileNo</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-12" id="tbl3">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">MEMBER DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable2" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th><INPUT type="checkbox" id="checkAlls" name="chk[]" /> </th>
+                                <th>Member Id</th>
+                                <th>Name</th>
+                                <th>MobileNo</th>
+                                <th style="display:none;">Password</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#tbl1").hide();
+        $("#ActiveId").hide();
+        $("#tbl2").hide();
+        $("#tbl3").hide();
+        $("#SubCategoryId").change(function () {
+            $('#default-datatable tbody').empty();
+            var data = $("#SubCategoryId").val();
+            if (data == 3) {
+                $("#tbl2").hide();
+                $("#ActiveId").hide();
+                $("#tbl1").show();
+                $("#tbl3").hide();
+                $.ajax({
+                    url: "/Admin/GetfranchiseeList",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                       // //debugger;
+                        var arrData = data;
+                        var Html = "";
+                        var cou = 1;
+                        for (var i = 0; i <arrData.length; i++) {
+                            Html += "<tr> <td> " + cou + "</td> <td> <INPUT type='checkbox'  name='chk[]' /></td> <td class='Franchiseid' Franchise_Id=" + arrData[i].Franchise_Id + "> " + arrData[i].Franchise_Id + "</td><td class='FranchiseName' Name =" + arrData[i].Name + "> " + arrData[i].Name + "</td><td class='FranchiseMobileNo' MobileNo =" + arrData[i].MobileNo + "> " + arrData[i].MobileNo + "</td><td class='Franchisepsw' memberpsw=" + arrData[i].psw + " style='display:none;'>" + arrData[i].psw + "</td></tr>";
+                            cou++;
+                        }
+                        $('#default-datatable tbody').append(Html);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Server not Responding !!!');
+                        $("#showSpinner").hide();
+                    }
+                });
+            }
+
+            else if (data == 2) {
+                $('#default-datatable1 tbody').empty();
+                $("#tbl1").hide();
+                $("#ActiveId").hide();
+                $("#tbl2").show();
+                $("#tbl3").hide();
+                $.ajax({
+                    url: "/Admin/GetDipoList",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        var arrData = data;
+                        var Html = "";
+                        var cou = 1;
+                        for (var i = 0; i <arrData.length; i++) {
+                            Html += "<tr> <td> " + cou + "</td> <td> <INPUT type='checkbox'  name='chk[]' /></td> <td class ='Depoid' Franchise_Id=" + arrData[i].Franchise_Id + "> " + arrData[i].Franchise_Id + "</td><td class ='DepoName' Name =" + arrData[i].Name + "> " + arrData[i].Name + "</td><td class ='DepoNameMobileNo' MobileNo =" + arrData[i].MobileNo + "> " + arrData[i].MobileNo + "</td><td class='Dipopsw' memberpsw=" + arrData[i].psw + " style='display:none;'>" + arrData[i].psw + "</td></tr>";
+                            cou++;
+                        }
+                        $('#default-datatable1 tbody').append(Html);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Server not Responding !!!');
+                        $("#showSpinner").hide();
+                    }
+                });
+            }
+
+            else if (data == 1) {
+                $('#default-datatable2 tbody').empty();
+                $("#tbl1").hide();
+                $("#tbl2").hide();
+                $("#ActiveId").show();
+                $("#tbl3").show();
+                $.ajax({
+                    url: "/Admin/GetSMSMemberDetails",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //debugger;
+                        var arrData = data;
+                        var Html = "";
+                        var cou = 1;
+                        for (var i = 0; i <arrData.length; i++) {
+                            Html += "<tr> <td> " + cou + "</td> <td> <INPUT type='checkbox'  name='chk[]' /></td> <td class='memberid' Franchise_Id=" + arrData[i].Franchise_Id + ">" + arrData[i].Franchise_Id + "</td><td class='membername' Name =" + arrData[i].Name + "> " + arrData[i].Name + "</td><td class='memberMobileNo' MobileNo =" + arrData[i].MobileNo + ">" + arrData[i].MobileNo + "</td><td class='memberpsw' memberpsw=" + arrData[i].psw + " style='display:none;'>" + arrData[i].psw + "</td></tr>";
+                            cou++;
+                        }
+                        $('#default-datatable2 tbody').append(Html);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Server not Responding !!!');
+                        $("#showSpinner").hide();
+                    }
+                });
+            }
+
+            else {
+                $("#tbl1").hide();
+                $("#tbl2").hide();
+                $("#ActiveId").hide();
+                $("#tbl3").hide();
+            }
+
+        });
+    });
+</script>
+<script type="text/javascript">
+    function Item() {
+        this.memberid = null;
+        this.membername = null;
+        this.memberMobileNo = null;
+        this.memberpsw = null;
+    }
+    function Item1() {
+        this.Depoid = null;
+        this.DepoName  = null;
+        this.DepoNameMobileNo = null;
+        this.Dipopsw = null;
+    }
+    function Item2() {
+        this.Franchiseid = null;
+        this.FranchiseName = null;
+        this.FranchiseMobileNo = null;
+        this.Franchisepsw = null;
+    }
+    function SendSms() {
+        var data = $("#SubCategoryId").val();
+        alert("SMS Content Not Approved.");
+        return false;
+        if (data == 1) {
+
+            var OrderData = [];
+            $('#default-datatable2 tbody').find('input[type=checkbox]:checked').each(function () {
+
+
+                var memberid = $(this).parents("tr").find(".memberid").html();
+                var membername = $(this).parents("tr").find(".membername").html();
+                var memberMobileNo = $(this).parents("tr").find(".memberMobileNo").html();
+                var memberpsw = $(this).parents("tr").find(".memberpsw").html();
+
+
+                if (memberid != "") {
+                    var cuObj = new Item();
+                    cuObj.memberid = memberid;
+                    cuObj.membername = membername;
+                    cuObj.memberMobileNo = memberMobileNo;
+                    cuObj.memberpsw = memberpsw;
+                    OrderData.push(cuObj);
+                }
+                else {
+                    $(this).parents("tr").find(".memberid").focus();
+                    return;
+                }
+
+            })
+
+            var strrawdata = JSON.stringify(OrderData);
+            if (strrawdata != "[]") {
+                var dataobject = {
+                    strrawdata: strrawdata,
+                };
+
+
+                $.ajax({
+                    url: "/Admin/SendSmsDetail",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+
+                    data: JSON.stringify(dataobject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        alert(r);
+                        window.location.reload();
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Please Check values Entered by you !!!');
+
+                    }
+                });
+            }
+            else {
+
+                alert("Enter Member Id Ids");
+            }
+        }
+        if(data == 2)
+        {
+
+            var OrderData = [];
+            $('#default-datatable1 tbody').find('input[type=checkbox]:checked').each(function () {
+
+
+                var Depoid = $(this).parents("tr").find(".Depoid").html();
+                var DepoName = $(this).parents("tr").find(".DepoName").html();
+                var DepoNameMobileNo = $(this).parents("tr").find(".DepoNameMobileNo").html();
+                var Dipopsw = $(this).parents("tr").find(".Dipopsw").html();
+
+
+                if (Depoid != "") {
+                    var cuObj = new Item1();
+                    cuObj.Depoid = Depoid;
+                    cuObj.DepoName = DepoName;
+                    cuObj.DepoNameMobileNo = DepoNameMobileNo;
+                    cuObj.Dipopsw = Dipopsw;
+                    OrderData.push(cuObj);
+                }
+                else {
+                    $(this).parents("tr").find(".Depoid").focus();
+                    return;
+                }
+
+            })
+
+            var strrawdata = JSON.stringify(OrderData);
+            if (strrawdata != "[]") {
+                var dataobject = {
+                    strrawdata: strrawdata,
+                };
+
+
+                $.ajax({
+                    url: "/Admin/SendDepoDetail",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+
+                    data: JSON.stringify(dataobject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        alert(r);
+                        window.location.reload();
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Please Check values Entered by you !!!');
+
+                    }
+                });
+            }
+            else {
+
+                alert("Enter Member Id Ids");
+            }
+        }
+
+        if (data == 3) {
+
+            var OrderData = [];
+            $('#default-datatable tbody').find('input[type=checkbox]:checked').each(function () {
+
+
+                var Franchiseid = $(this).parents("tr").find(".Franchiseid").html();
+                var FranchiseName = $(this).parents("tr").find(".FranchiseName").html();
+                var FranchiseMobileNo = $(this).parents("tr").find(".FranchiseMobileNo").html();
+                var Franchisepsw = $(this).parents("tr").find(".Franchisepsw").html();
+
+
+                if (Depoid != "") {
+                    var cuObj = new Item2();
+                    cuObj.Franchiseid = Franchiseid;
+                    cuObj.FranchiseName = FranchiseName;
+                    cuObj.FranchiseMobileNo = FranchiseMobileNo;
+                    cuObj.Franchisepsw = Franchisepsw;
+                    OrderData.push(cuObj);
+                }
+                else {
+                    $(this).parents("tr").find(".Depoid").focus();
+                    return;
+                }
+
+            })
+
+            var strrawdata = JSON.stringify(OrderData);
+            if (strrawdata != "[]") {
+                var dataobject = {
+                    strrawdata: strrawdata,
+                };
+
+
+                $.ajax({
+                    url: "/Admin/SendFranchiseDetail",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+
+                    data: JSON.stringify(dataobject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        alert(r);
+                        window.location.reload();
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Please Check values Entered by you !!!');
+
+                    }
+                });
+            }
+            else {
+
+                alert("Enter Member Id Ids");
+            }
+        }
+
+    }
+
+</script>
+
+
+

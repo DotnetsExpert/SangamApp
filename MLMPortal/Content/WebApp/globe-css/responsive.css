@@ -1,0 +1,65 @@
+﻿@media screen and (max-width:767px){
+    .invest-box .media {
+    display: -ms-flexbox;
+    display: block;
+    overflow: hidden;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+    .inner-invest-box .media img {
+    width: 100%;
+    max-width:100%;
+}
+     .inner-invest-box .media-body h4 {
+   text-align: left;
+    font-size: 16px;
+    margin: 10px 0;
+}
+}
+
+@media screen and (max-width:540px){
+    .icon-box ul li {   
+    margin: 0 6px;
+    }
+
+    .pswrd {
+    width: 100%;
+    float: left;
+}
+    .otbtn {
+     width: 100%;
+    padding:0 15px;
+     margin-bottom:20px;
+}
+    .otp-btn {
+    height: 40px;
+    border-radius: 7px;
+    background: #074e84;
+    width: 100%;
+    border: none;
+
+    }
+
+    .p-marquee ul li{
+    font-size: 13px;
+}
+
+    .earn-1 {
+    padding: 0px 5px;
+    font-size: 16px;
+font-weight: 600;}
+    .invitation-1 {
+    float: left;
+    width: 60%;
+}
+   
+
+      .withdraw-option .list-group-item img{
+         width:45px;
+     }
+
+       .withdraw-option .list-group-item p{
+           margin:5px 0;
+           font-size:12px;
+       }
+}

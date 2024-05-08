@@ -1,0 +1,377 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "MemberViewProfile";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "AccumulatedIncome");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">MemberViewProfile</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header" style="background-color:darkblue;color:white;"><i class="fa fa-table"></i>MemberViewProfile</div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-6">                                       
+                                            <div class="form-group">
+                                                <label class="lab control-label">Country Code</label>
+                                                <div class="col-lg-12">
+                                                    @Html.DropDownListFor(m => m.CountryCode, Model.PhoneCodeLst, new { @class = "form-control input-circle ng-pristine ng-valid ng-touched", @disabled = "disabled" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="lab control-label">Mobile No</label>
+                                            @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">IFSC Code</label>
+                                    @Html.TextBoxFor(m => m.IFSCCode, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> MemberName</label>
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Bank Name</label>
+                                    @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Father/Husband Name </label>
+                                    @Html.TextBoxFor(m => m.FatherName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Bank Branch</label>
+                                    @Html.TextBoxFor(m => m.BankBranch, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Registration Date: </label>
+                                    @Html.TextBoxFor(m => m.RegDate, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Account No.</label>
+                                    @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> Date Of Birth:</label>
+                                    @Html.TextBoxFor(m => m.DOB, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> PAN No.</label>
+                                    @Html.TextBoxFor(m => m.PanNo, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="lab control-label">Gender</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Gender, new { @class = "form-control", @disabled = "disabled" })
+                                     @*@Html.DropDownListFor(m => m.Month, new List<SelectListItem>() { new SelectListItem() { Text = "select", Value = "0" } }, new { @class = "form-control", @disabled = "disabled" })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Adhar No.</label>
+                                    @Html.TextBoxFor(m => m.AdharNo, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> Email Id</label>
+                                    @Html.TextBoxFor(m => m.EmailId, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Sponser Id</label>
+                                    @Html.TextBoxFor(m => m.SponserId, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Pin Code</label>
+                                    @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Sponser Name</label>
+                                    @Html.TextBoxFor(m => m.SponserName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">State</label>
+                                    @Html.DropDownListFor(m => m.StateId, Model.StateDDLLst, new { @class = "form-control input-circle ng-pristine ng-valid ng-touched", @onchange = "GetDistrict()", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Nominee Name</label>
+                                    @Html.TextBoxFor(m => m.NomName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">District</label>
+                                    @Html.DropDownListFor(m => m.District, Model.DistrictDDLLst, new { @class = "form-control input-circle ng-pristine ng-valid ng-touched", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> Nominee Father/Husband Name</label>                       
+                                     @Html.TextBoxFor(m => m.NomFatherName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">City</label>
+                                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Nominee Address</label>
+                                    @Html.TextBoxFor(m => m.NomAddressName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Address</label>
+                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Nominee Relation</label>
+                                    @Html.TextBoxFor(m => m.NomRelationName, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Landmark</label>
+                                    @Html.TextBoxFor(m => m.LandMark, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">KYS Status</label>
+                                    @Html.TextBoxFor(m => m.KYCStatus, new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+   
+    
+
+</script>
+
+
+

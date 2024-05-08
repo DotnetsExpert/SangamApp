@@ -1,0 +1,301 @@
+﻿@model MLMPortal.Models.PayoutReport
+
+@{
+    ViewBag.Title = "PendingWithdrwalRequests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+
+    .txtbox {
+        width: 200px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'=="1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "PedingProductList");
+            }
+            else {
+                alert("Server Not Response!");
+            } 
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[ 10, 20, 50, 100, 500, -1], [ 10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Pending Withdrwal Requests</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i> Pending Withdrwal Requests </div>
+            <div class="card-body">
+                <div class="row" style="display:none;">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="lab control-label"> Member Id</label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="lab control-label">From Date</label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="lab control-label"> To Date</label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" style="margin-top:30px">
+                        <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach" onclick="SearchData()"><i class="icon-lock"></i> Search</button>
+                    </div>
+                </div>
+                <div class="table-responsive" id="divmain">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Member Id</th>
+                                <th>Name</th>
+                                <th>Mobile No.</th>
+                                <th>Company Bank Name</th>
+                                <th>Bank AC. No.</th>
+                                <th>IFSCCode</th>
+                                @*<th>Deposit Type</th>*@
+                                @*<th>&nbsp;</th>*@
+                                @*<th>Transaction ID</th>*@
+                                <th>Req. Amount</th>
+                                <th>Payment Req. Date</th>
+                                <th>Description</th>
+                                <th>Approve</th>
+                                <th>Reject</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td>@item["Member_Id"]</td>
+                                        <td>@item["Name"]</td>
+                                        <td>@item["mobile"]</td>
+                                        <td>@item["BankName"]</td>
+                                        <td>@item["BankaccNo"]</td>
+                                        <td>@item["BankIfscCode"]</td>
+                                        @*<td>@item["DipositType"]</td>*@
+                                        @*<td>
+                                            <img src='@item["AFiles"]'
+                                                 style="cursor: pointer;height:30px;width:30px;" onclick="return  LoadDiv(this.src);" />
+                                        </td>*@
+                                        @*<td>@item["TransactionId"]</td>*@
+                                        <td>@item["ReqWallet"]</td>
+                                        <td>@item["EntredDate"]</td>
+                                        @*<td>@item["Time"]</td>*@ 
+                                        <td>
+                                            @Html.TextAreaFor(m => m.Remark, new { @id = "Remark" + item["SNo"], @class = "form-control txtbox" })
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success" onclick="ApproveProduct('@item["Member_Id"]','@item["SNo"]','@item["ReqWallet"]')">Approve</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary" onclick="RejectProduct('@item["Member_Id"]','@item["SNo"]','@item["ReqWallet"]')">Reject</button>
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <img id="imgDiv" style="height:400px;width:450px;" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function SearchData() {
+        //debugger;
+        var MemberId = $('#MemberId').val();
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        $.post('/Franchise/PedingProductList/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+            $('#divmain').html($(res).find('table'))
+
+        });
+    }
+
+    function ApproveProduct(MemberId,Id,Amount) {
+        //debugger;
+        var Remark = $('#Remark'+Id).val();
+        var dataobject = {
+            MemberId:MemberId,
+            Remark: Remark,
+            Amount:Amount,
+            Id: Id,
+            status:'1' 
+        };
+        $.ajax({
+            type: "POST",
+            url: "/PaymentReport/ApproveDisapproveLuxFundRequest",
+            data: dataobject,
+            dataType: "json",
+            success: function (r) {
+                if (r.Id == "1") {
+                    alert(r.msg);
+                    location.reload();
+                }
+                else {
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+
+    function RejectProduct(MemberId,Id,Amount) {
+        //debugger;
+        var Remark = $('#Remark'+Id).val();
+        var dataobject = {
+            MemberId:MemberId,
+            Remark: Remark,
+            Amount:Amount,
+            Id: Id,
+            status: '0'
+        };
+        $.ajax({
+            type: "POST",
+            url: "/PaymentReport/ApproveDisapproveLuxFundRequest",
+            data: dataobject,
+            dataType: "json",
+            success: function (r) {
+                if (r.Id == "1") {
+                    alert(r.msg);
+                    location.reload();
+                }
+                else {
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+</script>
+
+
+<script>
+    function LoadDiv(url) {
+        document.getElementById("imgDiv").src = url;
+        $("#myModal").modal("show");
+
+           return false
+        }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+

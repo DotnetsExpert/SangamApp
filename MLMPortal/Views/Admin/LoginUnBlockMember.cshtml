@@ -1,0 +1,136 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "LoginUnBlockMember";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'!="") {
+                alert('@TempData["msg"].ToString()', window.location.href = "LoginUnBlockMember");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+</script>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title"> UNBLOCKED CUSTOMER LOGIN</div>
+                <hr>
+                <form action="LoginUnBlockMember" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id",@onchange= "GetMemberDetails(this)" })
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Name </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Enter Name",@readonly="true" })
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="UnBlock Customer" />
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+   
+</div>
+<script>
+
+        function Validate()
+        {
+            if (MemberId.value == '') {
+                alert('Please Enter Member Id');
+                MemberId.focus();
+
+                return false;
+            }
+          
+            if (Name.value == '') {
+                alert('Please Enter Name');
+                Name.focus();
+
+                return false;
+            }
+         
+
+        }
+        function GetMemberDetails(_this) {
+           
+            //debugger;
+          
+                var dataobject = {
+                    MemberId: _this.value
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/GetMemberName",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.Id != "0") {
+                            document.getElementById('Name').value = r.Name;
+                           
+                        }
+                        else {
+                            alert(r.msg, window.location.href = "LoginUnBlockMember");
+                        }
+                    }
+                });
+            }
+           
+        
+
+
+</script>

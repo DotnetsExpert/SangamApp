@@ -1,0 +1,224 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "BlockMember";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'!="") {
+                alert('@TempData["msg"].ToString()', window.location.href = "BlockMember");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+</script>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[ 10, 20, 50, 100, 500, -1], [ 10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+    });
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title"> BLOCKED CUSTOMER</div>
+                <hr>
+                <form action="BlockMember" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id",@onchange= "GetMemberDetails(this)" })
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Name </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Enter Name",@readonly="true" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Remark </label>
+                                <div class="col-lg-12">
+                                    @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @placeholder = "Enter Remark" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="Block Customer" />
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i>BLOCKED CUSTOMER DETAILS   </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Member Id</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                               
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+
+
+                                        <td class="Member_Id">@item["Member_Id"]</td>
+                                        <td class="Name">@item["Name"]</td>
+                                        <td class="mobile">@item["Statuss"]</td>
+                                       
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+        function Validate()
+        {
+            if (MemberId.value == '') {
+                alert('Please Enter Member Id');
+                MemberId.focus();
+
+                return false;
+            }
+            if (Remark.value == '') {
+                alert('Please Enter Remark');
+                Remark.focus();
+
+                return false;
+            }
+            if (Name.value == '') {
+                alert('Please Enter Name');
+                Name.focus();
+
+                return false;
+            }
+         
+
+        }
+        function GetMemberDetails(_this) {
+           
+            //debugger;
+          
+                var dataobject = {
+                    MemberId: _this.value
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/GetMemberName",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.Id != "0") {
+                            document.getElementById('Name').value = r.Name;
+                           
+                        }
+                        else {
+                            alert(r.msg, window.location.href = "BlockMember");
+                        }
+                    }
+                });
+            }
+           
+        
+
+
+</script>

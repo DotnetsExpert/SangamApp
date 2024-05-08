@@ -1,0 +1,214 @@
+﻿@model MLMPortal.Models.PayoutReport
+@{
+    ViewBag.Title = "MyDirectTeam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-content">
+
+                <div class="row merged20 mb-4 card">
+
+                    <form method="post">
+                        <div class="col-lg-12">
+                            <div class="d-widget" style="margin-bottom:1%;">
+                                <div class="d-widget-title">
+                                    <h5>Filters</h5>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-3" style="display:none;">
+                                        <label class="control-label">
+                                            From date
+                                        </label>
+
+                                        <div class="controls">
+                                            @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3" style="display:none;">
+                                        <label class="control-label">
+                                            To date
+                                        </label>
+
+                                        <div class="controls">
+                                            @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label class="control-label">Status</label>
+                                        <div class="controls">
+                                            @*@Html.TextBoxFor(m => m.Status, new { @class = "form-control", @type = "text" })*@
+                                            @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem() { Text = "--select--", Value = "" }, new SelectListItem() { Text = "Active", Value = "1" }, new SelectListItem() { Text = "Deactive", Value = "0" } }, new { @class = "form-control input-circle ng-valid ng-dirty ng-valid-parse ng-touched" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <label class="control-label">
+                                                &nbsp;
+                                            </label>
+
+                                            <div class="controls">
+                                                <input style="width:100%;" type="submit" id="btnSearch" class="btn btn-success" value="Search">
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                    </form>
+                    
+
+
+
+                </div>
+
+
+                <div class="row card mb-2">
+                    <div class="col-lg-12">
+                        <div class="d-widget">
+                            <div class="d-widget-title">
+                                <h5>My Direct(First Level Associate)</h5>
+                            </div>
+
+                            <div class="table-responsive dt-responsive" id="divtable">
+                                <table class="table table-striped" id="dom-jqry">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">SNo.</th>
+                                            <th scope="col">User Id</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Sponser Id</th>
+                                            <th scope="col">Status</th>
+                                            @*<th align="right" scope="col">Self Business</th>
+                                            <th scope="col">team Business</th>*@
+                                            <th scope="col">Reg. Date</th>
+                                            <th>Activation Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                                        {
+                                            int i = 0;
+                                            foreach (DataRow item in Model.dt.Rows)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>@i</td>
+                                                    <td>@item["SMemberID"]</td>
+                                                    @*<td>
+                                            <a href="../SalesBillNew.aspx?InvoiceNo=@item["InvoiceNo"]" target="_blank"> @item["InvoiceNo"] </a>
+                                        </td>
+                                        <td>
+                                            <a href="#" target="_blank">View Detail</a>
+                                        </td>*@
+                                                    <td>@item["Name"]</td>
+                                                    <td>@item["City"]</td>
+                                                    <td>@item["SIntro_ID"]</td>
+                                                    <td>@item["ActiveStatus"]</td>
+                                                    @*<td>@item["selfBusiness"]</td>
+                                                    <td>@item["TeamBusiness"]</td>*@
+                                                    <td>@item["RegDate"]</td>
+                                                    <td>@item["ActivationDate"]</td>
+
+                                                </tr>
+
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/wrfiles/datatables/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $('#page-loader1').hide();
+
+        $('#dom-jqry').DataTable(
+       {
+           "dom": '<"dt-buttons"Bf><"clear">lirtp',
+           "paging": true,
+           "autoWidth": true,
+           "buttons": [
+               'copyHtml5',
+       'csvHtml5',
+               'excelHtml5',
+
+               'print'
+           ]
+       }
+   );
+
+    });
+
+    function getDetails() {
+        $('#page-loader1').show();
+        $.ajax({
+            url: "../warehouse/rpt_pd_req",
+            type: "POST",
+
+            data: { 'FromDate': $('#FromDate').val(), 'ToDate': $('#ToDate').val(), 'p_Code': $('#InviceNo').val() },
+
+            datatype: "json",
+            success: function (data1) {
+                var htmlNew = data1;
+                $('#divtable').html($(htmlNew).find('#dom-jqry'));
+
+
+                $('#page-loader1').hide();
+
+                $('#dom-jqry').DataTable(
+       {
+           "dom": '<"dt-buttons"Bf><"clear">lirtp',
+           "paging": true,
+           "autoWidth": true,
+           "buttons": [
+               'copyHtml5',
+       'csvHtml5',
+               'excelHtml5',
+
+               'print'
+           ]
+       }
+   );
+
+
+            }
+        });
+    }
+
+
+
+</script>
+
+

@@ -1,0 +1,213 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "MemberBank";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="~/adminjs/ckeditor/ckeditor.js"></script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'=="1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "MemberBank");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+</script>
+}
+
+<script>
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title"> MEMBER BANK DETAILS</div>
+                <hr>
+                <form action="MemberBank" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id",@onchange= "GetBankDetails(this)" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label"> Name</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Enter Name" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.Id)
+                            <div class="form-group">
+                                <label class="lab control-label">Account No</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "20", @placeholder = "Enter Account No" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Bank Name</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", @placeholder = "Enter Bank Name" })
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Bank Branch</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.BankBranch, new { @class = "form-control", @placeholder = "Enter Bank Branch" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">IFSC Code</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.IFSCCode, new { @class = "form-control", @placeholder = "Enter IFSC Code" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Pan No</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.PanNo, new { @class = "form-control", @placeholder = "Enter Pan No" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="Update" />
+                                @*<button type="submit" class="btn btn-primary shadow-primary px-5" id="btnAdd"><i class="icon-lock"></i> Add Employee</button>*@
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+        function Validate()
+        {
+            if (MemberId.value == '') {
+                alert('Please Enter Member Id');
+                MemberId.focus();
+
+                return false;
+            }
+            if (Name.value == '') {
+                alert('Please Enter Name');
+                Name.focus();
+
+                return false;
+            }
+           
+            if (AccountNo.value == '') {
+                alert('Please Enter Account No');
+                AccountNo.focus();
+
+                return false;
+            }
+            if (BankName.value == '') {
+                alert('Please Enter Bank Name');
+                BankName.focus();
+
+                return false;
+            }
+            if (BankBranch.value == '') {
+                alert('Please Enter Bank Branch');
+                BankBranch.focus();
+
+                return false;
+            }
+            if (IFSCCode.value == '') {
+                alert('Please Enter IFSC Code');
+                IFSCCode.focus();
+
+                return false;
+            }
+            if (PanNo.value == '') {
+                alert('Please Enter Pan No');
+                PanNo.focus();
+
+                return false;
+            }
+
+
+        }
+        function GetBankDetails(_this) {
+           
+            //debugger;
+          
+                var dataobject = {
+                    MemberId: _this.value
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/GetMemberBank",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.Id != "0") {
+                            document.getElementById('Name').value = r.Name;
+                            document.getElementById('AccountNo').value = r.AccountNo;
+                            document.getElementById('IFSCCode').value = r.IFSCCode;
+                            document.getElementById('BankBranch').value = r.BankBranch;
+                            document.getElementById('PanNo').value = r.PanNo;
+                            document.getElementById('MemberId').value = r.MemberId;
+                            document.getElementById('BankName').value = r.BankName;
+                          
+                        }
+                        else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            }
+           
+        
+
+
+</script>

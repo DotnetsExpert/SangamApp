@@ -1,0 +1,104 @@
+﻿
+@*@{
+    ViewBag.Title = "GetMenuList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+
+@model MLMPortal.Models.Stucommon
+
+@{
+    Layout = null;
+}
+
+@using System.Data
+
+
+
+
+
+
+    <ul class="sidebar-menu do-nicescrol" style="background:#043b56 !important;">
+
+    <li class="sidebar-header">MAIN NAVIGATION</li>
+
+
+
+    @foreach (DataRow drMainMenu in Model.dt.Rows)
+    {
+        if (drMainMenu["MenuUrl"].ToString() == "#")
+        {
+             <li>
+
+                           <a class="waves-effect" href="javaScript:void();">
+
+                               <i class=@drMainMenu["MenuIcon"].ToString()></i><span>@drMainMenu["MenuTitle"].ToString() </span>
+                               <i class="fa fa-angle-left pull-right"></i>
+
+
+                               @*<i class=@drMainMenu["MenuIcon"].ToString()></i> @drMainMenu["MenuTitle"].ToString()<span class="fa arrow"></span>*@
+                           </a>
+                         
+
+                    <ul class="sidebar-submenu">
+                        @foreach (DataRow drSubmenu in Model.dt1.Rows)
+                    {
+                        if (drMainMenu["Id"].ToString() == drSubmenu["MainMenuId"].ToString())
+                        {
+
+                            if (drSubmenu["MenuUrl"].ToString() == "#")
+                            {
+                                   
+
+                            foreach (DataRow drthirdmenu in Model.dt2.Rows)
+                                    {
+                                        if (drSubmenu["MainMenuId"].ToString() == drthirdmenu["MainMenuId"].ToString() && drSubmenu["Submenuid"].ToString() == drthirdmenu["Submenuid"].ToString())
+                                        {
+                                               <li><a  href="@drthirdmenu["MenuUrl"].ToString()"><i class=@drthirdmenu["MenuIcon"].ToString()> @drthirdmenu["thirdtitle"].ToString()</i></a></li>
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    <li><a  href="@drSubmenu["MenuUrl"].ToString()"><span><i class="fa fa-long-arrow-right">@drSubmenu["submenutitle"].ToString()</i></span></a></li>
+
+                                }
+
+                            }
+
+                        }
+                    </ul>
+
+
+            </li>
+
+        }
+        else
+        {
+
+
+       
+
+            <li>
+                <a class="waves-effect" href="@drMainMenu["MenuUrl"].ToString()">
+                    <i class=@drMainMenu["MenuIcon"].ToString()></i> 
+                    <span>@drMainMenu["MenuTitle"].ToString()</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+
+        }
+    }
+
+
+</ul>
+
+
+
+
+
+
+
+
+

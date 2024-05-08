@@ -1,0 +1,101 @@
+﻿@model MLMPortal.Models.Support
+@{
+    ViewBag.Title = "ComposeMessage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "ComposeMessage");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+        });
+    </script>
+}
+
+<script type="text/javascript">
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Compose Message</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card-header" style="background-color:darkblue;color:white;">
+                        <i class="fa fa-mail-forward"></i> &nbsp; &nbsp; Compose Message To Member
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="lab control-label">Message Type</label>
+                                    @Html.DropDownListFor(m => m.MsgType, Model.MsgTypeList, new { @class = "form-control" })
+                                    <label class="lab control-label">To</label>
+                                    @Html.TextBoxFor(m => m.ToMemberId, new { @class = "form-control", @placeholder = "Enter User ID" })
+                                    <label class="lab control-label">Subject</label>
+                                    @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", })
+                                    <label class="lab control-label">Message</label>
+                                    @Html.TextAreaFor(m => m.Message, new { @class = "form-control", })
+
+
+                                    <div class="col-sm-2" style="margin-top:30px">
+                                        <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach">
+                                            <i class="fa fa-save"></i>&nbsp;&nbsp;Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

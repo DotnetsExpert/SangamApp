@@ -1,0 +1,701 @@
+﻿@{
+    Layout = null;
+    //string ProjectLogo = System.Configuration.ConfigurationManager.AppSettings["ProjectLogo"].ToString();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title> Missan Pay</title>
+    @*<link rel="shortcut icon" type="image/x-icon" href="/assets/wimg/favicon.png">*@
+    @*<link rel="icon" href="@ProjectLogo" type="/image/png" sizes="20x30" />*@
+    <link href="@Url.Content("/Content/assets/images/favicon.ico")" rel="icon" type="image/x-icon" />
+    <link href="@Url.Content("/Content/assets/plugins/select2/css/select2.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/plugins/inputtags/css/bootstrap-tagsinput.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/plugins/jquery-multi-select/multi-select.css")" rel="stylesheet" />
+
+    <link href="@Url.Content("/Content/assets/plugins/notifications/css/lobibox.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/plugins/simplebar/css/simplebar.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/css/bootstrap.min.css")" rel="stylesheet" />
+    @*<link href="@Url.Content("~/Content/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css")" rel="stylesheet" />*@
+
+    <link href="../Content/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+    <link href="../Content/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+    <link href="@Url.Content("/Content/assets/css/animate.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/css/icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/css/sidebar-menu.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/css/app-style.css")" rel="stylesheet" />
+    <link href="@Url.Content("/Content/assets/plugins/summernote/dist/summernote-bs4.css")" rel="stylesheet" />
+
+
+
+    <style>
+        .select2-container--default .select2-results > .select2-results__options {
+            max-height: 400px;
+            min-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+    <style type="text/css">
+        .lblColor {
+            color: #fff;
+        }
+    </style>
+
+
+
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 2 !important;
+            color: #212529;
+            text-align: left;
+            background-color: #fff
+        }
+
+        thead {
+            background: #043b56 !important;
+            color: white;
+        }
+
+        .btn-primary {
+            background: #043b56 !important;
+            border-color: #043b56 !important;
+            color: white;
+        }
+
+        .d-widget {
+            border-radius: 41px !important;
+            display: inline-block;
+            padding: 18px 15px;
+            width: 100%;
+            border: 1px solid #000000;
+        }
+
+        .soft-red {
+            background: #EF6C00 !important;
+        }
+    </style>
+
+
+
+
+    <script type="text/javascript">
+
+        function isNumberKey(evt, id) {
+            try {
+                var charCode = (evt.which) ? evt.which : event.keyCode;
+
+                if (charCode == 46) {
+                    var txt = document.getElementById(id).value;
+                    if (!(txt.indexOf(".") > -1)) {
+
+                        return true;
+                    }
+                }
+                if (charCode > 31 && (charCode < 48 || charCode > 57))
+                    return false;
+
+                return true;
+            } catch (w) {
+                alert(w);
+            }
+        }
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+
+    <script>
+        if ('@Session["username"]' == null || '@Session["username"]' == "") {
+            var url = "../Account/login";
+            window.location.href = url;
+        }
+
+
+    </script>
+    @*<script>
+            $(document).ready(function () {
+                var UserId = '@Request.RequestContext.HttpContext.Session["username"]';
+                var ARoleId = '@Request.RequestContext.HttpContext.Session["Role"]';
+                if (UserId == "" || ARoleId == "") {
+                    window.location.href = "../Account/login";
+                }
+            });
+        </script>*@
+</head>
+<body>
+    <div id="wrapper">
+        <!--Start sidebar-wrapper-->
+        <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
+            <div class="brand-logo" style="background:white">
+                <a href="@Url.Action("index","Home")" style="width:100%;">
+                    @*<img src="../Images/logo.png" class="logo-icon" alt="logo icon" style="width: 42%;">*@
+                    <h5 class="logo-text" style="color:black;">Mission Pay</h5>
+                </a>
+            </div>
+            <div class="user-details">
+                <div class="media align-items-center user-pointer collapsed" data-toggle="collapse" data-target="#user-dropdown">
+                    <div class="avatar">
+
+                        @if (Convert.ToString(Session["Role"]) == "2")
+                        {
+                            <img class="mr-3 side-user-img" src="/ProfilePic/@Session["prodilepic"]">
+                        }
+                        else
+                        {
+                            <img src="../Content/assets/images/avatars/userico.png" class="img-circle">
+                        }
+
+
+                    </div>
+                    <div class="media-body">
+                        <h6 class="side-user-name">
+                            @if (Session["username"] != null)
+                            {
+                                @Session["username"]
+                            }
+                            else
+                            {
+                                var redirectUrl = Url.Action("login", "Account");
+                                <script>
+                                    var redirectUrl = '@redirectUrl';
+                                    window.location.href = redirectUrl;
+                                </script>
+                            }
+                        </h6>
+                    </div>
+                </div>
+                <div id="user-dropdown" class="collapse">
+                    @if (Session["Role"] == null || Session["Role"].ToString() == "")
+                    {
+                        var redirectUrl = Url.Action("login", "Account");
+                        <script>
+                            var redirectUrl = '@redirectUrl';
+                            window.location.href = redirectUrl;
+                        </script>
+                    }
+                    <ul class="user-setting-menu">
+                        @if (Session["Role"] != null && Session["Role"].ToString() != "1")
+                        {
+                            @*<li><a href="../EmployeeMaster/DetailedView?EmpCode=@Session["username"].ToString()"><i class="icon-user"></i>  My Profile</a></li>*@
+                        }
+                        @*<li><a href="#"><i class="icon-settings"></i> Setting</a></li>*@
+                        <li><a href="@Url.Action("login","Account")"><i class="icon-power"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            @if (Session["Role"] != null && Session["Role"].ToString() != "" && (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "5"))
+            {
+                {
+
+                    Html.RenderAction("GetMenuList", "Admin");
+                }
+
+
+            }
+            else if (Convert.ToString(Session["Role"]) == "2")
+            {
+                <ul class="sidebar-menu do-nicescrol">
+                    <li>
+                        <a class="waves-effect" href="/Customer/UserDashboard"><i class="ti-home"></i><span>Dashboard </span></a>
+                    </li>
+
+                    @*//radhe////////////////*@
+
+
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Member</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="/Customer/RegistrationNew"><i class="fa fa-long-arrow-right"></i>Registration New</a></li>
+                            <li><a href="/Customer/MemberViewProfile"><i class="fa fa-long-arrow-right"></i>View Profile</a></li>
+                            <li><a href="/Customer/MemberEditProfile"><i class="fa fa-long-arrow-right"></i>KYC Details</a></li>
+                            <li><a href="/Memberteam/MemberBankDetails"><i class="fa fa-long-arrow-right"></i>Bank Details</a></li>
+                            @*<li style="display:none;"><a href="/Customer/h_t_u_video"><i class="fa fa-long-arrow-right"></i>How to use Video</a></li>*@
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Member Document</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="../Letter/WelcomeLetter"><i class="fa fa-long-arrow-right"></i>Welcome Letter </a></li>
+                            @*<li><a href="../WlcomeLetter/KYCUpdate"><i class="fa fa-long-arrow-right"></i>KYC Details</a></li>*@
+                            <li><a href="../Letter/IDCard"><i class="fa fa-long-arrow-right"></i>ID Card</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Password</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="/Customer/ChangePassword"><i class="fa fa-long-arrow-right"></i>Change Pasword</a></li>
+                            @*<li><a href="/Customer/ForgetLoginPassword"><i class="fa fa-long-arrow-right"></i>Forget Login Password</a></li>*@
+                            @*<li><a href="/Customer/ForgetTransactionPassword"><i class="fa fa-long-arrow-right"></i>Forget Transaction Password</a></li>
+                                <li><a href="/Customer/ChangeTransactionPassword"><i class="fa fa-long-arrow-right"></i>Change Transaction Password</a></li>*@
+
+                        </ul>
+                    </li>
+                    @*<li>
+                            <a class="waves-effect" href="javaScript:void();">
+                                <i class="icon-arrow-right"></i><span>E-Pin Management</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/PinManagement/MemberTopup_ByPin"><i class="fa fa-long-arrow-right"></i>Member Topup</a></li>
+                                <li><a href="/PinManagement/Pindetails"><i class="fa fa-long-arrow-right"></i>Pin Details</a></li>
+                                <li><a href="/PinManagement/User_PinTransfer"><i class="fa fa-long-arrow-right"></i>Pin Transfer</a></li>
+                                <li><a href="/PinManagement/EPinTransferReport"><i class="fa fa-long-arrow-right"></i>Pin Transfer Report</a></li>
+                            </ul>
+                        </li>*@
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Team</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="/Customer/MyDirectTeam"><i class="fa fa-long-arrow-right"></i>My Directs</a></li>
+                            <li><a href="/MemberTeam/MyTeam"><i class="fa fa-long-arrow-right"></i>My Team</a></li>
+                            <li><a href="/MemberTeam/LevelTree"><i class="fa fa-long-arrow-right"></i>Level Tree</a></li>
+                            <li><a href="/MemberTeam/LevelWiseTeamReport"><i class="fa fa-long-arrow-right"></i>Level Wise Report</a></li>
+
+                            <li><a href="/Customer/RankChart"><i class="fa fa-long-arrow-right"></i>Rank-Chart</a></li>
+
+                            @*<li><a href="/Customer/LevelIncomeCount"><i class="fa fa-long-arrow-right"></i>Level Team</a></li>*@
+
+                        </ul>
+                    </li>
+
+
+
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Fund Request</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="/Customer/FundRequest"><i class="fa fa-long-arrow-right"></i>Fund Request</a></li>
+                            <li><a href="/Customer/FundRequestReport"><i class="fa fa-long-arrow-right"></i>Fund Request Report</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+
+                        <a class="waves-effect" href="javaScript:void();">
+
+                            <i class="icon-arrow-right"></i><span>Member Topup </span>
+                            <i class="fa fa-angle-left pull-right"></i>
+
+
+
+                        </a>
+
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="/Customer/MemberTopup"><span><i class="fa fa-long-arrow-right">Member Topup</i></span></a></li>
+                            <li><a href="/Customer/TopupHistory"><span><i class="fa fa-long-arrow-right">Topup History</i></span></a></li>
+                        </ul>
+
+
+                    </li>
+
+                    <li>
+                        <a class="waves-effect" href="/PaymentReport/P2P_Transfer">
+
+                            <i class="icon-list"></i><span>P2P Transfer</span>
+                            @*<i class="fa fa-angle-left pull-right"></i>*@
+                        </a>
+                    </li>
+
+
+                    @*<li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Fund Request</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="/Customer/FundRequest"><i class="fa fa-long-arrow-right"></i>Fund Request</a></li>
+                            <li><a href="/Customer/FundRequestReport"><i class="fa fa-long-arrow-right"></i>Fund Request Report</a></li>
+
+                        </ul>
+                    </li>*@
+
+
+
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Withdrawl</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+                            <li><a href="../PaymentReport/WithdrawalRequestNEFT"><i class="fa fa-long-arrow-right"></i>Withdrawl Requests</a></li>
+                            @*<li><a href="../PaymentReport/WithdrawalRequestROI"><i class="fa fa-long-arrow-right"></i>ROI Income Requests</a></li>*@
+                            <li><a href="../PaymentReport/WithdrawalHistoryNEFT"><i class="fa fa-long-arrow-right"></i>Withdrawal History</a></li>
+                            <li><a href="../MemberTeam/TransactionHistory"><i class="fa fa-long-arrow-right"></i>Transaction History</a></li>
+                            @*<li><a href="../WlcomeLetter/KYCUpdate"><i class="fa fa-long-arrow-right"></i>KYC Details</a></li>*@
+                            @*<li><a href="../WlcomeLetter/IDCard"><i class="fa fa-long-arrow-right"></i>ID Card</a></li*@
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="waves-effect" href="javaScript:void();">
+                            <i class="icon-arrow-right"></i><span>Payout Report</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="sidebar-submenu">
+
+                            <li><a href="/PayoutReport/LevelIncome"><i class="fa fa-long-arrow-right"></i>Level Income</a></li>
+
+                            <li><a href="/PayoutReport/PerformanceIncome"><i class="fa fa-long-arrow-right"></i>Performance Bonus</a></li>
+                            <li><a href="/PayoutReport/SuperPerformanceIncome"><i class="fa fa-long-arrow-right"></i>Super Performance Bonus</a></li>
+
+                            <li><a href="/PayoutReport/BestPerformerOfTheDayIncome"><i class="fa fa-long-arrow-right"></i>Best Performer Of The Day Income</a></li>
+                            <li><a href="/PayoutReport/BronzeTTOIncome"><i class="fa fa-long-arrow-right"></i>TTO Royality Income</a></li>
+
+
+                            <li><a href="/PayoutReport/RankIncome"><i class="fa fa-long-arrow-right"></i>CTO Royality Income</a></li>
+                           
+                            
+                            <li><a href="/PayoutReport/Reward"><i class="fa fa-long-arrow-right"></i>Monthly Reward Income</a></li>
+
+
+
+
+                            @*<li><a href="/PayoutReport/BinaryIncome"><i class="fa fa-long-arrow-right"></i> Matching Income</a></li>*@
+                            @*<li><a href="/PayoutReport/ROIIncome"><i class="fa fa-long-arrow-right"></i>ROI Income</a></li>*@
+                            @*<li><a href="../PayoutReport/LevelIncome"><i class="fa fa-long-arrow-right"></i>Repurchase Income</a></li>*@
+
+                        </ul>
+                    </li>
+                    <li><a href="/Account/login" class="waves-effect"><i class="icon-cloud-upload text-danger"></i><span>Logout</span></a></li>
+                </ul>
+            }
+
+
+
+
+        </div>
+        <!--End sidebar-wrapper-->
+        <!--Start topbar header-->
+        <header class="topbar-nav">
+            <nav class="navbar navbar-expand fixed-top gradient-ibiza">
+                <ul class="navbar-nav mr-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link toggle-menu" href="javascript:void();">
+                            <i class="icon-menu menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form class="search-bar" style="display:none;">
+                            <input type="text" class="form-control" placeholder="Enter keywords">
+                            <a href="javascript:void();"><i class="icon-magnifier"></i></a>
+                        </form>
+                    </li>
+                </ul>
+                <ul class="navbar-nav align-items-center right-nav-link">
+                    <li class="nav-item dropdown-lg" style="display:block">
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();" style="display:none;">
+                            <i class="icon-bell"></i><span class="badge badge-primary badge-up">10</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right animated fadeIn">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    You have 10 Notifications
+                                    <span class="badge badge-primary">10</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javaScript:void();">
+                                        <div class="media">
+                                            <i class="icon-people fa-2x mr-3 text-info"></i>
+                                            <div class="media-body">
+                                                <h6 class="mt-0 msg-title">New Registered Users</h6>
+                                                <p class="msg-info">Lorem ipsum dolor sit amet...</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javaScript:void();">
+                                        <div class="media">
+                                            <i class="icon-cup fa-2x mr-3 text-warning"></i>
+                                            <div class="media-body">
+                                                <h6 class="mt-0 msg-title">New Received Orders</h6>
+                                                <p class="msg-info">Lorem ipsum dolor sit amet...</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javaScript:void();">
+                                        <div class="media">
+                                            <i class="icon-bell fa-2x mr-3 text-danger"></i>
+                                            <div class="media-body">
+                                                <h6 class="mt-0 msg-title">New Updates</h6>
+                                                <p class="msg-info">Lorem ipsum dolor sit amet...</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="list-group-item"><a href="javaScript:void();">See All Notifications</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item language">
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javaScript:void();"><i class="flag-icon flag-icon-in"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
+                            <span class="user-profile">
+                                @if (Convert.ToString(Session["Role"]) == "2")
+                                {
+                                    <img class="mr-3 side-user-img" src="/ProfilePic/@Session["prodilepic"]">
+                                }
+                                else
+                                {
+                                    <img src="../Content/assets/images/avatars/userico.png" class="img-circle">
+                                }
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right animated fadeIn">
+                            <li class="dropdown-item user-details">
+                                <a href="javaScript:void();">
+                                    <div class="media">
+                                        <div class="avatar"><img class="align-self-start mr-3" src="../Content/assets/images/avatars/userico.png" alt="user avatar"></div>
+                                        <div class="media-body">
+                                            <h6 class="mt-2 user-title">
+                                                @if (Session["username"] != null)
+                                                {
+                                                    @Session["username"]
+                                                }
+                                                else
+                                                {
+                                                    var redirectUrl = Url.Action("login", "Account");
+                                                    <script>
+                                                        var redirectUrl = '@redirectUrl';
+                                                        window.location.href = redirectUrl;
+                                                    </script>
+                                                }
+                                            </h6>
+                                            @*<p class="user-subtitle">na@gmail.com</p>*@
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-divider"></li>
+                            @*<li class="dropdown-item"><a href="#"><i class="icon-wallet mr-2"></i> Account</a></li>
+                                <li class="dropdown-divider"></li>*@
+                            @*<li class="dropdown-item"><a href="#"><i class="icon-settings mr-2"></i> Setting</a></li>
+                                <li class="dropdown-divider"></li>*@
+                            <li class="dropdown-item"><a href="@Url.Action("login","Account")"><i class="icon-power mr-2"></i> Logout </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <!--End topbar header-->
+        <div class="clearfix"></div>
+
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <!--Start Dashboard Content-->
+                @RenderBody()
+                <!--End Dashboard Content-->
+            </div>
+            <!-- End container-fluid-->
+
+        </div><!--End content-wrapper-->
+        <!--Start Back To Top Button-->
+        <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+        <!--End Back To Top Button-->
+        <!--Start footer-->
+        <footer class="footer" style="background: #043b56; color: white; height: 40px;">
+            <div class="container">
+                <div class="text-center">
+                    <p>Copyright © 2023 <a href="#" target="_blank" style="color:white;">Mission Pay</a> </p>
+
+                </div>
+            </div>
+        </footer>
+        <!--End footer-->
+
+    </div>
+
+    <script src="@Url.Content("/Content/assets/js/jquery.min.js")"></script>
+
+    @*Here toolkit*@
+
+    <!-- Toolkit Popup Script JS-->
+    @*<script src="js/jquery.js"></script>*@
+    <script src="~/TreeStyle/genealogy.js"></script>
+    @*<script src="~/TreeStyle/jquery.tree.js"></script>*@
+    <script src="~/TreeStyle/tooltipster.bundle.min.js"></script>
+    <!-- Toolkit Popup Script JS-->
+    @*<script src="../Content/assets/jquery.dataTables.min.js"></script>*@
+    <script src="~/Content/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/jszip.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+    <script src="../Content/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+
+    <script src="@Url.Content("/Content/assets/js/popper.min.js")"></script>
+
+    <script src="@Url.Content("/Content/assets/js/bootstrap.min.js")"></script>
+
+
+    <script src="@Url.Content("/Content/assets/plugins/simplebar/js/simplebar.js")"></script>
+    <script src="@Url.Content("/Content/assets/js/waves.js")"></script>
+    <script src="@Url.Content("/Content/assets/js/sidebar-menu.js")"></script>
+    <script src="@Url.Content("/Content/assets/js/app-script.js")"></script>
+
+    <script src="@Url.Content("/Content/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/sparkline-charts/jquery.sparkline.min.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/Chart.js/Chart.min.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/notifications/js/lobibox.min.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/notifications/js/notifications.min.js")"></script>
+    <script src="@Url.Content("/Content/assets/js/index.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/alerts-boxes/js/sweetalert.min.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/alerts-boxes/js/sweet-alert-script.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/jquery-multi-select/jquery.multi-select.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/jquery-multi-select/jquery.quicksearch.js")"></script>
+    <script src="@Url.Content("/Content/assets/plugins/summernote/dist/summernote-bs4.min.js")"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            //$('#autoclose-datepicker').datepicker({
+            //    autoclose: true,
+            //    todayHighlight: true
+            //});
+
+            $('.single-select').select2();
+
+            $('.multiple-select').select2();
+
+            //multiselect start
+
+            $('#my_multi_select1').multiSelect();
+            $('#my_multi_select2').multiSelect({
+                selectableOptgroup: true
+            });
+
+            $('#my_multi_select3').multiSelect({
+                selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+                selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+                afterInit: function (ms) {
+                    var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which === 40) {
+                                that.$selectableUl.focus();
+                                return false;
+                            }
+                        });
+
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which == 40) {
+                                that.$selectionUl.focus();
+                                return false;
+                            }
+                        });
+                },
+                afterSelect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                },
+                afterDeselect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                }
+            });
+
+            $('.custom-header').multiSelect({
+                selectableHeader: "<div class='custom-header'>Selectable items</div>",
+                selectionHeader: "<div class='custom-header'>Selection items</div>",
+                selectableFooter: "<div class='custom-header'>Selectable footer</div>",
+                selectionFooter: "<div class='custom-header'>Selection footer</div>"
+            });
+
+
+
+        });
+        $(document).ready(function () {
+            //  $('.cal').datepicker();
+
+        })
+        function BindDDL(data, id) {
+
+            var option = "";
+            if (data != null) {
+                for (var i = 0; i < data.length; i++) {
+                    option += "<option value='" + data[i].Value + "'>" + data[i].Text + "</option>";
+                }
+                $('#' + id).html(option);
+            }
+
+        }
+    </script>
+
+
+    @*@section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }*@
+
+
+    @*<script src="~/OperationJs/jsOther.js"></script>*@
+</body>
+</html>

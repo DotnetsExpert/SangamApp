@@ -1,0 +1,46 @@
+﻿@model MLMPortal.Models.Master
+@using System.Data
+@{
+    ViewBag.Title = "Report_IP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>IP Report</h4>
+
+@{
+    if (Session["Role"].ToString() == "1")
+    {
+        <div class="table-responsive" id="divmain">
+            <table id="default-datatable" class="table table-bordered">
+                <thead>
+                    <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                        <th scope="col">SNo.</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">User Type</th>
+                        <th scope="col">IP Address</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                    {
+                        int i = 0;
+                        foreach (DataRow item in Model.dt.Rows)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td class="EntryId">@item["UserId"]</td>
+                                <td class="Account Code">@item["TypeName"]</td>
+                                <td class="CompanyId">@item["IPAddress"]</td>
+                                <td class="Invoice No">@item["Enteredate"]</td>
+                                <td class="InvoiceDate">@item["EntryTime"]</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Error";
+    Layout = null; //"~/Views/Shared/Error.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .del {
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+<a href="/Home/Default" class="btn btn-primary" >Back To Home</a>
+
+
+@*<h1 class="text-danger">Error.</h1>*@
+
+@*<h2 class="text-danger">An error occurred while processing your request.</h2>*@
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <section class="panel del" style="border:1px solid;">
+                <header class="panel-heading" style="background:#e8180ecc;color:white;font-size: 21px;">
+                    Opps!!
+                    <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-times"></a>
+                    </span>
+                </header>
+
+                <div class="panel-body">
+
+                    <center>
+                        <h2 class="text-danger">Route Not Found !!!!</h2>
+                        @*<h3>Failed Your Paymet.!!</h3><center>
+
+                            <h4>Transaction Id : <asp:Label runat="server" ID="txtTransactionId"></asp:Label> </h4>
+                            <h4>Amount : <asp:Label runat="server" ID="txtAmount"></asp:Label>  </h4>*@
+                </div>
+
+
+            </section>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>

@@ -1,0 +1,156 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "Replicated_web_details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<style>
+    .panel-heading {
+        border-color: #eff2f7;
+        font-size: 16px;
+        font-weight: 400;
+        background: #f88e3f;
+        text-transform: uppercase;
+        padding: 15px;
+        color: #fff;
+        width: 100%;
+    }
+
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .btn-primary {
+        background-color: #1fb5ad;
+        border-color: #1fb5ad;
+        color: #FFFFFF;
+    }
+</style>
+<div class="row" style="background-color:white;">
+    
+
+    <header class="panel-heading">
+
+        Replicated Website Details
+        <span class="tools pull-right">
+            <a href="javascript:;" class="fa fa-chevron-down"></a>
+            <a href="javascript:;" class="fa fa-cog"></a>
+            <a href="javascript:;" class="fa fa-times"></a>
+        </span>
+
+
+
+
+
+
+
+        @*<input type="submit" value="Export To Excel" style="display:none;" class="btn btn-primary ">*@
+        @using (Html.BeginForm("Export", "Admin", FormMethod.Post))
+        {
+            
+            <input type="hidden" name="GridHtml" id="GridHtml" />
+                                                    <input type="hidden" name="Remark" id="Remark" />
+                                                    
+                                                    <input type="submit" onclick="return Exporttoexcel()" id="btnSubmit" value="Export to excel" class="btn btn-success" />
+                                                    @*<input type="button" onclick="printBills()" id="btnPrint" class="btn btn-primary" value="Print" />*@
+        }
+
+    </header>
+
+    <form method="post">
+
+        <div class="row">
+
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="lab control-label"> Member Id</label>
+                  
+                        @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+                   
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="lab control-label">From Date</label>
+                    <div class="col-lg-12">
+                        @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="lab control-label"> To Date</label>
+                    <div class="col-lg-12">
+                        @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-3" style="margin-top:30px">
+                <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i> Search</button>
+            </div>
+        </div>
+
+
+
+    </form>
+
+
+    <div class="panel-body" style="width:100%;">
+        <section id="unseen">
+
+            <div id="tableprint">
+                <table cellspacing="0" cellpadding="4" rules="all" class="table table-bordered"  style="background-color:White;border-color:#CC9966;border-width:1px;border-style:None;font-size:11px;border-collapse:collapse;">
+                    <tbody>
+                        <tr style="color:#FFFFCC;background-color:#990000;font-family:Verdana;font-weight:bold;width:100%;">
+                            <th scope="col">SNo.</th>
+                            <th scope="col">Customer Id</th>
+                            <th scope="col">Franchid</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Email Id</th>
+                            <th scope="col">Create Date</th>
+
+
+                        </tr>
+                    </tbody>
+
+                    @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                    {
+                        int i = 0;
+                        foreach (DataRow item in Model.dt.Rows)
+                        {
+                            i++;
+
+                            <tr>
+                                <td>@i </td>
+                                <td class="Type1">@item["Cust_id"]</td>
+                                <td class="Franchid">@item["Franchise_Id"]</td>
+                                <td class="Name">@item["Name"]</td>
+                                <td class="Franchid">@item["MobileNo"]</td>
+                                <td class="Type1">@item["EmailId"]</td>
+                                <td class="Name">@item["CreateDate"]</td>
+
+                            </tr>
+                        }
+                    }
+
+                </table>
+            </div>
+        </section>
+    </div>
+    <script>
+    function Exporttoexcel() {
+
+    $('#GridHtml').val($('#tableprint').html());
+    $("#Remark").val('Replicated web details');
+   
+    return true;
+    }
+    </script>
+</div>
+

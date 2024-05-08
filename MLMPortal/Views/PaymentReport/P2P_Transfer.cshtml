@@ -1,0 +1,176 @@
+﻿@model MLMPortal.Models.PayoutReport
+@{
+    ViewBag.Title = "MemberTopup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+
+<style>
+    .a1 {
+        padding-left: 10px;
+    }
+    .form-group {
+        margin-bottom: 2px;
+    }
+</style>
+<my-spinner>
+    <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+        <i class="fa fa-refresh fa-spin nexo-refresh-icon" style="color: rgb(0, 0, 0); font-size: 50px; position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -25px; width: 44px; height: 50px;">
+        </i>
+    </div>
+</my-spinner>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h4>P2P Transfer</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    @if (TempData["flag"] != null)
+                    {
+                        <div class="row">
+                            <div class="col-sm-12" style="background: azure;font-size: 16px;height: 49px;">
+                                @if (TempData["flag"].ToString() == "1")
+                                {
+                                    <div class="alert alert-primary icons-alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <i class="icofont icofont-close-line-circled"></i>
+                                        </button>
+                                        <p><strong>Success!</strong> @TempData["msg"]</p>
+                                    </div>
+                                }
+
+                                @if (TempData["flag"].ToString() == "0")
+                                {
+                                    <div class="alert alert-danger icons-alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <i class="icofont icofont-close-line-circled"></i>
+                                        </button>
+                                        <p><strong>Error!</strong> @TempData["msg"].ToString()</p>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+            <div class="card-header-right">
+            </div>
+        </div>
+        <div class="card-block">
+
+            <form method="post">
+                <div class="row">
+                    <div class="col-sm-6">
+
+                        <div class="form-group">
+                            <label class="lab control-label a1"> Enter Member ID*</label> <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.UseId, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="lab control-label a1">Member Name</label> <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0px">
+                            <label class="lab control-label a1">Wallet Type</label>
+                            <div class="col-lg-12">
+                                @Html.DropDownListFor(m => m.DepositType, new List<SelectListItem>() { new SelectListItem() { Text = "Payout Wallet", Value = "M" }, new SelectListItem() { Text = "Recharge Wallet", Value = "F" } }, new { @class = "form-control", @onchange = "BindWallet()" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="lab control-label a1">Wallet</label> <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0px">
+                            <label class="lab control-label a1">Transfer To M.Id</label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @onchange = "return Get_MemberDetails()" })
+                                <label id="ttname" style="color:red;margin:0px;padding:0px"></label>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group" style="margin-top:0px">
+                            <label class="lab control-label a1">Transfer Amt</label> <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.TranferAmt, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top:0px">
+                            <label class="lab control-label a1">Transaction Password</label> <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.TransactionID, new { @class = "form-control", @type = "password" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm-3">
+
+                            <input type="submit" value="Submit" onclick="return Validate()" class="btn btn-success btn-group-lg form-control" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function Validate() {
+        if ($('#MemberId').val() == "") {
+            alert("Please Enter Member Id");
+            $('#memberId').focus();
+            return false;
+        }
+        if ($('#TranferAmt').val() == "" || $('#TranferAmt').val() == "0") {
+            alert("Please Enter Tranfer Amt");
+            $('#TranferAmt').focus();
+            return false;
+        }
+
+        if (!confirm('Are You Sure You Want To top this Id')) {
+            return false;
+        }
+        return true;
+    }
+    function Get_MemberDetails() {
+        $("#showSpinner").show();
+        $.post('/PinManagement/GetMemberDetails_ById', { MemberId: $.trim($('#MemberId').val()) }, function (data1) {
+            debugger;
+            var DataObject = JSON.parse(data1);
+            if (DataObject.length != 0) {
+                $('#ttname').text(DataObject[0].Name);
+            }
+            else {
+                alert("Member id does not exists.!!");
+                $('#MemberId').val('')
+                $('#ttname').text('');
+            }
+        })
+        $("#showSpinner").hide();
+    }
+
+    function BindWallet() {
+        $("#showSpinner").show();
+        $.post('/PaymentReport/BindUserWallet', { DepositType: $.trim($('#DepositType').val()) }, function (data) {
+            debugger;
+            console.log(data);
+            $('#Amount').val(data.newWallet);
+
+
+        })
+        $("#showSpinner").hide();
+    }
+
+</script>

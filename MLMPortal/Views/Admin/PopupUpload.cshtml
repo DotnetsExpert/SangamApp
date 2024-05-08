@@ -1,0 +1,226 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "PopupUpload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+    });
+</script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "PopupUpload");
+            }
+            else if ('@TempData["flag"]' == "2") {
+                alert('@TempData["msg"].ToString()', window.location.href = "PopupUpload");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">Popup Upload</div>
+                <hr>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Select Type</label>
+                                <div class="col-lg-12">
+                                    @Html.DropDownListFor(m => m.Type, new List<SelectListItem>()
+                                     {
+                                         new SelectListItem(){ Text= "MEMBER", Value = "MEMBER"},
+                                         new SelectListItem(){ Text= "FRANCHISE", Value = "FRANCHISE"},
+                                         new SelectListItem(){ Text= "DIPO", Value = "DIPO"},
+
+                                     }, "Select", new { @id = "ddlTyped", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="firstname"> Title  <span>*</span></label>
+                                @Html.TextBoxFor(m => m.ImageTitle, new { @id = "ImageTitle", @class = "form-control", @placeholder = "Image Title" })
+                                @Html.HiddenFor(m => m.Entryid, new { @id = "hdId", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="lastname">Image <span>*</span></label>
+                                <input type="file" class="form-control" id="CategoryImageURL" name="IamgeFile" />
+                            </div>
+                        </div> <!-- end col -->
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="text-center col-md-12" id="div3">
+                            <input type="submit" class="btn btn-success waves-effect waves-light mt-2" value="Save" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">POPUP UPLOAD DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Image</th>
+                                <th>Action</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Catdt != null)
+                            {
+
+                                int i = 0;
+                                foreach (DataRow dr in Model.Catdt.Rows)
+                                {
+                                    i++;
+                                    <tr>
+
+                                        <td>@i</td>
+                                        <td>@dr["Type"].ToString()</td>
+                                        <td>@dr["Title"].ToString()</td>
+                                        <td><img src="@dr["ImageFile"].ToString()" style="height:50px;width:50px;" class="img-responsive" /></td>
+                                        <td style="text-align:center" onclick="GetNews(@dr["EntryId"])">
+                                            <a style='color:red;font-size:20px;'><i class='fa fa-pencil'></i> </a>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a style='color:red;font-size:20px;'><i class='fa fa-trash-o' aria-hidden="true" onclick="DeleteNewsDetails(@dr["EntryId"])"></i></a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th style="color:red" colspan="5">Record Not Found</th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#CategoryImageURL").change(function () {
+
+            var validExtensions = ["jpg", "jpeg", "png"]
+            var file = $(this).val().split('.').pop();
+            if (validExtensions.indexOf(file) == -1) {
+                alert("Only formats are allowed : " + validExtensions.join(', '));
+                $("#CategoryImageURL").val('');
+                return;
+            }
+        });
+    });
+    function GetNews(Id) {
+        var dataobject = {
+            Id: Id
+        };
+        $.ajax({
+            url: "/Admin/GetPopupUploadDataForEdit",
+            type: "POST",
+            data: dataobject,
+            dataType: "json",
+            success: function (data) {
+                //debugger;
+                if (data != null) {
+                    $("#hdId").val(data.Entryid);
+                    $("#ImageTitle").val(data.VideoTitle);
+                    $("#ddlTyped").val(data.Type);
+                    $("#CategoryImageURL").val(data.VideoFile);
+                }
+            },
+
+            error: function () {
+
+            }
+        });
+    }
+    function DeleteNewsDetails(Id) {
+        var f = confirm('Do you really want to delete this Record ?');
+        if (f) {
+            if (Id == '') {
+                alert('Code not found!');
+                return;
+            }
+            var dataobject = {
+                Id: Id,
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Admin/DeletePopupUploadMaster",
+                data: dataobject,
+                dataType: "json",
+                success: function (r) {
+                    $("#showSpinner").hide();
+                    alert('Record Deleted Successfully.');
+                    location.reload();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('Server not Responding !!!');
+                    $("#showSpinner").hide();
+                }
+            });
+        }
+        return;
+    }
+</script>
+

@@ -1,0 +1,102 @@
+﻿@model MLMPortal.Models.clsDash
+@{
+    ViewBag.Title = "ADashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+} 
+@using System.Data; 
+<style>
+    .img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+@*<link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+<!DOCTYPE html> 
+<html>
+<head>  
+</head>
+<body> 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel-content">
+                    <h4 class="main-title">Admin Dashboard</h4>
+
+                    <div class="row merged20 mb-4">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red">
+                                <div class="d-widget-title">
+                                    <h5>Total Joining</h5>
+                                </div>
+                                <div class="d-widget-content">
+                                    <span class="realtime-ico pulse"></span>
+                                    <h5>@Model.TotalJoining</h5>
+                                    <i class="icofont-users-alt-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-blue">
+                                <div class="d-widget-title">
+                                    <h5>Total Active</h5>
+                                </div>
+                                <div class="d-widget-content">
+                                    <span class="realtime-ico pulse"></span>
+
+                                    <h5>@Model.TotalActiveMember</h5>
+                                    <i class="icofont-optic"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-green">
+                                <div class="d-widget-title">
+                                    <h5>Total Deactive</h5>
+                                </div>
+                                <div class="d-widget-content">
+                                    <span class="realtime-ico pulse"></span>
+                                    <h5>@Model.TotalInactiveMember</h5>
+                                    <i class="icofont-computer"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row merged20 mb-4">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-red" style="background-image: linear-gradient(to left, #efa65f, #f76a2d) !important;">
+                                <div class="d-widget-title">
+                                    <h5>Customer Sale</h5>
+                                </div>
+                                <div class="d-widget-content">
+                                    <span class="realtime-ico pulse"></span>
+
+                                    <h5>@Model.CustomerSale</h5>
+                                    <i class="icofont-users-alt-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="d-widget soft-blue" style="background-image: linear-gradient(to right, #673AB7 0%, #ba7bfb 100%) !important;">
+                                <div class="d-widget-title">
+                                    <h5>Franchise Sale</h5>
+                                </div>
+                                <div class="d-widget-content">
+                                    <span class="realtime-ico pulse"></span> 
+                                    <h5>@Model.FranchiseSale</h5>
+                                    <i class="icofont-optic"></i>
+                                </div>
+                            </div>
+                        </div> 
+                    </div> 
+                </div>
+            </div>
+        </div><!-- main content -->
+    </div> 
+</body>
+</html>
+
+
+

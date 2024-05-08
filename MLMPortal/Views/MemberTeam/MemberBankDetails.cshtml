@@ -1,0 +1,178 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "MemberBankDetails";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "MemberBankDetails");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+
+    <script type="text/javascript">
+
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <div class="row pt-2 pb-2">
+        <div class="col-sm-9">
+            <h4 class="page-title">Member Bank Details</h4>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card-header" style="background-color:darkblue;color:white;"><i class="fa fa-table"></i>MemberBankDetails</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        @if (Session["role"].ToString() == "2")
+                                        {
+                                            <label class="lab control-label">Member Id</label>
+                                            @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            <label class="lab control-label">Member Id</label>
+                                            @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @onchange = "BindDetails()" })
+                                        }
+                                        <label class="lab control-label">Payee Name</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", })
+                                        <label class="lab control-label">Account No</label>
+                                        @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", })
+                                        <label class="lab control-label">Bank Name:</label>
+                                        @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", })
+                                        <label class="lab control-label">Branch</label>
+                                        @Html.TextBoxFor(m => m.BankBranch, new { @class = "form-control", })
+                                        <label class="lab control-label">IFSC Code</label>
+                                        @Html.TextBoxFor(m => m.IFSCCode, new { @class = "form-control", })
+                                        <label class="lab control-label">Pan No.</label>
+                                        @Html.TextBoxFor(m => m.PanNo, new { @class = "form-control", })
+
+                                        <label class="lab control-label">Phone Pay No.</label>
+                                        @Html.TextBoxFor(m => m.PhonePayNo, new { @class = "form-control", })
+
+                                        <div class="col-sm-2" style="margin-top:30px">
+                                            <button type="submit" class="btn btn-success shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i>Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function BindDetails() {
+            //debugger;
+
+        //    if ($("#MemberId").val() != "") {
+        //        objrep = {};
+        //        objrep.MemberId = $("#MemberId").val();
+        //        $.post('/ProductManagement/Get_BindMemberDetails', { obj: objrep }, function (data) {
+        //            alert(data);
+        //            if (data != '' && data != undefined) {
+        //                alert(data.MemberId);
+        //                $("#MemberId").val(data.MemberId);
+        //                $("#Name").val(data.Name);
+        //                $("#AccountNo").val(data.AccountNo);
+        //                $("#BankName").val(data.BankName);
+        //                $("#BankBranch").val(data.BankBranch);
+        //                $("#IFSCCode").val(data.IFSCCode);
+        //                $("#PanNo").val(data.PanNo);
+
+
+        //                $("#sacc").val(data.AccountNo);
+        //                $("#sbank").val(data.BankName);
+        //                $("#sbra").val(data.BankBranch);
+        //                $("#sifsc").val(data.IFSCCode);
+        //                $("#span").val(data.PanNo);
+        //            }
+        //            else {
+        //                alert('Member Id does not exists!!.')
+        //                reset();
+        //            }
+
+        //        });
+        //    }
+        //    else {
+        //        alert("Please Enter Member Id");
+        //        return false;
+            
+            //}
+
+            if ($("#MemberId").val() != "") {
+                window.location.href = "/ProductManagement/MemberBankDetails?Id=" + $("#MemberId").val();
+                }
+        }
+
+        function reset() {
+            $("#MemberId").val('');
+            $("#Name").val('');
+            $("#AccountNo").val('');
+            $("#BankName").val('');
+            $("#BankBranch").val('');
+            $("#IFSCCode").val('');
+            $("#PanNo").val('');
+
+
+            $("#sacc").val('');
+            $("#sbank").val('');
+            $("#sbra").val('');
+            $("#sifsc").val('');
+            $("#span").val('');
+        }
+    </script>

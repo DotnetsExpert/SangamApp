@@ -1,0 +1,264 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+<style>
+    #neonShadow:hover {
+        transform: translateX(-20px)rotate(30deg);
+        border-radius: 5px;
+        background-color: #c3bacc;
+        transition: 0.5s;
+    }
+</style>
+<style>
+
+    body {
+        background-image: url(../App/bggs.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .new-card {
+        background-color: #000;
+        padding: 11px;
+        border: 2px solid #ed1d24;
+    }
+
+    .ball {
+        position: absolute;
+        /*position: fixed;*/
+        border-radius: 100%;
+        opacity: 0.7;
+    }
+
+    @@media screen and (max-width:768px) {
+        .ball {
+            position: fixed;
+        }
+    }
+</style>
+
+<script>
+
+    function showpassword() {
+        if ($('#show_hide_password input').attr("type") == "text") {
+            $('#show_hide_password input').attr('type', 'password');
+            $('#show_hide_password i').addClass("fa-eye-slash");
+            $('#show_hide_password i').removeClass("fa-eye");
+        } else if ($('#show_hide_password input').attr("type") == "password") {
+            $('#show_hide_password input').attr('type', 'text');
+            $('#show_hide_password i').removeClass("fa-eye-slash");
+            $('#show_hide_password i').addClass("fa-eye");
+        }
+    }
+
+    $(document).ready(function () {
+       
+    });
+</script>
+
+<script>
+    function Login() {
+        if ($("#txtphoneno").val() == "") {
+            alert("Please Enter UserName")
+            $("#txtphoneno").focus();
+            return;
+        }
+        if ($("#txtpassword").val() == "") {
+            alert("Please Enter Password")
+            $("#txtpassword").focus();
+            return;
+        }
+        var data = new FormData;
+        data.append("Action", "2");
+
+        data.append("MobileNo", $("#txtphoneno").val());
+        data.append("Password", $("#txtpassword").val());
+
+        $("#showSpinner").show();
+
+        $.ajax({
+            url: "/User/LoginUser",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+                if (r.Id == "1") {
+
+                    window.location.href = "/Webapp/Dashboard";
+                }
+                else if (r.Id == "2") {
+
+                    alert(r.Msg);
+                }
+                else {
+                    alert(r.Msg);
+                }
+
+
+                $("#showSpinner").hide();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                $("#showSpinner").hide();
+            }
+        });
+    }
+</script>
+
+
+
+<my-spinner>
+    <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+        <div class="spinner-border m-2" role="status" style="position: absolute; top: 30%; left: 50%; margin-top: -25px; margin-left: -25px;"></div>
+    </div>
+</my-spinner>
+
+<div class="container-fluid bg-color">
+
+    <div class="row justify-content-center">
+        <div class="new p-3">
+            <div class="card mt-4 new-card gradient-border">
+                <div class="company-logo">
+                    <a href="../user/login">   <img src="~/App/gone.png" alt="Royalqueue" class="img-fluid" /> </a>
+                </div>
+                <!-- Nav pills -->
+                <div class="loginregister">
+                    <Center style='display:none'> <h3>App is under maintenance, There may be technical issue. please cooperate till tomorrow 1 pm </h3></Center>
+                    <ul class="nav nav-pills" role="tablist">
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+
+                        <div id="home" class="container tab-pane active">
+                            <br>
+                            <div class="form-box border-form">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-group mb-3 input-group-sm">
+                                            <input type="text" id="txtphoneno" class="form-control" placeholder="Please enter User ID" />
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-12">
+                                        <div class="input-group" id="show_hide_password">
+                                            <input type="password" id="txtpassword" class="form-control" placeholder="Please enter password" />
+                                            <div class="input-group-addon prr"> <a href="javascript:void(0);" onclick="showpassword()"><i class="fa fa-eye-slash" aria-hidden="true"></i></a> </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <div class="col-md-12">
+                                        <div id="dvCaptcha">
+                                        </div>
+                                        <input type="hidden" id="hfCaptcha" />
+                                        <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+                                        <br />
+
+
+                                        @*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+
+
+                                        @*<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+                                            async defer></script>*@
+
+
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <br />
+                                        <input type="button" id="Button1" value="Log in" class="btn send-btn btn-primary" onclick="Login()" />
+
+                                    </div>
+                                    <div class="col-md-12" align="center">
+                                        <a href="../User/Registration" style="color:white;text-align:center">Don't have an account? Sign Up now!</a>
+                                    </div>
+
+                                    <div class="col-md-12" align="center">
+                                        <a href="../User/Recoverypassword" style="color:white;text-align:center"><i class="fa fa-lock"></i> Recover Password!</a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+
+                                <img class="img-fluid mt-4" src="~/App/globe-img/1.gif" style="width:100%" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ball"></div>
+<!--ball-->
+<script>
+
+    // Some random colors
+    const colors = ["#3CC157", "#2AA7FF", "#1B1B1B", "#FCBC0F", "#F85F36"];
+
+    const numBalls = 50;
+    const balls = [];
+
+    for (let i = 0; i < numBalls; i++) {
+        let ball = document.createElement("div");
+        ball.classList.add("ball");
+        ball.style.background = colors[Math.floor(Math.random() * colors.length)];
+        ball.style.left = `${Math.floor(Math.random() * 100)}vw`;
+        ball.style.top = `${Math.floor(Math.random() * 100)}vh`;
+        ball.style.transform = `scale(${Math.random()})`;
+        ball.style.width = `${Math.random()}em`;
+        ball.style.height = ball.style.width;
+
+        balls.push(ball);
+        document.body.append(ball);
+    }
+
+    // Keyframes
+    balls.forEach((el, i, ra) => {
+        let to = {
+            x: Math.random() * (i % 2 === 0 ? -11 : 11),
+            y: Math.random() * 12
+        };
+
+        let anim = el.animate(
+            [
+                { transform: "translate(0, 0)" },
+                { transform: `translate(${to.x}rem, ${to.y}rem)` }
+            ],
+            {
+                duration: (Math.random() + 1) * 2000, // random duration
+                direction: "alternate",
+                fill: "both",
+                iterations: Infinity,
+                easing: "ease-in-out"
+            }
+        );
+    });
+
+
+
+
+</script>
+<!--end ball-->

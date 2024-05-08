@@ -1,0 +1,284 @@
+﻿
+@{
+    ViewBag.Title = "Registration";
+   Layout = "~/Views/shared/_weblayout.cshtml";
+}
+
+<script src="~/Content/assets/js/jquery.min.js"></script>
+<style>
+    #signup .row{
+        margin-top:1%;
+    }
+</style>
+<main id="main">
+
+    <my-spinner>
+        <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+            <div class="spinner-border m-2" role="status" style="position: absolute; top: 30%; left: 50%; margin-top: -25px; margin-left: -25px;"></div>
+        </div>
+    </my-spinner>
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url('/Content/webassets/img/about-header.jpg');">
+        <div class="container position-relative d-flex flex-column align-items-center">
+
+            <h2>Sign Up</h2>
+            <ol>
+                <li><a href="/Home/Index">Home</a></li>
+                <li>Sign Up</li>
+            </ol>
+
+        </div>
+    </div><!-- End Breadcrumbs -->
+
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-12 col-xl-11">
+            <div class="card text-black" style="border-radius: 25px;">
+                <div class="card-header">
+
+                    <p class="text-center h1 fw-bold mx-1 mx-md-4">Sign Up</p>
+                </div>
+                <div class="card-body p-md-5" id="signup">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 col-lg-12 col-xl-12 order-2 order-lg-1">
+
+
+                            <form class="mx-1 mx-md-4" style="margin-top:2px">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="SponserId">Sponsor ID <span style="color:red">*</span>  </label>
+                                                <input type="text" id="SponserId" class="form-control" placeholder="Sponsor ID" onchange="GetSposerId(this)" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="SponserName">Sponsor Name<span style="color:red">*</span></label>
+                                                <input type="email" readonly id="SponserName" class="form-control" placeholder="Sponsor Name" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-sm-4">
+            <div class="d-flex flex-row align-items-center mb-2">
+                <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                <div class="form-outline flex-fill mb-0">
+                    <label class="form-label" for="Direction">Direction<span style="color:red">*</span></label>
+                    <select class="form-control" id="Direction">
+                        <option value="L">Left</option>
+                        <option value="R">Right</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>*@
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="Name">Your Name<span style="color:red">*</span></label>
+                                                <input type="text" id="Name" class="form-control" placeholder="Your Name" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="row">
+
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="EmailId">Your Email(optional)</label>
+                                                <input type="email" id="EmailId" class="form-control" placeholder="Your Email(optional)" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="MobileNo">Your Mobile</label>
+                                                <input type="email" id="MobileNo" class="form-control" placeholder="Your Mobile" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="Pass">Password<span style="color:red">*</span></label>
+                                                <input type="password" id="Pass" class="form-control" placeholder="Password" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                   
+                                    <div class="col-sm-4">
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="CPass">Repeat your password<span style="color:red">*</span></label>
+                                                <input type="password" id="CPass" class="form-control" placeholder="Repeat your password" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                            <div class="form-check d-flex mb-5" style="margin-top:4px">
+                                                <input class="form-check-input me-2" type="checkbox" checked="checked" value="" id="form2Example3c" />
+                                                <label class="form-check-label" for="form2Example3">
+                                                    I agree all statements in <a href="#!">Terms of service</a>
+                                                </label>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="d-flex mx-4 mb-3 mb-lg-4">
+                                            <button type="button" class="btn btn-primary btn-lg" onclick="SaveRegistrionData()">Register</button>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+
+
+    function SaveRegistrionData() {
+        if (Name.value == '') {
+            alert('Please Enter Name');
+            Name.focus();
+
+            return false;
+        }
+
+        //if (EmailId.value == '') {
+        //    alert('Please Enter Email Id');
+        //    EmailId.focus();
+
+        //    return false;
+        //}
+        if (SponserId.value == '') {
+            alert('Please Enter Sponsor Id');
+            SponserId.focus();
+
+            return false;
+        }
+        //if (Direction.value == '') {
+        //    alert('Please Select Direction');
+        //    Direction.focus();
+
+        //    return false;
+        //}
+
+        if (Pass.value == '') {
+            alert('Please Enter Password');
+            Pass.focus();
+
+            return false;
+        }
+        if (Pass.value != CPass.value) {
+            alert('Please enter conferm password same as  Password');
+            Pass.focus();
+
+            return false;
+        }
+        $("#showSpinner").show();
+
+        var obj = {
+            SponserId: $('#SponserId').val(),
+            //Direction: $('#Direction').val(),
+            Name: $('#Name').val(),
+            EmailId: $('#EmailId').val(),
+            MobileNo: $('#MobileNo').val(),
+            Pass: $('#Pass').val(),
+        }
+
+
+        $.post('/Home/Save_Registration', obj, function (res) {
+
+
+            alert(res.msg);
+            if (res.flag!= "0") {
+                $('#Name').val('')
+                $('#EmailId').val('')
+                $('#MobileNo').val('')
+                $('#Pass').val('')
+                window.location.href = window.location.href;
+            }
+            else {
+                $("#showSpinner").hide();
+            }
+
+
+        })
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+    function GetSposerId(_this) {
+
+        //debugger;
+
+        var dataobject = {
+            MemberId: _this.value
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Admin/GetSposerId",
+            data: dataobject,
+            dataType: "json",
+            success: function (r) {
+                if (r.Id != "0") {
+                    document.getElementById('SponserName').value = r.SponserName;
+                }
+                else {
+                    document.getElementById('SponserId').value = '';
+                    document.getElementById('SponserName').value = '';
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+
+</script>

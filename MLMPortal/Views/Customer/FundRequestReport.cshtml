@@ -1,0 +1,168 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "ProductRequestList";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'=="1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "AccumulatedIncome");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[ 10, 20, 50, 100, 500, -1], [ 10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Fund Request Report</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="col-sm-12">
+                <div class="card-header" style="background-color:darkblue;color:white;"><i class="fa fa-table"></i>BANK WALLET DETAILS</div>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive" id="divmain">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                <th scope="col">SNo.</th>
+                                <th scope="col">Request Id</th>
+                                <th scope="col">Deposit Amount</th>
+                                @*<th scope="col">View Detail</th>*@
+                                @*<th scope="col">Bank</th>
+                                <th scope="col">Branch</th>
+                                <th scope="col">IFSC Code</th>*@
+                                <th align="right" scope="col">Deposit Date</th>
+                                <th scope="col">Deposit Type</th>
+                                <th scope="col">Deposit By</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Approved Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td class="EntryId">@item["ID"]</td>
+                                        <td class="MoneyAmount">@item["MoneyAmount"]</td>
+                                        @*<td class="View Detail">@item["View Detail"]</td>*@
+                                        @*<td class="BankName">@item["BankName"]</td>
+                                        <td class="BankBranch">@item["BankBranch"]</td>
+                                        <td class="iFSCCOde">@item["iFSCCOde"]</td>*@
+                                        <td class="Dated">@item["Dated"]</td>
+                                        <td class="DipositType">@item["mode"]</td>
+                                        <td class="Name">@item["Name"]</td>
+                                        <td class="AStatus">@item["AStatus"]</td>
+                                        @*<td class="AFiles">@item["AFiles"]</td>*@
+                                        <td class="appDate">@item["appDate"]</td>
+
+                                       
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SearchData() {
+        //debugger;
+        var MemberId = $('#MemberId').val();
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        $.post('/PayoutReport/AccumulatedIncome/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+            $('#divmain').html($(res).find('table'))
+
+        });
+    }
+
+
+
+</script>
+
+
+

@@ -1,0 +1,112 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "ManageLeftRight";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "ManageLeftRight");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">MemberBankDetails</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card-header" style="background-color:darkblue;color:white;"><i class="fa fa-table"></i>ManageLeft/right</div>
+                </div>
+               
+            </div>
+            <div class="card-body">
+                <form method="post">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Member Id</label>
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", })
+                                    <label class="lab control-label">Name</label>
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", })
+                                    <label class="lab control-label">Sponser Id</label>
+                                    @Html.TextBoxFor(m => m.SponserId, new { @class = "form-control" })
+                                    <label class="lab control-label">Sponser Name</label>
+                                    @Html.TextBoxFor(m => m.SponserName, new { @class = "form-control", })
+                                    <label class="lab control-label">Direction</label>
+                                    @Html.DropDownListFor(m => m.Direction, new List<SelectListItem>() { new SelectListItem() { Text = "Left", Value = "L" }, new SelectListItem() { Text = "Right", Value = "R" }, }, "Select", new { @class = "form-control" })
+                                  
+                                    <div class="col-sm-2" style="margin-top:30px">
+                                        <button type="submit" class="btn btn-success shadow-primary px-5" id="btnSerach" ><i class="icon-lock"></i> Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      <div class="col-sm-6" style="background-color:#f1f1f1;"></div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+
+
+
+</script>
+
+
+

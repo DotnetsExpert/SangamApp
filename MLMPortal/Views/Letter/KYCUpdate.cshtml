@@ -1,0 +1,452 @@
+﻿@model MLMPortal.Models.KYCUpdate
+@{
+    ViewBag.Title = "KYCUpdate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+
+<script>
+    function ShowImagePreview(input) {
+        //debugger;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#ImgPAN').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+                    
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+         }
+         function ShowImagePreview1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#Img1').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+         }
+         function ShowImagePreview2(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#ImgAadhar').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+         }
+         function ShowImagePreview3(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#Img2').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "/WlcomeLetter/KYCUpdate");
+            }
+            else
+            {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="row pt-2 pb-2">
+
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header" style="background-color:darkblue;color:white;"><i class="fa fa-table"></i>KYC DETAILS</div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+       
+                 <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">PAN Copy:</label>
+                                    <br />
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.PAN, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview(this);" })
+                                           </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Aadhar Copy:</label>
+                                    <br />
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.Adhar, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview2(this);" })
+                                      </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/><hr />
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">PAN Copy:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.PanFilePath != null)
+                                            {
+                                                <img id="ImgPAN" src="@Model.PanFilePath" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                            }
+                                            else
+                                            {
+                                                <img id="ImgPAN" src="http://placehold.it/180" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                            }
+                               
+
+
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">Aadhar Copy:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.AdharFilePath != null)
+                                            {
+                                                <img id="ImgAadhar" src="@Model.AdharFilePath" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                            }
+                                            else
+                                            {
+                                                <img id="ImgAadhar" src="http://placehold.it/180" alt="Aadhar Copy" height="200" width="200" class="img-responsive" />
+                                            }
+
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      
+
+                    </div>
+                    <br /><hr />
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Bank PassBook/Cancelled Cheque:</label>
+                                    <br />
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.BankPassbook, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview1(this);" })
+
+
+                                    @*&nbsp; &nbsp;  <input type="file" value="Choose File" onchange="ShowImagePreview1(this);" TabIndex="14" id="fileBankcopy"/>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Adhar Back Copy: </label>
+                                    <br />
+
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.Adharback, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview3(this);" })
+
+
+                                    @*&nbsp; &nbsp;   <input type="file" value="Choose File" onchange="ShowImagePreview3(this);" TabIndex="14" id="fileAdharcopy"/>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br /><hr />
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">Bank PassBook/Cancelled Cheque:</label>
+                                        <br />
+                                        <div class="form-group">
+
+   @if (Model.BankPassbookFilePath != null)
+   {
+    <img id="Img1" src="@Model.BankPassbookFilePath" alt="Bank PassBook" height="200" width="200" class="img-responsive" />
+   }
+   else
+   {
+    <img id="Img1" src="http://placehold.it/180" alt="Bank PassBook" height="200" width="200" class="img-responsive" />
+   }
+
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">Adhar Back Copy:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.AdharbackFilePath != null)
+                                            {
+                                                <img id="Img2" src="@Model.AdharFilePath" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+
+            }
+                                            else
+                                            {
+                                              <img id="Img2" src="http://placehold.it/180" alt="PAN Copy" height="200" width="200" class="img-responsive" /> 
+
+                                            }
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-8">
+                            <br />
+                           
+                            <div class="col-sm-3" style="margin-top:30px">
+                                <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i> Submit</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    @*<div class="panel-body">
+                        <div class="col-lg-12">
+
+                            <div id="Div3" class="col-md-6">
+                                <div class="control-group">
+                                    <label for="accountLastName" class="control-label">
+                                        Bank PassBook/Cancelled Cheque:
+                                    </label>
+                                    <div class="controls">
+
+                                        <div class="form-group">
+                                            <img id="ImgPAN" src="http://placehold.it/180" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Div4" class="col-md-6">
+                                <div class="control-group">
+                                    <label for="accountLastName" class="control-label">
+                                        Adhar Back Copy:
+                                    </label>
+                                    <div class="controls">
+
+                                        <img id="ImgAadhar" src="http://placehold.it/180" alt="Aadhar Copy" height="200" width="200" class="img-responsive" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>*@
+
+
+
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+  @*<div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i>Kyc Update Details</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                              
+                                <th>Member Id</th>
+                                <th>PANCopy2</th>
+                                <th>AADHARCopy2</th>
+                                <th>Passbookcopy</th>
+                                <th>AdharBackCopy</th>
+                                <th>PANCopy</th>
+                                <th>AADHARCopy</th>
+                                <th>Passbookcopy</th>
+                                <th>AdharBackCopy</th>
+                              
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td class="Member_Id">@item["Member_ID"]</td>
+
+                                        <td class="NewsFor">
+                                            <img alt="banner" src='@item["PANCopy2"]' />
+
+                                          </td>
+                                        <td class="NewsFor1">
+                                            <img alt="banner" src='@item["AADHARCopy2"]' />
+
+                                        </td>
+                                        <td class="NewsFor2">
+                                            <img alt="banner" src='@item["Passbookcopy"]' />
+
+                                        </td>
+                                        <td class="NewsFor3">
+                                            <img alt="banner" src='@item["AdharBackCopy"]' />
+
+                                        </td>
+                                        <td class="NewsFor4">
+                                            <img alt="banner" src='@item["PANCopy"]' />
+
+                                        </td>
+                                        <td class="NewsFor5">
+                                            <img alt="banner" src='@item["AADHARCopy"]' />
+
+                                        </td>
+                                        <td class="NewsFor6">
+                                            <img alt="banner" src='@item["Passbookcopy"]' />
+
+                                        </td>
+                                        <td class="NewsFor7">
+                                            <img alt="banner" src='@item["AdharBackCopy"]' />
+
+                                        </td>
+                                      
+                                        @*<td class="PANCopy2">@item["PANCopy2"]</td>
+                                        <td class="AADHARCopy2">@item["AADHARCopy2"]</td>
+                                        <td class="Passbookcopy">@item["Passbookcopy"]</td>
+                                        <td class="AdharBackCopy">@item["AdharBackCopy"]</td>
+                                        <td class="PANCopy">@item["PANCopy"]</td>
+                                        <td class="AADHARCopy">@item["AADHARCopy"]</td>
+                                        <td class="Passbookcopy">@item["Passbookcopy"]</td>
+                                        <td class="AdharBackCopy">@item["AdharBackCopy"]</td>
+
+</tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>*@
+</div>
+<script>
+    //function SearchData() {
+    //    //debugger;
+    //    var MemberId = $('#MemberId').val();
+    //    var FromDate = $('#FromDate').val();
+    //    var ToDate = $('#ToDate').val();
+
+    //    $.post('/PayoutReport/AccumulatedIncome/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+    //        $('#divmain').html($(res).find('table'))
+
+    //    });
+    //}
+
+
+
+</script>
+

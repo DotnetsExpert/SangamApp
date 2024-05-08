@@ -1,0 +1,123 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "CompanyMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "CompanyMaster");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+    </script>
+}
+<script>
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">Update Level Commission</div>
+                <hr>
+                <form action="CompanyMaster" method="post">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-8">
+                            
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Prime Package [Rs.354]</th>
+                                    <th>Super Prime Package [Rs.754]</th>
+                                </tr>
+                                @if (Model!=null && Model.dt!=null && Model.dt.Rows.Count>0)
+                                {
+                                    foreach (DataRow item in Model.dt.Rows)
+                                    {
+                                        <tr>
+                                            <td>@item["Levels"]</td>
+                                            <td> <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="txtPackage1" value="@item["Income"]" onchange="UpdateLevel(@item["Levels"],1,this)" /> </td>
+                                            <td> <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="txtPackage2" value="@item["Package2"]"  onchange="UpdateLevel(@item["Levels"],2,this)" /> </td>
+                                        </tr>
+                                    }
+                                }
+
+
+
+
+                            </table>
+
+
+
+                        </div>
+                    </div>
+                    <hr />
+                    @*<div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="Update" />
+
+
+                            </div>
+                        </div>
+                    </div>*@
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        function UpdateLevel(level,PackId,_this)
+        {
+            debugger;
+
+            var per = parseInt($(_this).val() || 0);
+
+
+            $.post('/Admin/UpdateLevelPercentage', { Level: level, PackageId: PackId, LevelPer: per }, function (data) {
+
+                alert(data.msg)
+
+                if (data.flag == "1") {
+                    location.reload();
+                }
+
+
+
+            })
+
+
+
+        }
+
+    </script>
+</div>

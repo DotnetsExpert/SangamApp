@@ -1,0 +1,257 @@
+﻿@model MLMPortal.Models.Stucommon
+@{
+    ViewBag.Title = "AssignPermission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+
+
+<script src="~/assets/js/jquery.min.js"></script>
+@*<script src="~/Template/js/jquery.min.js"></script>*@
+<script src="~/DynamicMenu/horizontal-layout.js"></script>
+@*<link href="~/DynamicMenu/master_style.css" rel="stylesheet" />
+    <link href="~/DynamicMenu/horizontal_menu_style.css" rel="stylesheet" />*@
+@*<link rel="stylesheet" href="~/DynamicMenu/main.css">*@
+<style>
+    .bgin img {
+        display: none;
+    }
+
+    [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: relative;
+        left: 0;
+        opacity: 1;
+    }
+</style>
+<div class="pd20"></div>
+
+
+
+
+
+<div id="page-content-wrapper">
+    <div class="page-content">
+
+        
+        <div class="wrapper">
+            <div class="brr">
+                <div class="container-fluid">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Assign Permission</div>
+                            <hr>
+                            <div class="row">
+
+                            
+                                <div class="col-sm-2">
+                                    <label class="me">
+                                        User Type
+                                    </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="text1">
+                                        @Html.DropDownListFor(model => model.Rolename, (List<SelectListItem>)ViewBag.Rolelist, new { @id = "ddlusertype", @class = "form-control", @onchange = "BindAllUsers()" })
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <label class="me">
+                                        Users
+                                    </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="text1">
+                                        <select id="ddlusers" class="form-control" onchange="BindMenu()"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="records">
+                                        <h2></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="records">
+                                        <h2></h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10">
+                                    <div class="btnss">
+
+
+                                  
+
+                                        <a href="javascript:void(0);" onclick="Submitdata()" class="btn btn-primary shadow-primary px-5"> Save</a>
+                                        <a href="javascript:void(0);" onclick="location.reload()" class="btn btn-primary shadow-primary px-5"> Clear</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="records">
+                                        <h2></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="records">
+                                        <h2>Menu List</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10">
+                                    <div class="col-md-12 treeview" id="tdtree">
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="pd20"></div>
+                    <div class="control-sidebar-bg"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+            function BindAllUsers() {
+
+                //debugger;
+                $("#showSpinner").show();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("BindAllUsers")',
+                    dataType: 'json',
+                    data: {
+                        UserType: $("#ddlusertype").val()
+                    },
+                    success: function (data1) {
+                        //debugger;
+                        var JSON = eval(data1);
+                        var srno = '';
+                        var html = '';
+                        for (var i = 0; i < JSON.length; i++) {
+                            srno = i + 1;
+                            html += "<option value=" + JSON[i].usid + ">" + JSON[i].UserName + "</option>";
+                        }
+                        html += '</tbody>';
+                        $('#ddlusers').html(html);
+                        $("#showSpinner").hide();
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve Data : ' + ex);
+                        $("#showSpinner").hide();
+                    }
+                });
+            }
+</script>
+
+<script type="text/javascript">
+            function BindMenu() {
+                //debugger;
+
+                $("#showSpinner").show();
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/Admin/GetMainMenuData",
+                    data: JSON.stringify({
+                        UserType: $("#ddlusertype").val(),
+                        Username: $("#ddlusers option:selected").text()
+                    }),
+                    success: function (data1) {
+                        //debugger;
+                        $("#tdtree").html(data1);
+                        $("#showSpinner").hide();
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve Data : ' + ex);
+                        $("#showSpinner").hide();
+                    }
+                });
+            }
+</script>
+
+<script type="text/javascript">
+            function Submitdata() {
+                //debugger;
+
+                var multivalue1 = new Array();
+                var multivalue2 = new Array();
+                var multivalue3 = new Array();
+                var tbldata = document.getElementById("tdtree");
+                var chks = tbldata.getElementsByClassName("chkmainid");
+                var chks2 = tbldata.getElementsByClassName("chksubid");
+                var chks3 = tbldata.getElementsByClassName("chkthirdbid");
+
+                for (var i = 0; i < chks.length; i++) {
+                    if (chks[i].checked) {
+                        multivalue1.push(chks[i].value);
+                    }
+                }
+
+                for (var i = 0; i < chks2.length; i++) {
+                    if (chks2[i].checked) {
+                        multivalue2.push(chks2[i].value);
+                    }
+                }
+
+                for (var i = 0; i < chks3.length; i++) {
+                    if (chks3[i].checked) {
+                        multivalue3.push(chks3[i].value);
+                    }
+                }
+
+                //debugger;
+                $("#showSpinner").show();
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/Admin/InsertMenuPermission",
+                    data: JSON.stringify({
+                        multivalue1: multivalue1,
+                        multivalue2: multivalue2,
+                        multivalue3: multivalue3,
+                        UserType: $("#ddlusertype").val(),
+                        Username: $("#ddlusers option:selected").text()
+                    }),
+                    success: function (data) {
+                        //debugger;
+                        if (data == "S") {
+                            alert("Menu Updated Successfully. ");
+                            $("#showSpinner").hide();
+                            location.reload();
+                        }
+                        else {
+                            alert("Please select menu");
+                            $("#showSpinner").hide();
+                        }
+                    }
+                });
+            };
+</script>

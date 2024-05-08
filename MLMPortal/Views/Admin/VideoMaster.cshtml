@@ -1,0 +1,250 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "VideoMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+
+        //$("body").on("click", "#default-datatable .details22", function () {
+        //    window.location.href = "../Admin/memberreport?Id=" + $(this).attr('id');
+        // });
+    });
+</script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+
+
+    <script>
+        function Validate() {
+            //debugger;
+            if ($("#ddlTyped").val() == "") {
+                alert("Please select type");
+                return false;
+            }
+            if ($("#moviesTrailer").val() == "") {
+                alert("Please select Video");
+                return false;
+            }
+            if ($("#moviesTrailer").val()!= "") {
+                var Imagefile = $("#moviesTrailer").get(0).files;
+
+            }
+
+        }
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"]', window.location.href = "VideoMaster");
+            }
+            
+
+        });
+    </script>
+
+<script>
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">ADD Video</div>
+                <hr>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.Videoid, new { @id = "hdId", @class = "form-control" })
+                            <div class="form-group">
+                                <label class="lab control-label">Select Type</label>
+                                <div class="col-lg-12">
+                                    @Html.DropDownListFor(m => m.Type, new List<SelectListItem>()
+                                     {
+                                         new SelectListItem(){ Text= "MEMBER", Value = "MEMBER"},
+                                         new SelectListItem(){ Text= "FRANCHISE", Value = "FRANCHISE"},
+                                         new SelectListItem(){ Text= "DIPO", Value = "DIPO"},
+
+                                     }, "Select", new { @id = "ddlTyped", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Video Title </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.VideoTitle, new { @id = "VideoTitles", @class = "form-control", @placeholder = "News Heading" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="input-13">Video</label>
+                                <input type="file" id="moviesTrailer" name="VideoFile" class="form-control form-control-square" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="text-center col-md-12" id="div3">
+                            <input type="submit" class="btn btn-success waves-effect waves-light mt-2" value="Save" onclick="return Validate()" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">VIDEO DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Type</th>
+                                <th>Video Title</th>
+                                <th>Video File</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model.Catdt != null)
+                            {
+
+                                int i = 0;
+                                foreach (DataRow dr in Model.Catdt.Rows)
+                                {
+                                    i++;
+                                    <tr>
+
+                                        <td>@i</td>
+                                        <td>@dr["Type"].ToString()</td>
+                                        <td>@dr["Title"]</td>
+                                        <td>
+                                            <video width="100" height="100" id="imgFile" src=@dr["Video"] controls>
+                                                <source type="video/mp4" />
+                                            </video>
+                                        </td>
+                                        <td style="text-align:center" onclick="GetNews(@dr["Videoid"])">
+                                            <a style='color:red;font-size:20px;'><i class='fa fa-pencil'></i> </a>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a style='color:red;font-size:20px;'><i class='fa fa-trash-o' aria-hidden="true" onclick="DeleteNewsDetails(@dr["Videoid"])"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th style="color:red" colspan="5">Record Not Found</th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+   
+    function GetNews(Id) {
+        var dataobject = {
+            Id: Id
+        };
+        $.ajax({
+            url: "/Admin/GetService",
+            type: "POST",
+            data: dataobject,
+            dataType: "json",
+            success: function (data) {
+                //debugger;
+                if (data != null) {
+                    $("#hdId").val(data.Videoid);
+                    $("#VideoTitles").val(data.VideoTitle);
+                    $("#ddlTyped").val(data.Type);
+                    $("#moviesTrailer").val(data.VideoFile);
+                }
+            },
+
+            error: function () {
+
+            }
+        });
+    }
+    function DeleteNewsDetails(Id) {
+        //debugger;
+        var f = confirm('Do you really want to delete this Record ?');
+        if (f) {
+            if (Id == '') {
+                alert('Code not found!');
+                return;
+            }
+            var dataobject = {
+                Id: Id,
+                Action: "4"
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Admin/DeleteVideoMaster",
+                data: dataobject,
+                dataType: "json",
+                success: function (r) {
+                    $("#showSpinner").hide();
+                    if (r == "1") {
+                        alert('Record Deleted Successfully.');
+                        location.reload();
+                    }
+                    else {
+                        alert('Server not Responding !!!');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('Server not Responding !!!');
+                    $("#showSpinner").hide();
+                }
+            });
+        }
+        return;
+    }
+</script>

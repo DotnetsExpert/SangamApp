@@ -1,0 +1,332 @@
+﻿@model MLMPortal.Models.UserReport
+@{
+    ViewBag.Title = "User_PinTransfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<my-spinner>
+    <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+        <i class="fa fa-refresh fa-spin nexo-refresh-icon" style="color: rgb(0, 0, 0); font-size: 50px; position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -25px; width: 44px; height: 50px;">
+        </i>
+    </div>
+</my-spinner>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h5>Pin Transfer</h5>
+
+            <div class="card-header-right">
+
+            </div>
+
+
+
+        </div>
+        <div class="card-block">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="col-form-label">Enter Transfer From ID:</label>
+                    @*<input type="text" class="form-control" id="TransferFromId" placeholder="Enter Transfer From ID" onchange="GetMemNameFrom()" />*@
+                    @Html.TextBoxFor(m=>m.memberId,new { @class="form-control",@readonly="readonly"})
+                </div>
+                <div class="col-sm-3">
+                    <label class="col-form-label">Name:</label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div class="col-sm-3">
+                    <label class="col-form-label">Enter Transfer to ID:</label>
+                    <input type="text" class="form-control" id="TransferToId" placeholder="Enter Transfer to ID" onchange="GetMemNameTo()" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="col-form-label">Name:</label>
+                    <input type="text" class="form-control" id="txtTMemName" disabled />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="col-form-label">Package</label>
+                    @Html.DropDownList("txtPackage", (List<SelectListItem>)ViewBag.PinAmt, new { @class = "form-control", @onchange = "GetPinAmt(this)", @Id = "txtPackage" })
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">PIN Balance:</label>
+                    <input type="text" name="PinBalance" id="PinBalance" class="form-control" disabled />
+
+                </div>
+                <div class="col-sm-3">
+                    <label class="col-form-label">Transfer No of PINs :</label>
+                    <input type="number" min="1" class="form-control" id="TransferNoOfPin" placeholder="No of PINS" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-2" style="margin-top:7px">
+                    <input type="submit" id="btnsave" style="display:none" />
+                    <Input type="submit" onclick="checkValidate()" class="btn btn-primary m-b-0" value="Transfer PIN" />
+                    <br /><br />
+
+                </div>
+               
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h4>PIN Details </h4>
+        </div>
+        <div class="card-block">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="col-form-label">Assigned To</label>
+                    <input type="text" id="txtAssignedTo" class="form-control" placeholder="Assigned To" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="col-form-label">Transfer Date</label>
+                    <input type="date" id="txtGenDate" class="form-control" />
+                </div>
+                <div class="col-sm-2" style="margin-top:33px">
+                    <input type="submit" id="btnSearch" value="Search" class="btn btn-success" onclick="getDetails()" />
+                </div>
+            </div><hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="height:500px;overflow-y:scroll" id="divtable">
+                        <table id="tblPinDetails" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>SNo.</th>
+                                    <th>Member Code</th>
+                                    <th>Name</th>
+                                    <th>Transfer Date</th>
+                                    <th>Send Pins</th>
+                                    <th>Received Pins</th>
+                                    <th>Particulars</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Table1 != null && Model.Table1.Rows.Count > 0)
+                                {
+                                    var count = 1;
+                                    foreach (System.Data.DataRow item in Model.Table1.Rows)
+                                    {
+
+                                        <tr>
+                                            <td>@(count++)</td>
+                                            <td>@item["MemID"]</td>
+                                            <td>@item["Name"]</td>
+                                            <td>@item["Date1"]</td>
+                                            <td>@item["sendpin"]</td>
+                                            <td>@item["recvd"]</td>
+                                            <td>@item["Particulars"]</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    //function GetPinAmt(_this)
+    //{
+    //    $('#PinBalance').val('');
+    //
+    //    var selectedOptionText = $('#txtPackage :selected').text().split('-')[1];
+
+    //    if (parseInt(selectedOptionText).toString() == 'NaN')
+    //        return;
+    //    $('#PinBalance').val(selectedOptionText);
+    //}
+
+
+    function GetPinAmt() {
+
+        if ($("#txtPackage").val() == "") {
+            $("#PinBalance").val("");
+            return;
+        }
+        if ($('#memberId').val() == '') {
+            alert('Enter Transfer Member Id');
+            $("#memberId").val('')
+            return;
+        }
+
+
+        var dataobject = {
+           PackId: $("#txtPackage").val(),
+           TransferMemberId: $('#memberId').val()
+        };
+        $.ajax({
+            url: "@Url.Action("getPinBalance", "PinManagement")",
+            type: "POST",
+            data: dataobject,
+            dataType: "json",
+            success: function (data) {
+                if (data != "") {
+                    $("#PinBalance").val(data)
+                }
+                else {
+                    alert("Insufficient Pin Balance !!!");
+                    $("#PinBalance").val("");
+
+                }
+            },
+            error: function () {
+                alert('Error!')
+
+            }
+        });
+    }
+
+
+
+    function checkValidate() {
+        if ($("#memberId").val() == "") {
+            alert("Please Enter From Id");
+            $("#memberId").focus();
+            return;
+        }
+        if ($("#TransferToId").val() == "") {
+            alert("Please Enter To Id");
+            $("#TransferToId").focus();
+            return;
+        }
+        if ($("#txtPackage").val() == "") {
+            alert("Please Select Package");
+            $("#txtPackage").focus();
+            return;
+        }
+        if ($("#TransferNoOfPin").val() == "" && $("#TransferNoOfPin").val() < 0) {
+            alert("Please Fill Number Of Pin");
+            $("#TransferNoOfPin").focus();
+            return;
+        }
+        if (parseInt($("#TransferNoOfPin").val()) > parseInt($("#PinBalance").val())) {
+            alert("Insufficient Pin Balance Please Purchase Pin. !!!");
+            $("#TransferNoOfPin").val("");
+            $("#TransferNoOfPin").focus();
+            return;
+        }
+        var dataobject = {
+            TransferFromId: $("#memberId").val(),
+            TransferToId: $('#TransferToId').val(),
+            txtPackage: $("#txtPackage").val(),
+            PinBalance: $("#PinBalance").val(),
+            TransferNoOfPin: $('#TransferNoOfPin').val()
+        };
+        $.ajax({
+            url: "@Url.Action("admininsertPintransfer", "PinManagement")",
+            type: "POST",
+            data: dataobject,
+            dataType: "json",
+            success: function (data) {
+                if (data != "") {
+                    alert(data);
+                    $("#memberId").val('');
+                    $("#TransferToId").val('');
+                    $("#txtPackage").val('');
+                    $("#PinBalance").val('');
+                    $("#TransferNoOfPin").val('');
+
+                    $("#Name").val('');
+                    $("#txtTMemName").val('');
+                }
+                else {
+                    alert("Details Not Found !!!");
+
+                }
+            },
+            error: function () {
+                alert('Error!')
+
+            }
+        });
+    }
+
+    function GetMemNameFrom() {
+        var dataobject = {
+            MemberCode: $("#TransferFromId").val()
+        };
+        $.ajax({
+            url: "@Url.Action("GetMemberDetails", "PinManagement")",
+            type: "POST",
+            data: dataobject,
+            dataType: "json",
+            success: function (data) {
+                if (data != "") {
+                    $("#txtFMemName").val(data)
+                }
+                else {
+                    alert("Details Not Found !!!");
+                    $("#txtFMemName").val("");
+                    $("#TransferFromId").val("");
+                    $("#TransferFromId").focus();
+
+                }
+            },
+            error: function () {
+                alert('Error!')
+
+            }
+        });
+    }
+
+    function GetMemNameTo() {
+        var dataobject = {
+            MemberCode: $("#TransferToId").val()
+        };
+        $.ajax({
+            url: "@Url.Action("GetMemberDetails", "PinManagement")",
+            type: "POST",
+        data: dataobject,
+        dataType: "json",
+        success: function (data) {
+            if (data != "") {
+                $("#txtTMemName").val(data)
+            }
+            else {
+                alert("Details Not Found !!!");
+                $("#txtTMemName").val("");
+                $("#TransferToId").val("");
+                $("#TransferToId").focus();
+
+            }
+        },
+        error: function () {
+            alert('Error!')
+
+        }
+    });
+    }
+
+    function getDetails() {
+        $("#showSpinner").show();
+        $.ajax({
+            url: "../PinManagement/PinTransfer",
+            type: "GET",
+            data: { 'MemberId': $.trim($('#txtAssignedTo').val()), 'tDate': $.trim($('#txtGenDate').val()) },
+            datatype: "json",
+            success: function (data1) {
+                var htmlNew = data1;
+                $('#divtable').html($(htmlNew).find('#tblPinDetails'));
+                $("#showSpinner").hide();
+                // $('#divtable').html($(htmlNew).find('#divcnt'));
+
+            }
+        });
+    }
+</script>
+

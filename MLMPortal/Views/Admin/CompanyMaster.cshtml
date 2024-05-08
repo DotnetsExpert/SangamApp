@@ -1,0 +1,196 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "CompanyMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    label{
+        margin-left: 15px;
+    }
+</style>
+
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "CompanyMaster");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+    </script>
+}
+<script>
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">ADD COMPANY DETAILS</div>
+                <hr>
+                <form action="CompanyMaster" method="post">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.CategoryId)
+                            <div class="form-group">
+                                <label class="lab control-label">Company Name</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Company Website</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Website, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Company GST No</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.GSTNo, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Email Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.EmailId, new { @class = "form-control", @placeholder = "Enter Email Id" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Contact No</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Contact, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10" })
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-4">
+
+                            <div class="form-group">
+                                <label class="lab control-label">Company Address</label>
+                                <div class="col-lg-12">
+                                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="Update" />
+                               
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+   
+    <script>
+        function Validate()
+        {
+            if (Name.value == '') {
+                alert('Enter Company Name');
+                Name.focus();
+
+                return false;
+            }
+            if (Website.value == '') {
+                alert('Enter Website Url');
+                Website.focus();
+
+                return false;
+            }
+            if (Address.value == '') {
+                alert('Enter Address');
+                Address.focus();
+
+                return false;
+            }
+            if (EmailId.value == '') {
+                alert('Enter Company Email Id');
+                EmailId.focus();
+
+                return false;
+            }
+            if (Contact.value == '') {
+                alert('Enter Contact No');
+                Contact.focus();
+
+                return false;
+            }
+        }
+        function Getcategory(Id,_this)
+        {
+            //debugger;
+            document.getElementById('CategoryName').value= $(_this).attr('category');
+            document.getElementById('CategoryId').value = Id;
+            document.getElementById("submit").value = "Update";
+           
+           
+        }
+        function DeleteCategoryDetails(CategoryId) {
+            var x = confirm("Are you sure you want to delete?");
+            //debugger;
+            if (x) {
+                var dataobject = {
+                    CategoryId: CategoryId
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/DeleteCategory",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.CategoryId == "1") {
+                            alert(r.msg);
+                            location.reload();
+                        }
+                        else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+</div>

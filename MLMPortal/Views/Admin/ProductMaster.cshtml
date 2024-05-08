@@ -1,0 +1,804 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "ProductMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="~/ckeditor/ckeditor.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+                'pageLength',
+                {
+                    extend: 'excelHtml5', footer: true
+                },
+                { extend: 'csvHtml5', footer: true },
+                {
+                    extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+                    pageSize: 'LEGAL',
+                    text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+                    titleAttr: 'PDF'
+                }
+            ]
+        });
+
+        //$("body").on("click", "#default-datatable .details22", function () {
+        //    window.location.href = "../Admin/memberreport?Id=" + $(this).attr('id');
+        // });
+
+    });
+
+    function CalculateAPPCPRP() {
+        var RP = 0, CP = 0;
+        RP = Number($("#APP").val()) * 0.10
+        CP = Number($("#APP").val()) * 0.20
+        $("#CP").val(CP.toFixed(2));
+        $("#RP").val(RP.toFixed(2));
+    }
+
+    function bindapp() {
+        var SR = 0, PR = 0;
+        if ($("#CategoryId option:selected").text() == "Package 555") {
+            $("#APP").val(0);
+            $("#CP").val(555);
+            $("#RP").val(25);
+        }
+        else {
+            PR = Number($("#PurchaseRate").val() == "" ? "0" : $("#PurchaseRate").val());
+            SR = Number($("#SaleRate").val() == "" ? "0" : $("#SaleRate").val());
+            if (SR >= PR) {
+                $("#APP").val((SR - PR).toFixed(2));
+                CalculateAPPCPRP();
+            }
+        }
+
+
+
+    }
+
+
+    function bindDiscountPer() {
+        var MRP = 0, DP = 0;
+        MRP = Number($("#MRP").val() == "" ? "0" : $("#MRP").val());
+        DP = Number($("#DP").val() == "" ? "0" : $("#DP").val());
+        var discountdiff = MRP - DP;
+        $("#DiscountPer").val(parseFloat((discountdiff / MRP) * 100).toFixed(2));
+    }
+
+</script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "ProductMaster");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+        });
+
+    </script>
+}
+
+<script>
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">ADD PRODUCT</div>
+                <hr>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+
+
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.Id)
+                            <div class="form-group">
+                                <label class="lab control-label">Category</label>
+                                <div class="col-lg-12">
+                                    @Html.DropDownListFor(m => m.CategoryId, (List<SelectListItem>)ViewBag.CategoryList, new { @id = "CategoryId", @class = "form-control", @onchange = "BindSubcategory(this)" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Sub Category Name</label>
+                                <div class="col-lg-12">
+                                    @Html.DropDownListFor(m => m.SubCategoryId, new List<SelectListItem>() { new SelectListItem() { Text = "Select", Value = "0" } }, new { @id = "SubCategoryId", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Product Name</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Batch No.</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.BatchNo, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">HSN Code</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.HSNCode, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Purchase Rate</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.PurchaseRate, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10", @onchange = "bindapp()" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Sale Rate</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.SaleRate, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10", @onchange = "bindapp()" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">GST % </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.GST, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "4", @onchange = "gst()" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">CGST %</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.CGST, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">SGST %</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.SGST, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Purchase GST</label>
+                                <div class="col-lg-12">
+
+                                    @Html.RadioButtonFor(m => m.PurchaseGst, "1")@Html.Label("Include")
+                                    @Html.RadioButtonFor(m => m.PurchaseGst, "2", new { @checked = "checked" })@Html.Label("Exclude")
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Sale GST</label>
+                                <div class="col-lg-12">
+                                    @Html.RadioButtonFor(m => m.SaleGst, "1")@Html.Label("Include")
+                                    @Html.RadioButtonFor(m => m.SaleGst, "2", new { @checked = "checked" })@Html.Label("Exclude")
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">MRP</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MRP, new { @class = "form-control", @onchange = "bindDiscountPer()" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">DP</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.DP, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10", @onchange = "bindDiscountPer()" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Discount(%)</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.DiscountPer, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4" style="display:none;">
+                            <div class="form-group">
+                                <label class="lab control-label">BV</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.BV, new { @class = "form-control", @onkeypress = "return isNumber(event)", @maxLength = "10" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">APP</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.APP, new { @class = "form-control", @onchange = "CalculateAPPCPRP()" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">CP</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.CP, new { @class = "form-control", @readonly = "readonly", @onkeypress = "return isNumber(event)", @maxLength = "10" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">RP</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.RP, new { @class = "form-control", @readonly = "readonly", @onkeypress = "return isNumber(event)", @maxLength = "10" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Mfg Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MfgDate, new
+                               {
+                                   @class = "form-control",
+                                   @placeholder = "mm/yyyy"
+                               })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Expiry Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.ExpDate, new { @class = "form-control", @placeholder = "mm/yyyy" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Product Image</label>
+                                <div class="col-lg-12">
+
+                                    @Html.TextBoxFor(m => m.ProductFile, new { type = "file", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="lab control-label">Is Offer Product</label>
+                                <div class="col-lg-12">
+
+                                    @Html.CheckBoxFor(m => m.Isoffer)@Html.Label("Is Offer")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="lab control-label">Description</label>
+                                <div class="col-lg-12">
+
+                                    @Html.TextAreaFor(m => m.Description, new { @id = "Description", @class = "form-control" })
+                                    <script type="text/javascript">
+                                        CKEDITOR.replace('Description', {
+                                            filebrowserImageUploadUrl: '/images/products/'
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="Save Product Details" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">PRODUCT DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Product Code</th>
+                                <th>Multiple Images</th>
+                                <th>Show/Hide</th>
+                                <th>Category Name</th>
+                                <th>Sub Category Name</th>
+                                <th>Product Name</th>
+                                <th>Batch No</th>
+                                <th>Purchase Rate</th>
+                                <th>Sale Rate</th>
+                                <th>GST</th>
+                                <th>Pruchase GST</th>
+                                <th>Sale GST</th>
+                                <th>MRP</th>
+                                <th>DV</th>
+                                <th>BP</th>
+                                <th>APP</th>
+                                <th>CP</th>
+                                <th>RP</th>
+                                <th>Mfg. Date</th>
+                                <th>Expiry Date</th>
+                                <th>HSN Code</th>
+                                <th>Discription</th>
+                                <th>Product Image</th>
+                                <th>Is Offer</th>
+                                <th>Edit</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td class="KitCode">@item["KitCode"]</td>
+                                        <td class="text-center">
+                                            <a class="fa fa-upload" style="line-height: 4; font-size: x-large; cursor: pointer; color: blueviolet" onclick="openmodel(@item["KitCode"])"></a>
+                                        </td>
+                                        <td class="ShowHide">
+                                            @if (item["IS_Show"].ToString().ToLower() == "true")
+                                            {
+                                                <a class="btn btn-primary" onclick="ShowHideProduct(5,@item["entryid"])">Hide</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-success" onclick="ShowHideProduct(4,@item["entryid"])">Show</a>
+                                            }
+                                        </td>
+                                        <td class="CatName">@item["CatName"]</td>
+                                        <td class="SubCatName">@item["SubCatName"]</td>
+                                        <td class="KitName">@item["KitName"]</td>
+                                        <td class="BatchNo">@item["BatchaNo"]</td>
+                                        <td class="PurchaseRate">@item["PurchaseRate"]</td>
+                                        <td class="SaleRate">@item["DP"]</td>
+                                        <td class="GST">@item["GST"]</td>
+                                        <td class="PurchaseGST">@item["PSTatus1"]</td>
+                                        <td class="SaleGST">@item["SSTatus1"]</td>
+                                        <td class="MRP">@item["MRP"]</td>
+                                        <td class="DP">@item["DP"]</td>
+                                        <td class="BV">@item["BV"]</td>
+                                        <td class="APP">@item["APP"]</td>
+                                        <td class="CP">@item["CP"]</td>
+                                        <td class="RP">@item["RP"]</td>
+                                        <td class="MfgDate">@item["MfgDate"]</td>
+                                        <td class="ExpDate">@item["ExpDate"]</td>
+                                        <td class="HSNCode">@item["HSNCode"]</td>
+                                        <td class="Description">
+                                            <textarea class="form-control" style="min-width:240px" cols="4" rows="2">@item["Descrip"]</textarea>
+                                        </td>
+                                        <td class="Image">
+                                            <img alt="product" src='~/images/products/@item["Image"]' style="width:200px;height:100px" />
+                                        </td>
+
+                                        <td class="Isoffer">
+                                            @item["Isoffer"]
+                                        </td>
+
+                                        <td style="text-align:center" onclick="Getcategory(@item["SubCategoryId"],@item["CategoryId"],@item["entryid"],this)">
+                                            <a style='color:red;font-size:20px; cursor:pointer;'><i class='fa fa-pencil'></i> </a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script>
+        function gst() {
+            //debugger;
+            if (GST.value != '') {
+                var CSGST = GST.value * 1 / 2;
+                document.getElementById('CGST').value = CSGST;
+                document.getElementById('SGST').value = CSGST;
+            }
+        }
+        function Validate() {
+            if (CategoryId.value == '') {
+                alert('Please Select Category ');
+                CategoryId.focus();
+
+                return false;
+            }
+            if (Name.value == '') {
+                alert('Enter Product Name');
+                Name.focus();
+
+                return false;
+            }
+            if (BatchNo.value == '') {
+                alert('Enter Batch No');
+                BatchNo.focus();
+
+                return false;
+            }
+            if (HSNCode.value == '') {
+                alert('Enter HSN Code');
+                HSNCode.focus();
+
+                return false;
+            }
+            if (PurchaseRate.value == '0') {
+                alert('Enter Purchase Rate');
+                PurchaseRate.focus();
+
+                return false;
+            }
+            if (SaleRate.value == '0') {
+                alert('Enter Sale Rate');
+                SaleRate.focus();
+
+                return false;
+            }
+
+
+        }
+
+
+        function Getcategory(SUbId, CId, Id, _this) {
+            debugger;
+
+           
+            document.getElementById('CategoryId').value = CId;
+            // BindSubcategory(CId);
+            if (CId != "") {
+                var dataobject = {
+                    CategoryId: $("#CategoryId").val()
+
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/BindSubCategory",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        $('#SubCategoryId').html(MakeDropdown(r));
+                        document.getElementById('SubCategoryId').value = SUbId;
+                    }
+                });
+            }
+
+            document.getElementById('Name').value = $(_this).parent().find('.KitName').text();
+            document.getElementById('PurchaseRate').value = $(_this).parent().find('.PurchaseRate').text();
+            document.getElementById('BatchNo').value = $(_this).parent().find('.BatchNo').text();
+
+            document.getElementById('SaleRate').value = $(_this).parent().find('.SaleRate').text();
+            document.getElementById('GST').value = $(_this).parent().find('.GST').text();
+
+            document.getElementById('PurchaseGst').value = $(_this).parent().find('.PSTatus1').text();
+            document.getElementById('SaleGst').value = $(_this).parent().find('.SSTatus1').text();
+            document.getElementById('MRP').value = $(_this).parent().find('.MRP').text();
+            document.getElementById('DP').value = $(_this).parent().find('.DP').text();
+            document.getElementById('BV').value = $(_this).parent().find('.BV').text();
+            document.getElementById('APP').value = $(_this).parent().find('.APP').text();
+            document.getElementById('CP').value = $(_this).parent().find('.CP').text();
+            document.getElementById('RP').value = $(_this).parent().find('.RP').text();
+            document.getElementById('MfgDate').value = $(_this).parent().find('.MfgDate').text();
+
+            document.getElementById('ExpDate').value = $(_this).parent().find('.ExpDate').text();
+
+            document.getElementById('HSNCode').value = $(_this).parent().find('.HSNCode').text();
+
+            document.getElementById('Isoffer').value = $(_this).parent().find('.Isoffer').text();
+
+
+            document.getElementById('Description').value = CKEDITOR.instances.Description.setData($(_this).parent().find('.Description').text());
+
+            //CKEDITOR.instances.txtDescription.setData($(_this).attr('Description'));
+
+
+            // document.getElementById('BatchNo').value = $(_this).parent().find('.Image').text();
+            document.getElementById('Id').value = Id;
+
+
+            document.getElementById("submit").value = "Update";
+            gst();
+            bindDiscountPer();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+
+
+        }
+        function DeleteSubCategoryDetails(SubCategoryId) {
+            var x = confirm("Are you sure you want to delete?");
+            //debugger;
+            if (x) {
+                var dataobject = {
+                    SubCategoryId: SubCategoryId
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/DeleteSubCategoryDetails",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.CategoryId == "1") {
+                            alert(r.msg);
+                            location.reload();
+                        }
+                        else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+
+
+        function ShowHideProduct(Action, Id) {
+
+            var dataobject = {
+                Id: Id,
+                Action: Action
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ShowHideProduct",
+                data: dataobject,
+                dataType: "json",
+                success: function (r) {
+                    if (r.Id == "1") {
+                        alert(r.msg);
+                        location.reload();
+                    }
+                    else {
+                        alert(r.msg);
+                    }
+                }
+            });
+
+        }
+
+        function BindSubcategory(_this) {
+            //debugger;
+            // alert(_this.value);
+
+            if ($("#CategoryId option:selected").text() == "Package 555") {
+                $("#APP").attr("disabled", "disabled");
+                bindapp();
+            }
+            else {
+                $("#APP").removeAttr("disabled", "disabled");
+                bindapp();
+            }
+
+
+            var dataobject = {
+                CategoryId: $("#CategoryId").val()
+
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Admin/BindSubCategory",
+                data: dataobject,
+                dataType: "json",
+                success: function (r) {
+
+                    $('#SubCategoryId').html(MakeDropdown(r));
+
+
+                }
+            });
+
+        }
+
+        //function BindSubcategory(Id) {
+        //    //debugger;
+        //    var dataobject = {
+        //        CategoryId: Id
+
+        //    };
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Admin/BindSubCategory",
+        //        data: dataobject,
+        //        dataType: "json",
+        //        success: function (r) {
+
+        //            $('#SubCategoryId').html(MakeDropdown(r));
+
+
+        //        }
+        //    });
+
+        //}
+
+        function MakeDropdown(lst) {
+            var option = "";
+            for (var i = 0; i < lst.length; i++) {
+                option += "<option value='" + lst[i].Value + "'>" + lst[i].Text + "</option>";
+            }
+            return option;
+        }
+
+
+    </script>
+
+    <!-----------Prahlad singh------------->
+    <button type="button" style="display:none" class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="imagemodel">
+        Open modal
+    </button>
+    <!--------prahlad singh model for multipleimages-->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload Multiple Images</h4>
+                    <input type="hidden" id="pid" />
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <lable style=" line-height: 1; font-size: x-large; cursor: pointer; color: blueviolet">Upload here..</lable><label class="fa fa-upload" for="fuimage" style=" line-height:1; font-size: x-large; cursor: pointer; color: blueviolet"></label>
+                        <input type="file" class="form-control" id="fuimage" multiple />
+                    </div>
+                    <div class="row">
+                        <div class="row" id="previewimg" style="margin-left:0px;">
+                            <div class="col-sm-6" style="margin-top:28px"><img src="/images/products/download.png" alt="product image" style="height: 150px;width: 150px;" /> </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="saveMultipleImg()">Submit</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!----------------------------------->
+    <script>
+        function openmodel(ProductId) {
+            $('#pid').val(ProductId)
+            $('#imagemodel').trigger('click');
+
+        }
+
+
+
+        $("#fuimage").change(function () {
+            var htm = "";
+            var i = this.files.length;
+            for (var j = 0; j < i; j++) {
+                var file = this.files[j];
+                var fileType = file["type"];
+                var validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                if ($.inArray(fileType, validImageTypes) < 0) {
+                    alert('Please Upload only image file!');
+                    $("#fuimage").val('');
+                    $('#imgMainImage1').attr('src', '../img/pr1.png');
+                    return;
+                }
+                else {
+                    var input = (this.files[j]);
+                    if (input) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            htm += '<div class="col-sm-3" style="margin-top:28px"><img  src="' + e.target.result + '" alt="product image" style="height: 150px;width: 150px;" /> </div>';
+                            $('#previewimg').html(htm)
+
+                        }
+                        reader.readAsDataURL(input);
+                    }
+
+                    else {
+                        $('#imgMainImage1').attr('src', '../img/pr1.png');
+
+                        reader.readAsDataURL(input);
+                    }
+
+                }
+
+            }
+
+
+        });
+
+        function saveMultipleImg() {
+            var files = $("#fuimage").get(0).files;
+            var picture = [];
+            var formData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                formData.append("file1", files[i]);
+            }
+            formData.append("pid", $('#pid').val());
+
+            $.ajax({
+                url: '/Admin/UploadMultiImg',
+                method: 'post',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (e) {
+                    alert(e)
+                }
+            })
+        }
+    </script>
+</div>

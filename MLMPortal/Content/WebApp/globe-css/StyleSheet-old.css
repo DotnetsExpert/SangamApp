@@ -1,0 +1,607 @@
+﻿
+.fix-footer .footer-fix-icon{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    background: #f7f7f7;
+    padding: 10px;
+}
+.bg{
+     background-color: #ff2b49;   
+     padding: 0 0 10% 0;
+}
+.first-bg {
+    background-image: url('../globe-img/bg.png');    
+    background-repeat:no-repeat;
+    width: 100%;
+    background-size:cover;
+    padding: 152% 0 0 0;
+}
+
+.form-box{
+    background: #fff!important;
+    padding: 15px;
+    border-radius: 8px;
+    background: none;
+    overflow:hidden;
+}
+
+.form-box input[type="text"]{
+    height:40px;
+}
+
+.pswrd{
+width:77%;
+float:left;
+
+}
+.otbtn{
+    width:23%;
+    padding:0;
+}
+.otp-btn{
+    height: 40px;
+    border-radius: 7px;
+    background: #ff2b49;
+    width: 97px;
+    border: none;
+}
+
+.send-btn{
+    height: 40px;
+    border-radius: 7px;
+    background: #ff2b49;
+    width: 100%;
+    border: none;
+}
+
+.haveaccount{
+    text-align:center;
+    margin:10px 0 10px 0;
+    display:block;
+    color:rgba(255,43,73,.5);
+    border-bottom: 1px solid #ff2b49;
+}
+
+/**** slide up modal ****/
+a.bottom-up{
+   width: 100%;
+    margin: 0 auto;
+    color: rgba(255,43,73,.5);
+    font-size: 16px;
+    border: none;
+    display: block;
+    text-align: center;
+    border-bottom: 1px solid #ff2b49;
+    border-radius: 0;
+    padding: 10px;
+}
+
+ul.app-login{
+    padding-left:0;
+  }
+
+ul.app-login li{
+       background: #fff;
+    border-radius: 25px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin-bottom:10px;
+    padding: 8px;
+    list-style-type: none;
+}
+
+ul.app-login li a{
+    text-decoration:none;
+    color:#000;
+}
+
+ul.app-login li a:hover{
+    text-decoration:none;
+}
+
+.bottom-modal .modal-body, .modal-content{
+    background:#ff2b49;
+    border-radius:20px 20px 0 0;
+}
+
+.bottom-modal .modal-body p{
+    color:#fff;
+}
+
+
+.banner-img img{
+    width:100%;
+}
+.globe-box{
+    background:#277af9;
+}
+i.fa.fa-globe {
+   float: right;
+    top: -35px;
+    bottom: 0px;
+    position: relative;
+    color: #fff;
+    font-size: 24px;
+    right: -1px;
+    padding: 5px;
+}
+
+.fa.fa-bell-o{
+        float: left;
+    top: 25px;
+    position: relative;
+    color: #fff;
+    font-size: 24px;
+    right: 1px;
+    z-index: 9999;
+    padding: 5px;
+}
+
+.margquee-line{
+    color: #fff;
+    width: 80%;
+    margin: -2px auto;
+}
+.nav-tabs .nav-link.active {
+    color: #495057;
+    background-color:transparent !important;
+     border-color: transparent !important;
+}
+.tab-section{
+    padding:0;
+}
+.tab-section .footer-fix-icon{
+   padding: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #f7f7f7;
+
+}
+.tab-section .footer-fix-icon .nav-link{
+    padding:0;
+}
+
+.tab-section .footer-fix-icon ul li {   
+    float: left;
+    width: 20%;
+    margin:10px 0 0 0;
+}
+
+.tab-section .card-body{
+    padding:0;
+    margin-bottom: 75px;
+}
+.tab-section .card{
+    border:none;
+}
+
+.icon-box ul{
+    padding:0;
+}
+.icon-box ul li{
+    /*display:inline-block;
+    width:100%;
+    text-align:center;
+    max-width:70px; 
+    margin: 0 10px;*/
+    display: inline-block;
+    width: 20%;
+    text-align: center;  
+    margin: 0 10px;
+}
+
+.icon-box ul li img{
+       /*display: block;
+    width: 100%;
+    text-align: center;
+    max-width: 80px;
+    float: left;*/
+    display: block;
+    width: 100%;
+    text-align: center;
+    max-width: 80px;
+    margin: 0 auto;
+    float: none;
+}
+
+.icon-box ul li p{
+    text-align:center;
+    color:#000;
+}
+
+.card-header.footer-fix-icon .nav-tabs{
+    padding:0;
+}
+
+.card-header.footer-fix-icon .nav-tabs li a p{
+    font-size:12px;
+}
+
+.footer-fix-icon ul{
+    padding:0;
+}
+
+.footer-fix-icon ul li{
+    text-align: center;
+    width: 20%;
+}
+
+.footer-fix-icon ul li a{
+    text-align:center;
+    padding: 0;
+}
+
+
+
+.p-marquee ul{
+    padding:0;
+}
+.p-marquee ul li{
+    list-style-type:none;
+    padding:5px 0;
+    background:#f7f7f7;
+    margin:5px;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.inner-invest-box .media-body h4{
+    text-align:left;
+    font-size:16px;
+}
+
+.inner-invest-box .media img{
+    max-width: 70px;
+    width:100%;
+}
+
+.inner-invest-box .media-body p{
+    margin-bottom:0;
+    text-align:left;
+    font-size:15px;
+    color: #277af9;
+}
+
+.business-text{
+    /*float:left;*/
+    margin-bottom:15px;
+}
+
+.buy-btn{
+    /*background: #277af9;
+    height: 50px;
+    width: 50px;
+    margin: 25px 0;
+    float: right;
+    border-radius: 50px;*/
+    background: #277af9;   
+    width: 100%;
+    max-width: 80px;
+    margin: 1px 0;
+    border-radius: 4px;
+    padding: 0;
+    display: block;
+    overflow: hidden;
+}
+.buy-btn a{
+    /*color: #fff;
+    padding: 12px 0;
+    display: block;*/
+    color: #fff;
+    padding: 5px 0;
+    display: block;
+    width: 100%;
+    text-align:center;
+}
+
+.earn-box{
+        width: 100%;
+    margin: 15px auto;
+    border-radius: 12px;
+    background: #277af9;
+    display: block;
+    overflow: hidden;
+    color: #fff;
+    padding: 10px 15px;
+}
+
+.clear{
+    clear:both;
+    height:1px;
+}
+
+.slide-img .carousel-inner{
+   text-align:center;
+}
+.earn-1 .amount{
+    text-align:center;
+}
+
+
+.wire-heading h2{
+    color: #277af9;
+    margin-top:20px;
+    font-size:18px;
+    text-align: center;
+}
+
+.earn-1{
+    float: left;   
+    border-right:2px solid #fff;
+    background: #277af9;
+    width: 50%;
+    padding: 0px 18px;   
+}
+
+.earn-1:last-child{
+    border-right:0;
+}
+
+.loginregister{
+    margin:15% 0;
+}
+
+.loginregister .nav-pills li{
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.loginregister .nav-pills .nav-link{
+    font-size:18px;
+    font-weight:600;
+}
+.loginregister .nav-pills .nav-link.active{
+   background: #ff2b4900;
+    color: #000;
+    border-bottom: 4px solid red;
+    border-radius: 0px;    
+}
+
+.loginregister .nav-pills .nav-link{
+    color:#000;
+}
+
+.loginregister .tab-pane, .loginregister .form-box{
+    padding:0;
+}
+
+.form-box label {
+    width:100%;
+}
+
+.terms{
+    font-size:14px;
+    margin:25px 0;
+}
+
+.terms span{
+    font-size:13px;
+}
+
+.border-form input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+}
+
+.border-form .input-group-text{
+    background:none;
+    border:none;
+    border-bottom: 1px solid #ccc;
+}
+
+.modal-bg {
+    background-image: url('../globe-img/modal-bg.png');
+    background-repeat:no-repeat;
+    background-size:cover;
+    border-radius: 20px;
+
+}
+
+.modal-bg p{
+    margin-top:40%;
+}
+
+.team-data{
+       float: left;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 10px;
+}
+.team-1{
+    text-align:center;
+}
+
+.team-1 p{
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.team-1 h6{
+    font-size: 14px;
+}
+
+.level-money ul li{
+    list-style-type: none;
+    padding: 0 10px;
+    width: 32%;
+    font-size: 14px;
+    display: inline-block;
+    border-right: 1px solid #eee;
+    text-align:center;
+}
+
+.level-money ul li:last-child{
+    border:none;
+}
+.level-money ul{
+    padding:0;
+}
+
+.level-money p{
+    margin:0;
+}
+
+.contribute, .num {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.invitation-1{
+   float: left;
+    width: 70%;
+}
+
+.invit-copy{
+    float:right;
+     width: 25%;
+}
+
+.business-text.invitation-1 p{
+    color:#333;
+}
+
+.invitation-1 h4{
+    color:#007bff;
+}
+
+h4.invite-title {
+    margin: 20px 0;
+    font-size:18px;
+}
+
+.earn-box.wealth{
+    padding:0;
+}
+
+.earn-box.wealth span.safe {
+    background: rgba(255,255,255,0.3);
+    width: 100%;
+    display: block;
+    font-size: 14px;
+    text-align: center;
+}
+
+.safe-amount{
+    display: block;
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.safe-box p{
+    margin:0;
+    padding:15px 0;
+    text-align: center;
+}
+
+.safe-amount a{
+    color:#fff;
+}
+
+.earn-1.wealth-1{
+    border-right:none;
+    text-align:center;
+}
+
+.transfer-btn{
+    background: #fff;
+    text-align: center;   
+    border-radius: 4px;
+    display: block;
+    padding: 10px;
+    margin-bottom: 20px !important;
+}
+
+.earn-1.wealth-1 .amount{
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/******** mine admin**/
+
+.mine-admin{
+      background: #007bff;
+    display: block;
+    overflow: hidden;
+    padding: 60px 15px 30px;
+}
+
+.mine-admin .assets-box ul{
+    list-style-type:none;
+    padding: 0;
+}
+
+.mine-admin .assets-box ul li{
+    display:inline-block;
+}
+
+.mine-admin .mine-box .media-body h4{
+    font-size:18px;
+    color:#fff;
+}
+
+.mine-admin .mine-box .media-body p{
+    font-size:14px;
+    color:#fff;
+}
+
+.mine-admin .total-assets{
+    float:left;
+    color:rgba(255,255,255,0.6);
+}
+
+.mine-admin .admin-price{
+    float: right;
+    color: #fff;
+    line-height: 24px;
+    font-size: 20px;
+    font-weight: bold;
+}
+   .admin-nav .list-group {
+    margin: 25px 10px;
+    box-shadow: 0px 1px 5px #ccccccb0;
+}
+
+
+   .admin-nav .list-group li{
+       padding:10px 0;
+       padding: 15px 15px;
+       background:#007bff1f;
+       display: block !important;
+   }
+
+     .admin-nav .list-group li .fa{
+         font-size:16px;
+     }
+
+     .fa.fa-ico{
+         margin-right:15px;
+         float: left;
+     }
+     .admin-nav .list-group li span{
+         font-size:16px;
+         margin-left:15px;
+         font-family: sans-serif;
+         color:#000;
+     }
+
+     .admin-nav .list-group li .fa-angle-right{
+         float:right;
+     }
+
+     .withdraw-option .list-group-item{
+         padding:10px 5px;
+         width: 25%;
+     }
+
+     .bottom-space{
+         padding-bottom:80px;
+     }

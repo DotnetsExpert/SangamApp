@@ -1,0 +1,154 @@
+﻿@model MLMPortal.Models.PayoutReport
+
+@{
+    ViewBag.Title = "FranchiseDayclose";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+        border:2px solid black;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "Ecom_ProductRequestList");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Franchise Wise Day Close</h4>
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-content">
+
+                <div class="row merged20 mb-4">
+                    <div class="col-lg-12">
+                        <div class="d-widget">
+                            <div class="d-widget-title">
+                                <h5></h5>
+                            </div>
+
+                            <div class="table-responsive dt-responsive" id="divtable">
+                                <table class="table-default table table-striped table-responsive-md table-bordered" id="dom-jqry">
+                                    <thead>
+                                        <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                            <th scope="col">Sr.No.</th>
+                                            @*<th scope="col">Invoice No</th>*@
+                                            <th scope="col">Franchise Name</th>
+                                            <th scope="col">PinCode</th>
+                                            <th align="right" scope="col">Amount</th>
+                                           
+                                            <th align="right" scope="col">App</th>
+                                            <th align="right" scope="col">CP</th>
+                                            <th align="right" scope="col">Franchise Income</th>
+                                            <th align="right" scope="col">Company Income</th>
+                                            <th align="right" scope="col">Image Receipt</th> 
+                                            <th align="right" scope="col">Action</th>
+                                            <th align="right" scope="col">View</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                                        {
+                                            int i = 0;
+                                            foreach (DataRow item in Model.dt.Rows)
+                                            {
+                                                i++;
+                                                <tr class="text-center">
+                                                    <td>@i </td>
+                                                    @*<td class="InvoiceNo">@item["InvoiceNo"]</td>*@
+                                                    <td class="PhoneNumber">@item["Franchise_Name"]</td>
+                                                    <td class="PinCode" style="font-weight:bold;color:#003399;">@item["PinCode"]</td>
+                                                    <td class="PaidAmount">@item["PaidAmount"]</td> 
+                                                    <td class="NewApp">@item["NewApp"]</td>
+                                                    <td class="NewCP">@item["NewCP"]</td>
+                                                    <td class="FranchiseIncome">@item["FranchiseIncome"]</td>
+                                                    <td class="CompanyIncome">@item["CompanyIncome"]</td>
+                                                    <td class="ImagePath"><img src="@item["ImagePath"]"/></td>
+                                                                                                     
+                                                    <td>
+                                                        <a href="javascript:void(0);" onclick="Dayclose('@item["Franchise_Id"]','@item["PinCode"]')">Approve</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="../admin/ViewFranchiseRequestResponse?InvoiceNo=@item["Pincode"]">View</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>  
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+
+                        function ApprovedOrder(InvoiceNo) {
+                            //debugger;
+                            if (confirm('Are you sure want to approved this order.!!')) {
+                                $.post('/ProductManagement/ApprovedOrder/', { InvoiceNo: InvoiceNo }, function (res) {
+
+                                    if (res == '1') {
+                                        alert('Order Approved Successfully.');
+                                    }
+                                });
+                            }
+                        }
+
+
+ 
+                        function Dayclose(Franchise_Id,Pincode) {
+        //debugger;
+        if (confirm('Are you sure want to approved this order.!!')) {
+            $.post('/Admin/Dayclosefranchise/', { Action: 1, Franchise_Id: Franchise_Id, Pincode: Pincode }, function (res) {
+
+                if (res == '1') {
+                    alert('Day closed successfully.');
+                    window.location.reload();
+                }
+            });
+        }
+    }
+
+
+</script>
+

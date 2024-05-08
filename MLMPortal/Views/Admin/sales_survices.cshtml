@@ -1,0 +1,278 @@
+﻿@model MLMPortal.Models.cls_sales
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-loader" id="page-loader1" style="display:none">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    <span>Loading...</span>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-content">
+
+
+                <div class="pass-form">
+                    <div class="d-widget-title">
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5>CUSTOMER PURCHASE</h5>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="@Url.Action("sales_survices", "Admin")" class="btn btn-primary" >New</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" uk-toggle="target: #modal-example" class="btn btn-info" >Find</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" class="btn btn-danger" onclick="dlt_Inv()" >Delete</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" class="btn btn-success" onclick="get_Inv_Dtls('First')" >First</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" class="btn btn-dark" onclick="get_Inv_Dtls('Previous')" >Previous</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" class="btn btn-dark" onclick="get_Inv_Dtls('Next')" >Next</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" class="btn btn-success" onclick="get_Inv_Dtls('Last')" >Last</a>
+                            </div>
+                            <div class="col-sm-1">
+                                <a href="javascript:void()" class="btn btn-primary" onclick="get_print()"   >Print</a>
+                            </div>
+                        </div>
+
+                        </div>
+
+                    <div class="col-sm-12">
+
+                        <section class="panel">
+
+                            <div class="panel-body">
+
+                                <div class="col-lg-12">
+
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label for="accountLastName" class="control-label">
+                                                Member Id <span style="color:red;">*</span>
+                                            </label>
+
+                                            <div class="controls">
+                                                <input type="text" value="" id="txtMemberId" class="form-control" placeholder="Enter Member Id" onchange="get_Cust_Dtls()">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <label for="accountLastName" class="control-label">
+                                                Applicant Name
+                                            </label>
+                                            <div class="controls">
+                                                <input readonly="readonly" value="" type="text" id="txtName" class="form-control">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <label for="accountLastName" class="control-label">
+                                                Mobile No.
+                                            </label>
+                                            <div class="controls">
+                                                <input readonly="readonly" type="text" id="txtMobileNo" class="form-control">
+
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-lg-4">
+                                            <label for="accountLastName" class="control-label">
+                                                Invoice No.
+                                            </label>
+                                            <div class="controls">
+                                                <input readonly="readonly" value="" type="text" id="txtInvNo" class="form-control">
+
+                                            </div>
+                                        </div>
+
+                                        
+
+                                        <div class="col-lg-8">
+                                            <label for="accountLastName" class="control-label">
+                                                Address
+                                            </label>
+                                            <div class="controls">
+                                                <textarea id="txtAddr" class="form-control" readonly></textarea>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                  
+
+                                    <br />
+                                    <div class="row">
+
+                                        <div class="form-group col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table-default table table-striped table-responsive-md" id="tblProduct">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Product Name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Rate</th>
+                                                            <th>BV</th>
+                                                            <th>Amount</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot>
+                                                        <tr>
+
+                                                            <td>
+                                                                @Html.DropDownList("ProductId", (List<SelectListItem>)ViewBag.ProductList, new { @id = "ProductId", @class = "form-control", @onchange = "GetItemDetails()", @Style = "width:290px;" })
+
+                                                            </td>
+
+                                                            <td>
+                                                                <input style="width:100px;" type="text" id="txtQty" placeholder="Quantity" onkeypress="return isNumKey(event);" maxlength="3" onchange="get_Amt()" />
+                                                            </td>
+                                                            <td>
+                                                                <input style="width:100px;" type="text" readonly id="txtRate" />
+                                                            </td>
+                                                            <td>
+                                                                <input style="width:100px;" type="text" readonly id="txtBV" />
+                                                            </td>
+                                                            <td>
+                                                                <input style="width:100px;" type="text" readonly id="txtAmount" />
+                                                            </td>
+
+                                                            <td>
+                                                                <a onclick="AddProduct()" style="color:blue; cursor:pointer;">
+                                                                    Add
+                                                                </a>
+                                                            </td>
+
+                                                        </tr>
+                                                    </tfoot>
+
+
+                                                </table>
+
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label for="accountLastName" class="control-label">
+                                                        Gross Amount
+                                                    </label>
+
+                                                    <div class="controls">
+                                                        <input type="text" value="0" readonly="readonly" id="txtGrossAmt" class="form-control">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4">
+                                                    <label for="accountLastName" class="control-label">
+                                                        Final Amount
+                                                    </label>
+                                                    <div class="controls">
+                                                        <input readonly="readonly" value="0" type="text" id="txtFinalAmt" class="form-control">
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-lg-4">
+                                                    <label for="accountLastName" class="control-label">
+                                                        Paid Amount
+                                                    </label>
+                                                    <div class="controls">
+                                                        <input readonly="readonly" value="0" type="text" id="txtPaidAmt" class="form-control">
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                            <br />
+                                            <div class="row">
+
+                                                <div class="col-lg-12" style="text-align:center">
+                                                    <input type="text" id="btnSales" onclick="return Sales_customer_AD()" class="btn btn-success" value="Save & Generate Invoice" />
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                        </section>
+
+
+
+
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*View Details*@
+<div id="modal-example" uk-modal="">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Find Invoice</h2>
+
+        <div class="row">
+            <div class="col-lg-12">
+                
+                <div class="controls">
+                    <input type="text" value="" id="txtFInvNo" class="form-control" placeholder="Enter Invoice No" >
+
+                </div>
+            </div>
+        </div>
+        <br />
+        <p class="uk-text-right">
+            <button onclick="get_Inv_Dtls(1)" class="button uk-button-default uk-modal-close" type="button">Find</button>
+
+            <button class="button uk-button-default uk-modal-close" type="button">Cancel</button>
+
+        </p>
+    </div>
+</div>
+
+<script src="~/OperationJs/jsOther.js"></script>
+@*@Scripts.Render("~/bundles/wr_Salesjs")*@
+<script src="~/OperationJs/warehouse/Sales/jsSales_uad.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('select').select2();
+
+        $("#ProductId_chosen").hide();
+    });
+</script>

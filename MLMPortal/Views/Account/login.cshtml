@@ -1,0 +1,485 @@
+﻿@model MLMPortal.Models.Master
+@{
+    Layout = null;
+}
+
+<!--<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SignIn</title>-->
+@*<link href="@Url.Content("~/images/logo.png")" rel="icon" type="image/x-icon" />*@
+<!--<link href="@Url.Content("~/Content/assets/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/assets/css/animate.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/assets/css/icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/assets/css/app-style.css")" rel="stylesheet" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(document).bind('keydown', function (e) {
+                if (e.which === 13) { // return
+                    $('#btnSignIn').trigger('click');
+                }
+            });
+
+
+
+            $("#btnSignIn").click(function () {
+                debugger;
+                var UserName = $("#input-10").val();
+                var password = $("#txtpassword").val();
+                if (UserName == "") {
+                    alert("Please Enter UserName");
+                    $("#input-10").focus();
+                    return;
+                }
+                if (password == "") {
+                    alert("Please Enter password");
+                    $("#txtpassword").focus();
+                    return;
+                }
+                var dataobject = {
+                    UserName: UserName,
+                    Password: password
+                };
+                $("#showSpinner").show();
+                $.ajax({
+
+                    url: "/Account/AuthenticateUser",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    //data: dataobject,
+                    data: JSON.stringify(dataobject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        //debugger;
+                        //if (r[0] == '1') {
+                        var url = null;
+                        if (r[0] == '1' || r[0] == '5') {
+                            var url = "../Admin/index";
+                            window.location.href = url;
+                        }
+                        else if (r[0] == '2') {
+                            var url = "/Customer/UserDashboard";
+                            window.location.href = url;
+                        }
+                        else {
+                            swal("Info", "Invalid User Name or Password!", "error");
+                            $("#showSpinner").hide();
+                        }
+
+
+                        //window.location(url);
+                        //}
+                        //if (r[0] == "0") {
+                        //    swal("Info", "Invalid User Name or Password!", "error");
+                        //    $("#showSpinner").hide();
+                        //}
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        swal("Info", "Please Check Credentials Entered by you!", "error");
+                        $("#showSpinner").hide();
+                    }
+                });
+            });
+
+
+
+
+        });
+    </script>
+
+
+    <style>
+        .card-authentication1 {
+            max-width: 22rem !important;
+        }
+
+
+        .footer {
+            background-color: #F7F8FA !important;
+            position: fixed !important;
+            z-index: 99999 !important;
+            padding: 0px !important;
+            left: 0px !important;
+        }
+
+            .footer .copyright {
+                background: #ca0008 !important;
+                background: linear-gradient(black, black) !important;
+            }
+
+                .footer .copyright p {
+                    text-align: center !important;
+                    margin: 0 !important;
+                    padding: 0px !important;
+                    color: white !important;
+                }
+    </style>
+
+
+
+</head>
+
+<body class="authentication-bg">
+    <div id="wrapper" style="margin-top:8%;">
+        <div class="card card-authentication1 mx-auto my-5 animated zoomIn" style="max-width: 35rem !important;">
+            <div class="card-body">
+                <div class="card-content p-2">
+                    <div class="text-center">-->
+@*<img src="/images/logo.png" style="height:91px;"/>
+    <!--</div>
+                <div class="card-title text-uppercase text-center py-2">Sign In</div>
+                <div id="formLogin">
+                    <my-spinner>
+                        <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+                            <i class="fa fa-refresh fa-spin nexo-refresh-icon" style="color: rgb(0, 0, 0); font-size: 50px; position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -25px; width: 44px; height: 50px;">
+                            </i>
+                        </div>
+                    </my-spinner>
+                    <div class="form-group">
+                        <div class="position-relative has-icon-left">
+                            <label for="exampleInputUsername" class="sr-only">Username</label>
+                            <input type="text" id="input-10" name="firstname" class="form-control" placeholder="Username">
+                            <div class="form-control-position">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="position-relative has-icon-left">
+                            <label for="exampleInputPassword" class="sr-only">Password</label>
+                            <input type="password" id="txtpassword" class="form-control" placeholder="Password">
+                            <div class="form-control-position">
+                                <i class="icon-lock"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row mr-0 ml-0">
+                        <div class="form-group col-6">
+                            <div class="icheck-material-primary" style="display:none">
+                                <input type="checkbox" id="user-checkbox" checked="" />
+                                <label for="user-checkbox">Remember me</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-6 text-right">
+                            <a href="#">Forgot Password</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id="btnSignIn" value="Sign In" class="btn btn-danger shadow-danger btn-block waves-effect waves-light" style="background:#043b56;border:2px solid #043b56 !important;box-shadow:none !important;">Sign In</button>
+                    </div>
+                    <div class="form-group text-center" style="display:none">
+                        <button type="button" class="btn btn-facebook shadow-facebook text-white btn-block waves-effect waves-light"><i class="fa fa-facebook-square"></i> Sign In With Facebook</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Start Back To Top Button-->
+    <!--<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>-->
+    <!--End Back To Top Button-->
+    <!--</div>
+
+
+
+
+
+    <script src="@Url.Content("~/Content/assets/js/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/popper.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/waves.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/app-script.js")"></script>
+    <script src="@Url.Content("~/Content/assets/plugins/alerts-boxes/js/sweetalert.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/plugins/alerts-boxes/js/sweet-alert-script.js")"></script>
+
+    <script src="@Url.Content("~/Content/assets/plugins/jquery-validation/js/jquery.validate.min.js")"></script>
+
+
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            // validate signup form on keyup and submit
+            $("#formLogin").validate({
+                rules: {
+                    username: "required",
+                    password: "required",
+                    username: {
+                        required: true
+                    },
+                    password: {
+                        required: true
+                    },
+
+                    agree: "required"
+                },
+                messages: {
+
+                    username: {
+                        required: "Please enter username"
+                    },
+                    password: {
+                        required: "Please enter password"
+                    },
+                }
+            });
+
+            $("#btnSignIn").click(function () {
+                var UserName = $("#input-10").val();
+                var password = $("#txtpassword").val();
+                if (UserName == "") {
+                    alert("Please Enter UserName");
+                    $("#input-10").focus();
+                    return;
+                }
+                if (password == "") {
+                    alert("Please Enter password");
+                    $("#txtpassword").focus();
+                    return;
+                }
+            });
+
+        });
+
+    </script>
+
+
+
+    <div class="footer" style="width:100%;margin-top:1%;">
+        <div class="copyright" style="line-height:50px;">
+            <p class="ftex">Copyright © 2023 <span class="color-primary"> Design &  Developed by</span>Mission Pay</p>
+    <p>Copyright © 2023 <a href="#" target="_blank" style="color:white;">Tech Solution Softwares .</a> </p>
+            </div>
+        </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </body>
+
+    </html>
+*@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from corporx.themetags.com/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 16 Apr 2024 07:33:03 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!--favicon icon-->
+    <link rel="icon" href="~/Content/publicsite/assets/img/favicon.png" type="image/png" sizes="16x16">
+
+    <!--title-->
+    <title>Missn Pay</title>
+
+    <!--build:css-->
+    <link rel="stylesheet" href="~/Content/publicsite/assets/css/main.css">
+    <!-- endbuild -->
+</head>
+
+<body>
+
+    <!--preloader start-->
+    <div id="preloader">
+        <div class="loader1">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <!--preloader end-->
+    <div class="main">
+
+        <!--sign up section start-->
+        <section class="section section-lg py-0 min-vh-100 bg-soft">
+            <div class="container-fluid p-0">
+                <div class="row align-items-center min-vh-100 justify-content-center no-gutters">
+                    <div class="col-12 col-md-7 col-lg-8 col-xl-8 d-none d-md-none d-xl-block" style="background-image: url('../Content/publicsite/assets/img/slider-img-5.jpg');">
+                        <!-- Image -->
+                        <div class="d-flex align-items-center min-vh-100 bg-gradient-primary text-white">
+                            <div class="position-relative w-75 p-8">
+                                <h1 class="display-2">Welcome Back !</h1>
+                                <p class="lead">Keep your face always toward the sunshine - and shadows will fall behind you. Continually pursue fully researched niches whereas timely platforms.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5 col-lg-4 col-xl-4">
+                        <div class="login-signup-wrap bg-soft p-5 p-md-4 px-lg-6">
+                            <!-- Heading -->
+                            <h3 class="text-center">Sign In</h3>
+
+                            <!-- Subheading -->
+                            <p class="text-muted text-center mb-5">
+                                Sign in to your account to continue.
+                            </p>
+
+                            <!-- Form -->
+                            <form class="login-signup-form" action="#">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Email Address</label>
+                                    <div class="input-group input-group-merge">
+                                        <div class="input-icon">
+                                            <i class="ti-email"></i>
+                                        </div>
+                                        <input type="text" id="input-10" name="firstname" class="form-control" placeholder="Username">
+                                        @*<input type="email" class="form-control" placeholder="name@yourdomain.com" required>*@
+                                    </div>
+                                </div>
+                                <!-- Password -->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="font-weight-bold">Password</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="password-reset.html" class="form-text small text-muted">
+                                                Forgot password?
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group input-group-merge">
+                                        <div class="input-icon">
+                                            <i class="ti-lock"></i>
+                                        </div>
+                                        <input type="password" id="txtpassword" class="form-control" placeholder="Password">
+                                        
+                                    </div>
+                                </div>
+
+                                <!-- Submit -->
+                                <button class="btn btn-block btn-secondary mt-4 mb-3" id="btnSignIn" type="button">Sign in</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div> <!-- / .row -->
+            </div>
+        </section>
+        <!--sign up section end-->
+
+    </div>
+
+    <!--scroll bottom to top button start-->
+    <button class="scroll-top scroll-to-target" data-target="html">
+        <span class="fas fa-hand-point-up"></span>
+    </button>
+    <!--scroll bottom to top button end-->
+    <!--build:js-->
+    <script src="~/Content/publicsite/assets/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/popper.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/bootstrap.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/jquery.magnific-popup.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/jquery.easing.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/mixitup.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/headroom.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/smooth-scroll.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/wow.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/owl.carousel.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/jquery.waypoints.min.js"></script>
+    <!--<script src="~/Content/publicsite/assets/js/vendors/countUp.min.js"></script>-->
+    <script src="~/Content/publicsite/assets/js/vendors/jquery.countdown.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/vendors/validator.min.js"></script>
+    <script src="~/Content/publicsite/assets/js/app.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(document).bind('keydown', function (e) {
+                if (e.which === 13) { // return
+                    $('#btnSignIn').trigger('click');
+                }
+            });
+
+
+
+            $("#btnSignIn").click(function () {
+                debugger;
+                var UserName = $("#input-10").val();
+                var password = $("#txtpassword").val();
+                if (UserName == "") {
+                    alert("Please Enter UserName");
+                    $("#input-10").focus();
+                    return;
+                }
+                if (password == "") {
+                    alert("Please Enter password");
+                    $("#txtpassword").focus();
+                    return;
+                }
+                var dataobject = {
+                    UserName: UserName,
+                    Password: password
+                };
+                $("#showSpinner").show();
+                $.ajax({
+
+                    url: "/Account/AuthenticateUser",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    //data: dataobject,
+                    data: JSON.stringify(dataobject),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        //debugger;
+                        //if (r[0] == '1') {
+                        var url = null;
+                        if (r[0] == '1' || r[0] == '5') {
+                            var url = "../Admin/index";
+                            window.location.href = url;
+                        }
+                        else if (r[0] == '2') {
+                            var url = "/Customer/UserDashboard";
+                            window.location.href = url;
+                        }
+                        else {
+                            swal("Info", "Invalid User Name or Password!", "error");
+                            $("#showSpinner").hide();
+                        }
+
+
+                        //window.location(url);
+                        //}
+                        //if (r[0] == "0") {
+                        //    swal("Info", "Invalid User Name or Password!", "error");
+                        //    $("#showSpinner").hide();
+                        //}
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        swal("Info", "Please Check Credentials Entered by you!", "error");
+                        $("#showSpinner").hide();
+                    }
+                });
+            });
+
+
+
+
+        });
+    </script>
+
+    <!--endbuild-->
+</body>
+
+
+<!-- Mirrored from corporx.themetags.com/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 16 Apr 2024 07:33:03 GMT -->
+</html>

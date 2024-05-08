@@ -1,0 +1,206 @@
+﻿@model MLMPortal.Models.PayoutReport
+@{
+    ViewBag.Title = "RejectedProductRequestList";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'=="1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "AccumulatedIncome");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[ 10, 20, 50, 100, 500, -1], [ 10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Rejected Product Request List</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i>Rejected Product Request List</div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> Member Id</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @placeholder = "Enter Member Id" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label">From Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="lab control-label"> To Date</label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" style="margin-top:30px">
+                            <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach"><i class="icon-lock"></i> Search</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="table-responsive" id="divmain">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                <th scope="col">SNo.</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Invoice No.</th>
+                                @*<th scope="col">View Detail</th>*@
+                                <th scope="col">Center Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Address</th>
+                                <th align="right" scope="col">Amount</th>
+                                @*<th scope="col">Request ID</th>*@
+                                <th scope="col">Req_Status</th>
+                                <th scope="col">Remark</th>
+                                <th scope="col">Approve Date</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td class="EntryId">@item["InvoiceDate1"]</td>
+                                        <td class="CompanyId">@item["InvoiceNo"]</td>
+                                        @*<td class="View Detail">@item["View Detail"]</td>*@
+                                        <td class="Invoice No">@item["AccountCode"]</td>
+                                        <td class="InvoiceDate">@item["AccountName"]</td>
+                                        <td class="Account Code">@item["Address"]</td>
+                                        <td class="Account Name">@item["FinalAmount"]</td>
+                                        @*<td class="Address">@item["Username"]</td>*@
+                                        @*<td class="PhoneNumber">@item["PhoneNumber"]</td>*@
+                                        <td class="GrossAmount">@item["Req_Status"]</td>
+                                        <td class="Discount">@item["Remarks"]</td>
+                                        <td class="FinalAmount">@item["Date1"]</td>
+                                       
+
+                                        @*<td class="BalanceAmount">@item["BalanceAmount"]</td>
+                                        <td class="Intro_Id">@item["Intro_Id"]</td>
+                                        <td class="PayOut">@item["PayOut"]</td>
+                                        <td class="PayOutDate">@item["PayOutDate"]</td>
+                                        <td class="CGST">@item["CGST"]</td>
+                                        <td class="SGST">@item["CGST"]</td>
+                                        <td class="CGST">@item["CGST"]</td>*@
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SearchData() {
+        //debugger;
+        var MemberId = $('#MemberId').val();
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        $.post('/PayoutReport/AccumulatedIncome/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+            $('#divmain').html($(res).find('table'))
+
+        });
+    }
+
+
+
+</script>
+
+
+

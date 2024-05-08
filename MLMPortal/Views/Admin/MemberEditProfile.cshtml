@@ -1,0 +1,681 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "MemberEditProfile";
+    //Layout = "~/Views/Shared/Adminlayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "MemberEditProfile");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+
+<script>
+    function ShowImagePreview(input) {
+        //debugger;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#ImgPAN').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+         }
+         function ShowImagePreview1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#Img1').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+         }
+         function ShowImagePreview2(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#ImgAadhar').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+         }
+         function ShowImagePreview3(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#Img2').prop('src', e.target.result)
+                        .width(200)
+                        .height(100);
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row pt-2 pb-2">
+  
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header" style="background-color:darkblue;color:white;"><i class="fa fa-table"></i>EDIT PROFILE</div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label class="lab control-label">Member Id</label>
+                                            @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @onchange = "return BindData()"})
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="lab control-label">Country Code</label>
+                                                <div class="col-lg-12">
+                                                    @Html.DropDownListFor(m => m.CountryCode, Model.PhoneCodeLst, new { @class = "form-control input-circle ng-pristine ng-valid ng-touched" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">IFSC Code</label>
+                                    @Html.TextBoxFor(m => m.IFSCCode, new { @class = "form-control",})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                               
+
+
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label class="lab control-label">Mobile No</label>
+                                            @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", })
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="lab control-label"> MemberName</label>
+                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", })
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Bank Name</label>
+                                    @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Father/Husband Name </label>
+                                    @Html.TextBoxFor(m => m.FatherName, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Bank Branch</label>
+                                    @Html.TextBoxFor(m => m.BankBranch, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Registration Date: </label>
+                                    @Html.TextBoxFor(m => m.RegDate, new { @class = "form-control",@readonly="readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Account No.</label>
+                                    @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> Date Of Birth:</label>
+                                    @Html.TextBoxFor(m => m.DOB, new { @type = "date", @class = "form-control input-circle ng-pristine ng-untouched ng-valid", placeholder = "Date Of Birth" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">SPONSER ID</label>
+                                    @Html.TextBoxFor(m => m.SponserId, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="lab control-label">Gender</label>                          
+                                 @Html.DropDownListFor(m => m.Gender, new List<SelectListItem>() { new SelectListItem() { Text = "--select--", Value = "" }, new SelectListItem() { Text = "Male", Value = "MALE" }, new SelectListItem() { Text = "Female", Value = "FEMALE" } }, new { @class = "form-control input-circle ng-valid ng-dirty ng-valid-parse ng-touched" })
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Sponsor Name</label>
+                                    @Html.TextBoxFor(m => m.SponserName, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> Email Id</label>
+                                    @Html.TextBoxFor(m => m.EmailId, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">PAN NO</label>
+                                    @Html.TextBoxFor(m => m.PanNo, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">*Zip Code</label>
+                                    @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Adhar No.</label>
+                                    @Html.TextBoxFor(m => m.AdharNo, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">*State</label>
+                                    @Html.DropDownListFor(m => m.StateId, Model.StateDDLLst, new { @class = "form-control input-circle ng-pristine ng-valid ng-touched", @onchange = "GetDistrict()" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Nominee Name</label>
+                                    @Html.TextBoxFor(m => m.NomName, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">*District</label>
+                                   @Html.DropDownListFor(m => m.District, Model.DistrictDDLLst, new { @class = "form-control input-circle ng-pristine ng-valid ng-touched" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label"> Nominee Father/Husband Name</label>
+                                     @Html.TextBoxFor(m => m.NomFatherName, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">*City</label>
+                                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Nominee Address</label>
+                                    @Html.TextBoxFor(m => m.NomAddressName, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Address</label>
+                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Nominee Relation</label>
+                                    @Html.TextBoxFor(m => m.NomRelationName, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Landmark</label>
+                                    @Html.TextBoxFor(m => m.LandMark, new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Upload Profil Pic</label>
+                                    <br />
+                                    <input type="file" id="ProfilePic" name="ProfilePic" value="Choose File" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">PAN Copy:</label>
+
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.PAN, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview(this);" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Aadhar Copy:</label>
+
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.Adhar, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview2(this);" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br /><hr />
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">PAN Copy:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.PanFilePath != null)
+                                            {
+                                                <img id="ImgPAN" src="@Model.PanFilePath" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                            }
+                                            else
+                                            {
+                                                <img id="ImgPAN" src="http://placehold.it/180" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                            }
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">Aadhar Copy:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.AdharFilePath != null)
+                                            {
+                                                <img id="ImgAadhar" src="@Model.AdharFilePath" alt="PAN Copy" height="200" width="200" class="img-responsive" />
+                                            }
+                                            else
+                                            {
+                                                <img id="ImgAadhar" src="http://placehold.it/180" alt="Aadhar Copy" height="200" width="200" class="img-responsive" />
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <br /><hr />
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Bank PassBook/Cancelled Cheque:</label>
+                                    <br />
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.BankPassbook, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview1(this);" })
+
+
+                                    @*&nbsp; &nbsp;  <input type="file" value="Choose File" onchange="ShowImagePreview1(this);" TabIndex="14" id="fileBankcopy"/>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="lab control-label">Adhar Back Copy: </label>
+                                    <br />
+
+                                    &nbsp;  &nbsp;    @Html.TextBoxFor(m => m.Adharback, new { @class = "form-control", type = "file", @onchange = "ShowImagePreview3(this);" })
+
+
+                                    @*&nbsp; &nbsp;   <input type="file" value="Choose File" onchange="ShowImagePreview3(this);" TabIndex="14" id="fileAdharcopy"/>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br /><hr />
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">Bank PassBook/Cancelled Cheque:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.BankPassbookFilePath != null)
+                                            {
+                                                <img id="Img1" src="@Model.BankPassbookFilePath" alt="Bank PassBook" height="200" width="200" class="img-responsive" />
+                                            }
+                                            else
+                                            {
+                                                <img id="Img1" src="http://placehold.it/180" alt="Bank PassBook" height="200" width="200" class="img-responsive" />
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label class="lab control-label">Adhar Back Copy:</label>
+                                        <br />
+                                        <div class="form-group">
+
+                                            @if (Model.AdharbackFilePath != null)
+                                            {
+                                                <img id="Img2" src="@Model.AdharbackFilePath" alt="Adhar Back Copy" height="200" width="200" class="img-responsive" />
+
+                                            }
+                                            else
+                                            {
+                                                <img id="Img2" src="http://placehold.it/180" alt="Adhar Back Copy" height="200" width="200" class="img-responsive" />
+
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6" style="margin-top:10px;">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <input type="submit" value="Update" class="btn btn-primary"  onclick="return Validate();"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </form>
+              
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function GetDistrict() {
+        //debugger;
+
+        if ($('#StateId').val() != '') {
+            $.post('/Customer/GetMasterDropDown', { Action: 1, id1: $('#StateId').val() }, function (data) {
+                BindDDL(data, 'District');
+            })
+
+
+        }
+        else {
+            $('#District').html('<option value="">--none--</option>');
+        }
+
+    }
+    function Validate() {
+
+        if(MemberId.value=='')
+        {
+            alert('Please Enter Member Id');
+            MemberId.focus();
+            return false;
+        }
+        //if (Name.value == '') {
+        //    alert('Please Enter Name');
+        //    Name.focus();
+
+        //    return false;
+        //}
+        //if (FatherName.value == '') {
+        //    alert('Please Enter Father Name');
+        //    FatherName.focus();
+
+        //    return false;
+        //}
+        //if (MobileNo.value == '') {
+        //    alert('Please Enter Mobile No');
+        //    MobileNo.focus();
+
+        //    return false;
+        //}
+        //if (Gender.value == '') {
+        //    alert('Please Select Gender');
+        //    Gender.focus();
+
+        //    return false;
+        //}
+        //if (SponserId.value == '') {
+        //    alert('Please Enter Sponser Id');
+        //    SponserId.focus();
+
+        //    return false;
+        //}
+        //if (Direction.value == '') {
+        //    alert('Please Select Direction');
+        //    Direction.focus();
+
+        //    return false;
+        //}
+
+
+    }
+    function BindData() {
+        //debugger;
+
+        if ($('#MemberId').val() != '') {
+            //$.get('/Admin/MemberEditProfile', { Member_Id: $('#MemberId').val() }, function (data) {
+
+            //   // BindDDL(data, 'District');
+            //})
+            window.location.href = "/Admin/MemberEditProfile?Member_Id=" + $('#MemberId').val();
+
+        }
+        else {
+            //$('#District').html('<option value="">--none--</option>');
+        }
+
+    }
+
+</script>
+
+
+

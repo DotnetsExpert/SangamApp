@@ -1,0 +1,175 @@
+﻿@model MLMPortal.Models.Registration
+
+@{
+    ViewBag.Title = "ChangeSponser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+<script src="~/assets/js/jquery.min.js"></script>
+<style>
+    .panel {
+        border: none;
+        box-shadow: none;
+        /* BORDER-TOP: 4PX SOLID #189279; */
+    }
+
+    .panel {
+        border: none;
+        box-shadow: none;
+    }
+
+    .panel {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+        box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    }
+
+    .panel-heading {
+        border-color: #eff2f7;
+        font-size: 16px;
+        font-weight: 400;
+        background: #f88e3f;
+        text-transform: uppercase;
+        padding: 15px;
+        color: #fff;
+    }
+
+    .panel-body {
+        padding: 15px;
+        border: none;
+        box-shadow: none;
+        BORDER-TOP: 4PX SOLID #189279;
+    }
+
+    .row1 {
+        display: inline-block;
+        /*margin-top: 61px;*/
+        padding: 15px;
+        width: 100%;
+        BORDER: 1PX SOLID #cdcecd;
+        BACKGROUND: #f9ffe6;
+        /* background-color: #93119324; */
+        background-image: url(https://www.transparenttextures.com/patterns/hexellence.png);
+    }
+</style>
+<script>
+    //$(document).ready(function () {
+    //    alert("Ok");
+    //})
+    function Binddata() {
+        if ($("#MemberId").val() != "") {
+            window.location.href = "/Admin/ChangeSponser?Member_Id=" + $("#MemberId").val();
+        }
+        else {
+            alert("Please Enter Member Id.!!");
+            $("#MemberId").val('');
+            return false;
+
+        }
+    }
+    function Validate() {
+        if ($("#MemberId").val() == '') {
+            alert('Enter Member Id');
+            return false;
+        }
+        if ($("#New_SponserId").val() == '') {
+            alert('Enter New Sponser Id');
+            return false;
+        }
+    }
+</script>
+<form method="post">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <section class="panel">
+                <header class="panel-heading">
+                    Change Sponser 
+                    <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-times"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <section>
+                        <div class="form-horizontal">
+                           
+
+                            <div class="form-group">
+                                <label class="lab control-label">
+                                    Member Id
+                                </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(model => model.MemberId, new { @class = "form-control",@onchange="return Binddata()"})
+                                   
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="lab control-label">
+                                    Name
+                                </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" ,@readonly="readonly"})
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="lab control-label">
+                                   Sponser Id
+                                </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(model => model.SponserId, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="lab control-label">
+                                    Sponser Name
+                                </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(model => model.SponserName, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="lab control-label">
+                                    Enter New Sponser Id
+                                </label>
+                                <div class="col-lg-12">
+                                    @Html.TextBoxFor(model => model.New_SponserId, new { @class = "form-control" })
+                                </div>
+                            </div>
+                                <input type="submit" value="Submit" class="btn btn-success" onclick="return Validate()" />
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+
+</form>
+
+
+
+
+
+
+@if (TempData["flag"] != null)
+{
+<script>
+   
+    $(document).ready(function() {
+            //debugger;
+            if ('@TempData["flag"]' != "0") {
+                alert('@TempData["msg"]', window.location.href = "ChangeSponser");
+                $("#MemberId").val();
+            }
+            else {
+                alert('@TempData["msg"]');
+            }
+        });
+    
+</script>
+}

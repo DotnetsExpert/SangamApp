@@ -1,0 +1,579 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "UserDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+
+<style>
+    .B1 {
+        background-image: linear-gradient(to left, #0db2de 0%, #005bea 100%) !important;
+    }
+
+    .B2 {
+        background-image: linear-gradient(45deg, #f93a5a, #f7778c) !important;
+        margin-top: 8px;
+    }
+
+    .B7 {
+        background-image: linear-gradient(to right, #636f8e 0%, #acb8da 100%) !important;
+        margin-top: 8px;
+    }
+
+    .B3 {
+        background-image: linear-gradient(to left, #48d6a8 0%, #029666 100%) !important;
+    }
+
+    .B2 {
+        background-image: linear-gradient(45deg, #f93a5a, #f7778c) !important;
+    }
+
+    .sty {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+
+
+    .list-group-item > .badge {
+        float: right;
+    }
+
+    .badge {
+        display: inline-block;
+        min-width: 10px;
+        padding: 3px 7px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #369b6a;
+        border-radius: 10px;
+    }
+
+
+
+    .mini-stat-info span span {
+        font-weight: bold;
+    }
+    /*.fa-money:before {
+        content: "\f0d6";
+    }*/
+</style>
+<style>
+
+
+    .size1 {
+        width: 40px;
+        height: 40px;
+        line-height: 28px;
+    }
+
+    .mobilevisible {
+        display: none !important;
+    }
+
+    .ImgManage {
+        margin-top: -9px;
+        height: 37px;
+        width: 52px;
+    }
+
+    .img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+
+
+    .mini-stat-info {
+        font-size: 19px !important;
+    }
+</style>
+<link href="@Url.Content("~/assets/css/bootstrap.min.css")" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    function SharemeWhat(obj) {
+        //debugger;
+        currLoc = $("#hdnValue").val();
+        //alert(currLoc);
+        var currLoc1 = encodeURIComponent(currLoc);
+        window.location.href = ("https://web.whatsapp.com/send?text=" + currLoc1 + "");
+
+    }
+    function SharemeFacebook(obj) {
+        //debugger;
+        currLoc = $("#hdnValue").val();
+        window.open("http://www.facebook.com/sharer.php?u=" + currLoc + "  ");
+    }
+    function ShareMeTwiter(obj) {
+        //debugger;
+        currLoc = $("#hdnValue").val();
+        window.open("https://twitter.com/share?url=" + currLoc + "  ");
+    }
+    function SharemeEmail(obj) {
+        //debugger;
+        currLoc = $("#hdnValue").val();
+        window.location.href = "https://mail.google.com/mail/u/0/#inbox" + currLoc + "";
+    }
+
+    function SharemeWhat2(obj) {
+        //debugger;
+        currLoc = $("#hdnValue2").val();
+        //alert(currLoc);
+        var currLoc1 = encodeURIComponent(currLoc);
+        window.location.href = "https://web.whatsapp.com/send?text=" + currLoc1 + "";
+    }
+
+    function SharemeFacebook2(obj) {
+        //debugger;
+        currLoc = $("#hdnValue2").val();
+        window.open("http://www.facebook.com/sharer.php?u=" + currLoc + "  ");
+    }
+    function ShareMeTwiter2(obj) {
+        //debugger;
+        currLoc = $("#hdnValue2").val();
+        window.open("https://twitter.com/share?url=" + currLoc + "  ");
+    }
+    function SharemeEmail2(obj) {
+        //debugger;
+        currLoc = $("#hdnValue2").val();
+        window.location.href = "mailto:?subject=" + currLoc + "";
+    }
+</script>
+
+<div class="card">
+    <div class="row">
+        <div class="col-sm-5">
+            <input type="text" class="form-control" readonly="" id="reflink" value="">
+        </div>
+        <div class="col-sm-3">
+            <button id="btnCopy" onclick="copyToClipboard()" class="btn btn-primary" style=" margin-left: 11px;">Copy</button>
+        </div>
+    </div>
+    <div class="row ">
+
+
+        <div class="col-sm-4">
+            <ul>
+                <li class="list-group-item">
+                    <span class="m-left-xs">Name</span>
+                    <span class="badge">
+                        <span>
+                            <span id="ContentPlaceHolder1_lblName">
+                                <span id="ContentPlaceHolder1_lblName1">@Model.Name</span>
+                            </span>
+                        </span>
+                    </span>
+                </li>
+
+
+                <li class="list-group-item">
+                    <span class="m-left-xs">ID No.</span>
+                    <span class="badge badge-danger">
+                        <span>
+                            <span id="ContentPlaceHolder1_lblMemberId">
+                                <span id="ContentPlaceHolder1_MemberId">@Model.MemberId</span>
+                            </span>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+
+
+        </div>
+        <div class="col-sm-4">
+
+            <ul>
+                <li class="list-group-item">
+                    <span class="m-left-xs">Sponsor Id</span>
+                    <span class="badge badge-danger">
+                        <span>
+                            <span id="ContentPlaceHolder1_lblMemberId1">
+                                <span id="ContentPlaceHolder1_SponsorId">@Model.SponserId</span>
+                            </span>
+                        </span>
+                    </span>
+                </li>
+                <li class="list-group-item">
+                    <span class="m-left-xs">Date of Joining</span>
+                    <span class="badge badge-danger">
+                        <span>
+                            <span id="ContentPlaceHolder1_lblMemberId11">
+                                <span id="ContentPlaceHolder1_DOJ">@Model.RegDate</span>
+                            </span>
+                        </span>
+                    </span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="col-sm-4">
+
+            <ul>
+                <li class="list-group-item">
+                    <span class="m-left-xs">Activation Date</span>
+                    <span class="badge badge-danger">
+                        <span>
+                            <span id="ContentPlaceHolder1_lblMemberId11">
+                                <span id="ContentPlaceHolder1_DOJ">@Model.PaymentDate</span>
+                            </span>
+                        </span>
+                    </span>
+                </li>
+                <li class="list-group-item">
+                    <span class="m-left-xs">Status</span>
+                    <span class="badge badge-danger">
+                        <span>
+                            <span id="ContentPlaceHolder1_lblStatus">
+                                <span id="ContentPlaceHolder1_lblStatus">@Model.Status</span>
+                            </span>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<div class="card">
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="row wh pdd">
+            <!-- New -->
+            <div class="col-md-4" style="cursor:pointer;">
+                <a>
+                    <div class="mini-stat clearfix B1">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblTotalWithdraw">@Model.TotalWithdraw</span>
+                            </span><br />
+                            TOTAL WITHDRAW
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <div class="mini-stat clearfix B3">
+                    <span class="mini-stat-icon green"><i class="fa fa-eye"></i></span>
+                    <div class="mini-stat-info">
+                        <span>
+                            <span id="lblLedgerBalance" href="">@Model.LedgerBalance</span>
+                        </span><br />
+                        Main Wallet
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <div class="mini-stat clearfix B3">
+                    <span class="mini-stat-icon green"><i class="fa fa-eye"></i></span>
+                    <div class="mini-stat-info">
+                        <span>
+                            <span id="lblLedgerBalance" href="">@Model.FundWallet</span>
+                        </span><br />
+                        Fund Wallet
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <!-- New -->
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="/ProductManagement/MyLevelTeam">
+                    <div class="mini-stat clearfix B1">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+
+                                <span id="lblAllMember">@Model.AllTeam</span>
+                            </span><br />
+                            MY TEAM
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="/ProductManagement/MyDirectTeam">
+                    <div class="mini-stat clearfix B3">
+                        <span class="mini-stat-icon green"><i class="fa fa-eye"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblDirect" href="">@Model.MyDirects</span>
+                            </span><br />
+                            MY DIRECTS
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            @*<div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+            <div class="mini-stat clearfix B3">
+                <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                <div class="mini-stat-info">
+                    <span>
+                        <span id="lblDirectIncome">@Model.DirectIncome</span>
+                    </span>
+                    <br />
+                    DIRECT INCOME
+                </div>
+            </div>
+        </div>*@
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.LevelIncome</span>
+                            </span><br />
+                            Level INCOME
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Display None-->
+
+
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.Performancebonus</span>
+                            </span><br />
+                            Performance bonus
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.SuperPerformancebonus</span>
+                            </span><br />
+                            Super Performance bonus
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.PerformerOfTheDayIncome</span>
+                            </span><br />
+                            Performer Of The Day income
+                        </div>
+                    </div>
+                </a>
+            </div>  <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.BronzeIncome</span>
+                            </span><br />
+                            Bronze Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.SilverIncome</span>
+                            </span><br />
+                            Silver Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.StarsilverIncome</span>
+                            </span><br />
+                            Star Silver Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.GoldIncome</span>
+                            </span><br />
+                            Gold Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+
+
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.PlatinumIncome</span>
+                            </span><br />
+                            Platinum Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.DiamondIncome</span>
+                            </span><br />
+                            Diamond Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.AmbassadorIncome</span>
+                            </span><br />
+                            Ambassador Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+            <div class="col-md-4" style="cursor:pointer;margin-top: 5px;">
+                <a href="#">
+                    <div class="mini-stat clearfix B2">
+                        <span class="mini-stat-icon green"><i class="fa fa-money"></i></span>
+                        <div class="mini-stat-info">
+                            <span>
+                                <span id="lblMatchingIncome">@Model.CrownAmbassadorIncome</span>
+                            </span><br />
+                            Crown Ambassador Income
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+    </div>
+</div>
+ </div>
+
+<!--<div class="row">
+    <div class="col-sm-12" style="height:200px;">
+        <div class="mini-stat clearfix  frrr">
+            <div class=" text-left" style="text-align: LEFT; font-size: 26PX;border:1px solid;hieght:200px;">
+                <h4 class="rty">Company Information</h4>
+                <marquee id="test" behavior="scroll" direction="up" style="height: 130px;" scrolldelay="100" scrollamount="2" onmouseover="document.all.test.stop()" onmouseout="document.all.test.start()">
+                    <h4>
+                        <span id="lblnewsheading">@Model.NewDetails<br></span>
+                    </h4>-->
+@*//WELCOME TO My Shop  Pvt. Ltd.*@
+<!--<br>
+                    <br>  <br>
+                </marquee>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6"></div>
+</div>-->
+
+
+<script>
+   // $(document).ready(function () {
+       
+        $('#reflink').val(window.location.origin + "/Home/Registration?mid=" + '@Session["username"]');
+        const copyToClipboard = async () => {
+    const link = $("#reflink").val();
+
+    try {
+        if (window.isSecureContext && navigator.clipboard) {
+            await navigator.clipboard.writeText(link);
+            // toastr.success("Copied the text: " + link);
+
+            alert("Copied the text: " + link);
+        } else {
+            unsecuredcopyToClipboard(link);
+            // toastr.success("Copied the text: " + link);
+            alert("Copied the text: " + link);
+        }
+    } catch (error) {
+        console.error("Error copying text to clipboard:", error);
+        // Handle error appropriately, e.g., show error message
+        //toastr.error("Error copying text to clipboard");
+    }
+};
+
+    //})
+</script>
+

@@ -1,0 +1,305 @@
+﻿
+@model MLMPortal.Models.PayoutReport
+
+@{
+    ViewBag.Title = "FranchiseMinimartReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+
+
+<script>
+    //function isNumber(evt) {
+    //    evt = (evt) ? evt : window.event;
+    //    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    //    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    //        return false;
+    //    }
+    //    return true;
+    //}
+
+    function isNumber(evt, element) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+
+        if (
+            (charCode != 45 || $(element).val().indexOf('-') != -1) &&      // “-” CHECK MINUS, AND ONLY ONE.
+            (charCode != 46 || $(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+            (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+
+    $(".numbers-only").keypress(function (e) {
+        if (e.which == 46) {
+            if ($(this).val().indexOf('.') != -1) {
+                return false;
+            }
+        }
+
+        if (e.which != 8 && e.which != 0 && e.which != 46 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
+
+
+
+
+
+
+
+    function openmodal(invoiceno){
+
+        $("#hdninvoiceno").val(invoiceno);
+    }
+
+
+
+    function Dayclose(Franchise_Id,Pincode) {
+        //debugger;
+        if (confirm('Are you sure want to approved this order.!!')) {
+            $.post('/Admin/FranchiseDaycloseofminimart/', { Action: 2, Franchise_Id: Franchise_Id, Pincode: Pincode }, function (res) {
+
+                if (res == '1') {
+                    alert('Day closed successfully.');
+                    window.location.reload();
+                }
+            });
+        }
+    }
+
+
+    function Saverecord() {
+        if ($("#txtamount").val() == "") {
+            alert("Please Enter Amount !!!");
+            $("#txtamount").focus();
+            return;
+        }
+        if ($("#txttransactionid").val() == "") {
+            alert("Please Enter Transaction Id !!!");
+            $("#txttransactionid").focus();
+            return;
+        }
+        if ($("#imgreceipt").val() == "") {
+            alert("Please Choose Image !!!");
+            $("#imgreceipt").focus();
+            return;
+        }
+
+        var Images = $("#imgreceipt").get(0).files;
+
+        var data = new FormData;
+        data.append("Action", "4");
+        data.append("InvoiceNo", $("#hdninvoiceno").val());
+
+        data.append("Amount", $("#txtamount").val());
+        data.append("TransactionId", $("#txttransactionid").val());
+        data.append("Remark", $("#txtremark").val());
+
+        data.append("Receiptimg", Images[0]);
+
+        $.ajax({
+            url: "../Center/Insertupdaterequestfranchise",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+                if (r.Id == "1") {
+                    alert(r.Msg);
+                    location.reload();
+                }
+
+                else {
+                    alert('Server not Responding !!!');
+
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown+"_"+ textStatus);
+
+            }
+        });
+    }
+
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+       
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-content">
+
+                <div class="row merged20 mb-4">
+                    <div class="col-lg-12">
+                        <div class="d-widget">
+                            <div class="d-widget-title">
+                                <h5>Income Report By Minimart</h5>
+                            </div>
+
+                            <div class="table-responsive dt-responsive" id="divtable">
+                                <table class="table-default table table-striped table-responsive-md" id="dom-jqry">
+                                    <thead>
+                                        <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                                            <th scope="col">Sr</th>
+                                            @*<th scope="col">Invoice No</th>*@
+                                            <th scope="col">Mini Mart Name</th>
+                                            <th scope="col">PinCode</th>
+                                            <th align="right" scope="col">Amount</th>
+
+                                            <th align="right" scope="col">App</th>
+                                            <th align="right" scope="col">CP</th>
+                                            <th align="right" scope="col">Mini Mart Income</th>
+                                            <th align="right" scope="col">Franchise Income</th>
+                                            <th align="right" scope="col">Self Franchise Income</th>
+                                            <th align="right" scope="col">Company Income</th>
+
+                                            <th align="right" scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                                        {
+                                            int i = 0;
+                                            foreach (DataRow item in Model.dt.Rows)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>@i </td>
+                                                    @*<td class="InvoiceNo">@item["InvoiceNo"]</td>*@
+                                                    <td class="PhoneNumber">@item["Franchise_Name"]</td>
+                                                    <td class="PinCode" style="font-weight:bold;color:#003399;">@item["PinCode"]</td>
+                                                    <td class="PaidAmount">@item["PaidAmount"]</td>
+
+
+                                                    <td class="NewApp">@item["NewApp"]</td>
+                                                    <td class="NewCP">@item["NewCP"]</td>
+                                                    <td class="FranchiseIncome">@item["FranchiseIncome"]</td>
+                                                    <td class="CompanyIncome">@item["CompanyIncome"]</td>
+                                                    <td class="Selffranchiseincome">@item["Selffranchiseincome"]</td>
+                                                    <td class="CompanyAppByMinimart">@item["CompanyAppByMinimart"]</td>
+                                                   
+                                                        <td>
+                                                            <a href="javascript:void(0);" onclick="Dayclose('@item["Franchise_Id"]','@item["PinCode"]')">Approve</a>
+                                                        </td>
+                                                   
+
+
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modalRegister" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                <h4 class="modal-title" style="text-align-last: center">Request Amount</h4>
+                <input type="hidden" id="hdninvoiceno" />
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="lab control-label"> Amount</label>
+                            <div class="col-lg-12">
+                                <input type="text" id="txtamount" class="form-control
+                                      " onkeypress="return isNumber(event,this)" placeholder="Enter Request Amount" maxlength="10" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="lab control-label"> Transaction Id</label>
+                            <div class="col-lg-12">
+                                <input type="text" id="txttransactionid" class="form-control" placeholder="Enter Transaction Id" maxlength="100" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="lab control-label">Remarks</label>
+                            <div class="col-lg-12">
+
+                                <textarea id="txtremark" class="form-control" placeholder="Enter Remarks" maxlength="250"></textarea>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="lab control-label">Image Receipt</label>
+                            <div class="col-lg-12">
+                                <input type="file" id="imgreceipt" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="button" id="btnsave" value="Send" class="btn btn-success" onclick="Saverecord()" />
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

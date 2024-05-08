@@ -1,0 +1,257 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "RejectedWithdrawlRequests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    label {
+        margin-left: 15px;
+    }
+
+    .txtbox {
+        width: 200px;
+    }
+</style>
+<style>
+    .card .table td, .card .table th {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table td, .table th {
+        padding: 0px;
+    }
+</style>
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]'=="1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "PedingProductList");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+
+    </script>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[ 10, 20, 50, 100, 500, -1], [ 10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+    });
+           function isNumber(evt) {
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           }
+</script>
+<div class="row pt-2 pb-2">
+    <div class="col-sm-9">
+        <h4 class="page-title">Rejected Withdrawl Requests</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i> Rejected Withdrawl Requests </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="lab control-label"> Member Id</label>
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" id="MemberId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="lab control-label">From Date</label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", @type = "date" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="lab control-label"> To Date</label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", @type = "date" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" style="margin-top:30px">
+                        <button type="submit" class="btn btn-primary shadow-primary px-5" id="btnSerach" onclick="SearchData()"><i class="icon-lock"></i> Search</button>
+                    </div>
+                </div>
+                <div class="table-responsive" id="divmain">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Member Id</th>
+                                <th>Name</th>
+                                <th>Mobile No.</th>
+                                <th>Bank Name</th>
+                                <th>A/C No.</th>
+                                <th>IFSC Code</th>
+                                <th>Bank Branch</th>
+                                <th>Request Date</th>
+                                <th>Request Amount </th>
+                                <th>Remarks </th>
+                                <th>Payment Approval Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td>@item["Member_Id"]</td>
+                                        <td>@item["Member_Name"]</td>
+                                        <td>@item["MobileNo"]</td>
+                                        <td>@item["BankName"]</td>
+                                        <td>@item["BankaccNo"]</td>
+                                        <td>@item["BankIfscCode"]</td>
+                                        <td>@item["BankBranch"]</td>
+                                        <td>@item["EntredDate"]</td>
+                                        <td>@item["ReqWallet"]</td>
+                                        <td>@item["Remarks"]</td>
+                                        <td>@item["ApproveDate1"]</td>
+                                        <td>@item["AStatus"]</td>
+                                        @*<td>
+                                            @Html.TextAreaFor(m => m.Remark, new { @id = "Remark" + item["EntryId"], @class = "form-control txtbox" })
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success" onclick="ApproveProduct('@item["AccountCode"]','@item["EntryId"]','@item["FinalAmount"]')">Approve</button>
+
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary" onclick="RejectProduct('@item["AccountCode"]','@item["EntryId"]','@item["FinalAmount"]')">Reject</button>
+                                        </td>*@
+
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SearchData() {
+        //debugger;
+        var MemberId = $('#MemberId').val();
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+
+        $.post('/PaymentReport/RejectedWithdrawlRequests/', { MemberId: MemberId, FromDate: FromDate, ToDate: ToDate }, function (res) {
+
+            $('#divmain').html($(res).find('table'))
+
+        });
+    }
+
+    function ApproveProduct(MemberId,Id,Amount) {
+        //debugger;
+        var Remark = $('#Remark'+Id).val();
+        var dataobject = {
+            MemberId:MemberId,
+            Remark: Remark,
+            Amount:Amount,
+            Id: Id
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Franchise/ApproveFranProduct",
+            data: dataobject,
+            dataType: "json",
+            success: function (r) {
+                if (r.Id == "1") {
+                    alert(r.msg);
+                    location.reload();
+                }
+                else {
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+
+    function RejectProduct(MemberId,Id,Amount) {
+        //debugger;
+        var Remark = $('#Remark'+Id).val();
+        var dataobject = {
+            MemberId:MemberId,
+            Remark: Remark,
+            Amount:Amount,
+            Id: Id
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Franchise/RejectFranProduct",
+            data: dataobject,
+            dataType: "json",
+            success: function (r) {
+                if (r.Id == "1") {
+                    alert(r.msg);
+                    location.reload();
+                }
+                else {
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+</script>
+
+
+
+
+

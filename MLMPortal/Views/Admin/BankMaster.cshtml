@@ -1,0 +1,282 @@
+﻿@model MLMPortal.Models.Master
+@{
+    ViewBag.Title = "BankMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Data;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#default-datatable").DataTable({
+            dom: 'Bfrtip',
+            //pageLength: 5,
+            lengthMenu: [[10, 20, 50, 100, 500, -1], [10, 20, 50, 100, 500, "All"]],
+            buttons: [
+               'pageLength',
+           {
+               extend: 'excelHtml5', footer: true
+           },
+           { extend: 'csvHtml5', footer: true },
+           {
+               extend: 'pdfHtml5', footer: true, orientation: 'landscape',
+
+               pageSize: 'LEGAL',
+               text: '<i class="fa fa-file-pdf-o"> PDF</i>',
+               titleAttr: 'PDF'
+           }
+            ]
+        });
+
+
+
+        //$("body").on("click", "#default-datatable .details22", function () {
+        //    window.location.href = "../Admin/memberreport?Id=" + $(this).attr('id');
+        // });
+    });
+</script>
+<style>
+    label {
+        margin-left: 15px;
+    }
+</style>
+
+@if (TempData["flag"] != null)
+{
+
+    <script>
+        $(document).ready(function () {
+            //debugger;
+            if ('@TempData["flag"]' == "1") {
+                alert('@TempData["msg"].ToString()', window.location.href = "BankMaster");
+            }
+            else {
+                alert("Server Not Response!");
+            }
+
+        });
+    </script>
+}
+<script>
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="row">
+@if (Session["role"].ToString() == "1")
+{
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">ADD BANK</div>
+                <hr>
+                <form action="BankMaster" method="post">
+                   
+                        <div class="row">
+                            <div class="col-sm-4">
+                                @Html.HiddenFor(m => m.CategoryId)
+                                <div class="form-group">
+                                    <label class="lab control-label">Bank Name</label>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Enter Bank Name" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="lab control-label">Bank A/C No.</label>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @onkeypress = "return isNumber(event)", @placeholder = "Enter Bank A/C No." })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="lab control-label">A/C Holder Name</label>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control", @placeholder = "Enter A/C Holder Name" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="lab control-label">IFSc Code</label>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(m => m.IFSCCode, new { @class = "form-control", @placeholder = "Enter IFSC Code" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="lab control-label">Bank Branch</label>
+                                    <div class="col-lg-12">
+                                        @Html.TextBoxFor(m => m.BankBranch, new { @class = "form-control", @placeholder = "Enter Bank Branch" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                   
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="submit" class="btn btn-primary shadow-primary px-5" onclick="return Validate()" value="Save" />
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+}
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">BANK DETAILS</div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="default-datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Bank Name</th>
+                                <th>Account No</th>
+                                <th>IFSC Code</th>
+                                <th>Branch</th>
+                                <th>A/C Holder Name</th>
+                                @if (Session["role"].ToString() == "1")
+                                {
+                                    <th>Create Date</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                }
+                                    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (DataRow item in Model.dt.Rows)
+                                {
+                                    i++;
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td class="BankName">@item["BankName"]</td>
+                                        <td class="BankAcNo">@item["BankAcNo"]</td>
+                                        <td class="IFSCCOde">@item["IFSCCOde"]</td>
+                                        <td class="Branch">@item["Branch"]</td>
+                                        <td class="acname">@item["AccHolderName"]</td>
+                                        @if (Session["role"].ToString() == "1")
+                                        {
+                                            <td>@item["Dated"]</td>
+
+                                            <td account="@item["BankAcNo"]" ,Name="@item["BankName"]" ,ifsc="@item["IFSCCOde"]" ,branch="@item["Branch"]" , style="text-align:center" onclick="GetBank(@item["ID"],this)">
+                                                <a style='color:red;font-size:20px;'><i class='fa fa-pencil'></i> </a>
+                                            </td>
+                                            <td style="text-align:center">
+                                                <a style='color:red;font-size:20px;'><i class='fa fa-trash-o' aria-hidden="true" onclick="DeleteBankDetails(@item["ID"])"></i></a>
+                                            </td>
+                                        }
+                                           
+                                        
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        function Validate() {
+            if (Name.value == '') {
+                alert('Enter Bank Name');
+                Name.focus();
+
+                return false;
+            }
+            if (AccountNo.value == '') {
+                alert('Enter Account No');
+                AccountNo.focus();
+
+                return false;
+            }
+            if (IFSCCode.value == '') {
+                alert('Enter IFSC Code ');
+                IFSCCode.focus();
+
+                return false;
+            }
+            if (BankBranch.value == '') {
+                alert('Enter Branch');
+                BankBranch.focus();
+
+                return false;
+            }
+
+        }
+        function GetBank(Id, _this) {
+            //debugger;
+            document.getElementById('Name').value = $(_this).parent().find('.BankName').text();
+            document.getElementById('AccountNo').value = $(_this).parent().find('.BankAcNo').text();
+            document.getElementById('IFSCCode').value = $(_this).parent().find('.IFSCCOde').text();
+            document.getElementById('BankBranch').value = $(_this).parent().find('.Branch').text();
+            document.getElementById('CategoryId').value = Id;
+            document.getElementById('CategoryName').value = $(_this).parent().find('.acname').text();
+            document.getElementById("submit").value = "Update";
+
+
+        }
+        function DeleteBankDetails(CategoryId) {
+            var x = confirm("Are you sure you want to delete?");
+            //debugger;
+            if (x) {
+                var dataobject = {
+                    CategoryId: CategoryId
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/DeleteBankMaster",
+                    data: dataobject,
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.CategoryId == "1") {
+                            alert(r.msg);
+                            location.reload();
+                        }
+                        else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+</div>
