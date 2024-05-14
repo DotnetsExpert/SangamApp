@@ -1669,7 +1669,6 @@
     <Content Include="Views\PayoutReport\Reward.cshtml" />
     <Content Include="Views\Webapp\Login.cshtml" />
     <Content Include="Views\Webapp\Registration.cshtml" />
-    <Content Include="Views\Webapp\Recoverypassword.cshtml" />
     <Content Include="Views\shared\_Layoutapp.cshtml" />
     <Content Include="Views\shared\_LayoutUser.cshtml" />
     <Content Include="Views\Webapp\Dashboard.cshtml" />

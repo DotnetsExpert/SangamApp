@@ -1,4 +1,4 @@
-﻿@model IFortuneMLM.Models.PropertyClass
+﻿@model MLMPortal.Models.PropertyClass
 @{
     ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
@@ -28,8 +28,8 @@
 }
 </style>
 
-<link rel='stylesheet' href='~/App/js/sweetalert2.min.css' />
-<script src="~/App/js/sweetalert2.all.min.js"></script>
+<link rel='stylesheet' href='~/Content/WebApp/js/sweetalert2.min.css' />
+<script src="~/Content/WebApp/js/sweetalert2.all.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -145,7 +145,7 @@
         $("#showSpinner").show();
 
         $.ajax({
-            url: "/User/GetSponsorNamedetail",
+            url: "/WebApp/GetSponsorNamedetail",
             type: "POST",
             contentType: false,
             processData: false,
@@ -182,7 +182,7 @@
             $("#showSpinner").show();
 
             $.ajax({
-                url: "/User/Useralreadyexistsornot",
+                url: "/WebApp/Useralreadyexistsornot",
                 type: "POST",
                 contentType: false,
                 processData: false,
@@ -302,7 +302,7 @@
         $("#showSpinner").show();
 
         $.ajax({
-            url: "/User/InsertUserDetail",
+            url: "/WebApp/InsertUserDetail",
             type: "POST",
             contentType: false,
             processData: false,
@@ -401,7 +401,7 @@
 
       
         $.ajax({
-            url: "/User/SendOtpOnPhone",
+            url: "/WebApp/SendOtpOnPhone",
             type: "POST",
             contentType: false,
             processData: false,
@@ -447,7 +447,7 @@
         $("#showSpinner").show();
 
         $.ajax({
-            url: "/User/OtpResend",
+            url: "/WebApp/OtpResend",
             type: "POST",
             contentType: false,
             processData: false,
@@ -524,7 +524,7 @@
 
 
             <div class="logo text-center">
-                <img src="~/App/gone.PNG" class="img-fluid img-responsive" style="width: 87px; ">
+                <img src="~/Content/WebApp/gone.PNG" class="img-fluid img-responsive" style="width: 87px; ">
 
             </div>
 
@@ -642,7 +642,7 @@
                         </div>
 
                         <div class="col-md-12" align="center">
-                            <a href="../User/login" style=" text-align:center">Already have an account, Log in now!</a>
+                            <a href="../WebApp/login" style=" text-align:center">Already have an account, Log in now!</a>
                         </div>
 
                     </div>
@@ -660,7 +660,7 @@
                                 <div class="modal-body">
                                     <p> You can choose to directly enter 5G in the future or download the APP to use </p>
                                     <ul class="app-login">
-                                        <li><a href="../User/Login">Login</a></li>
+                                        <li><a href="../WebApp/Login">Login</a></li>
                                         <li><a href="#">Android Download APP</a></li>
                                         <li><a href="#">Google Download APP</a></li>
                                     </ul>
