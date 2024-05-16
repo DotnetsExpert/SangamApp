@@ -9,7 +9,7 @@
     <title>@ViewBag.Title</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-   
+
     <link rel="stylesheet" href="~/Content/WebApp/js/bootstrap.min.css" />
     <script src="~/Content/WebApp/js/jquery.min.js"></script>
     <script src="~/Content/WebApp/js/popper.min.js"></script>
@@ -36,16 +36,22 @@
                 max-width: 30px;
             }
     </style>
+    <script>
+       if ('@Session["username"]' == null || '@Session["username"]' == "") {
+           var url = "../webapp/login";
+           window.location.href = url;
+       }
 
+
+    </script>
 </head>
+
 <body>
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-sm basic-color navbar-dark">
             <a class="navbar-brand" href="#">
                 <h2>
-                    <img src="~/Content/WebApp/gone.png" class="img-fluid" style="width: 27px" />
-
-                    ROYAL QUEUE
+                  VARCAS
                 </h2>
             </a>
             <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal">
@@ -54,27 +60,20 @@
 
             <div class="d-flex justify-content-between align-items-center w-100 px-4">
                 <div>
-                    @*<a class="navbar-brand" href="../User/Login">
-                            Logout
-                        </a>*@
-                    Member_Id : <label>@Session["MUserName"]</label> ,
+                    Member_Id : <label>@Session["UserName"]</label> ,
                     Name : <label>@Session["Name"]</label>
-                    &emsp;&emsp;
                 </div>
-                <div>
+                @*<div>
                     <div class="text-xl-right">
                         <a href="javascript:void(0)" onclick="Logout()">
                             <div class="mainbxx m-0">
                                 <div class="bhh">
-                                    <img src="icon_187.8c398298.png" class="img-fluid img-responsive">
-                                </div>
-                                <div class="txtt m-0">
-                                    Sign Out
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </a>
                     </div>
-                </div>
+                </div>*@
             </div>
             <!-- Links -->
             @* <ul class="navbar-nav">
@@ -106,33 +105,26 @@
         <div class="card-header footer-fix-icon">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" href="../Content/WebApp/Dashboard">
+                    <a class="nav-link active" href="/WebApp/Dashboard">
                         <i class="fa fa-home" aria-hidden="true"></i>
                         <p>Home</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Content/WebApp/Warehouse">
+                    <a class="nav-link" href="/WebApp/Topup">
                         <i class="fa fa-building" aria-hidden="true"></i>
                         <p>Topup</p>
                     </a>
                 </li>
-
-                @*<li class="nav-item">
-                        <a class="nav-link" href="../Content/WebApp/Staking">
-                            <i class="fa fa-building" aria-hidden="true"></i>
-                            <p>Staking</p>
-                        </a>
-                    </li>*@
                 <li class="nav-item">
-                    <a class="nav-link" href="../Content/WebApp/Media">
+                    <a class="nav-link" href="/WebApp/AddFund">
                         @*<img src="../Content/WebApp/gone.png" class="img-responsive img-fluid" style="width: 71px; text-align: center; position: absolute; margin: -24px 0px 1px -32px;" />*@
-                        <i class="fa fa-diamond" aria-hidden="true"></i>
-                        <p>Media</p>
+                        <i class="fa fa-rupee" aria-hidden="true"></i>
+                        <p>Fund</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Content/WebApp/MyTeam">
+                    <a class="nav-link" href="/WebApp/TeamReports">
                         <!--wealth.aspx -->
                         <i class="fa fa-user-o" aria-hidden="true"></i>
                         <p>Team</p>
@@ -146,11 +138,12 @@
                         </a>
                     </li>*@
                 <li class="nav-item">
-                    <a class="nav-link" href="../Content/WebApp/TransferLazer">
+                    <a class="nav-link" href="/WebApp/IncomeReports">
                         <i class="fa fa-sun-o" aria-hidden="true"></i>
-                        <p>Earn</p>
+                        <p>Income</p>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>
@@ -166,19 +159,21 @@
                 <div class="modal-body1 admin-nav">
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <a href="~/Content/WebApp/ViewProfile">
+                            <a href="/WebApp/ViewProfile">
                                 <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>View Profile</span></i>
                             </a>
                         </li>
 
                         <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <a href="~/Content/WebApp/Profile">
-                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Update Bank</span></i>
+                            <a href="/WebApp/ChangePassword">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Change Password </span></i>
                             </a>
                         </li>
+
+
                         <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <a href="~/Content/WebApp/ChangePassword">
-                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Change Password </span></i>
+                            <a href="/WebApp/Profile">
+                                <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Update Bank</span></i>
                             </a>
                         </li>
 
@@ -204,20 +199,12 @@
                         </li>
 
                         <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <a href="~/Content/WebApp/DailyIncomeReport">
+                            <a href="/WebApp/ROIIncomeReport">
                                 <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>ROI Income Report </span></i>
 
                             </a>
 
                         </li>
-
-                        @*<li class="list-group-item d-flex justify-content-between align-items-start" style="display:none;">
-                                <a href="~/Content/WebApp/DirectIncomeReport">
-                                    <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Direct Income Report</span></i>
-
-                                </a>
-
-                            </li>*@
 
                         <li class="list-group-item d-flex justify-content-between align-items-start" style="display:none !important;">
                             <a href="~/Content/WebApp/LevelIncomeNew">
@@ -264,11 +251,6 @@
 
                             </a>
                         </li>
-                        @*<li class="list-group-item d-flex justify-content-between align-items-start" style="display:none;">
-                                <a href="~/Content/WebApp/BonusIncomeReport">
-                                    <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Bonus Income Report</span></i>
-                                </a>
-                            </li>*@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <a href="UpdateWinAddress">
                                 <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Update Withdrawl Address </span></i>
@@ -282,13 +264,8 @@
                             </a>
                         </li>
 
-                        @*
-                            <li><a href="ComposeMessage.aspx">Compose Message</a></li>
-                            <li><a href="SendMessage.aspx">Send Message </a></li>
-                            <li><a href="InboxMessage.aspx">Inbox Message </a></li>*@
 
-
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                        @*<li class="list-group-item d-flex justify-content-between align-items-start">
                             <a href="~/Content/WebApp/ComposeMessage">
                                 <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Compose Message </span></i>
 
@@ -307,7 +284,7 @@
                                 <i class="fa fa-file-text fa-ico" aria-hidden="true"><span>Inbox Message </span></i>
 
                             </a>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>
@@ -319,7 +296,7 @@
     <script>
 
         function Logout() {
-            window.location.href = "../Content/WebApp/Logout";
+            window.location.href = "/WebApp/Logout";
         }
 
 

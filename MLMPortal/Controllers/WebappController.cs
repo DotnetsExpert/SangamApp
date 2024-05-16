@@ -10,12 +10,19 @@ namespace MLMPortal.Controllers
 {
     public class WebappController : Controller
     {
-        Datalayer objL = new Datalayer();       
+        Datalayer objL = new Datalayer();
         public ActionResult Login()
         {
             return View();
         }
-
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            Session.Clear();
+            Session.RemoveAll();
+            return View("Login");
+        }
+        
         public JsonResult LoginUser(PropertyClass p)
         {
             string msg = "";
@@ -87,10 +94,153 @@ namespace MLMPortal.Controllers
 
         public ActionResult Dashboard()
         {
-            PropertyClass objp = new PropertyClass();
+            if (Session["username"]==null)
+            {
+                return RedirectToAction("login","webApp");
+            }
 
-            return View(objp);
+            Registration mr = new Registration();
+            mr.SessionId = Convert.ToString(Session["username"]);
+            mr.hdnValue = "/RegistrationForm?SPId=" + Convert.ToString(Session["username"]);
+            mr.dt = objL.GetDashBoardDetails(mr);
+            if (mr.dt != null && mr.dt.Rows.Count > 0)
+            {
+                mr.Name = mr.dt.Rows[0]["NAME"].ToString();
+                mr.MemberId = mr.dt.Rows[0]["RegistrationID"].ToString();
+                mr.SponserId = mr.dt.Rows[0]["SponsId"].ToString();
+                mr.RegDate = mr.dt.Rows[0]["DateOfJoin"].ToString();
+                mr.Rank = mr.dt.Rows[0]["Rank"].ToString();
+                mr.Distributor = mr.dt.Rows[0]["RankName"].ToString();
+                mr.Package = mr.dt.Rows[0]["JoinPkge"].ToString();
+                mr.Status = mr.dt.Rows[0]["Status"].ToString();
+                mr.UpgradeStatus = mr.dt.Rows[0]["USta"].ToString();
+                mr.ProfilePic = mr.dt.Rows[0]["ProfilePic"].ToString();
+                mr.PaymentDate = mr.dt.Rows[0]["ActivationDate"].ToString();
+                mr.TotalWithdraw = mr.dt.Rows[0]["TotalWithdraw"].ToString();
+                mr.LedgerBalance = mr.dt.Rows[0]["CurrentWalletAmnt"].ToString();
+
+
+
+                //mr.ROIWallet = mr.dt.Rows[0]["RoiWallet"].ToString();                   
+                
+                //mr.MatchingIncome = mr.dt.Rows[0]["MatchingIncome"].ToString();
+
+
+                mr.AllTeam = mr.dt.Rows[0]["OurTeam"].ToString();
+                mr.MyDirects = mr.dt.Rows[0]["DirectTeam"].ToString();
+                mr.DirectIncome = mr.dt.Rows[0]["DirectIncome"].ToString();
+                mr.LevelIncome = mr.dt.Rows[0]["LevelIncome"].ToString();
+                mr.FundWallet = mr.dt.Rows[0]["FundWallet"].ToString();
+                mr.SuperPerformancebonus = mr.dt.Rows[0]["SuperPerformanceIncome"].ToString();
+                mr.PerformerOfTheDayIncome = mr.dt.Rows[0]["PerformanceOftheDayIncome"].ToString();
+                mr.Performancebonus = mr.dt.Rows[0]["PerformanceIncome"].ToString();
+                mr.ROIIncome = mr.dt.Rows[0]["ROIIncome"].ToString();
+
+
+            }
+            mr.dt = null;
+
+            return View(mr);
         }
+
+
+
+
+        public ActionResult Topup()
+        {
+            UserReport returnObj = new UserReport();
+
+            returnObj.SmemberId = Convert.ToString(Session["username"]);
+            DataTable dt = objL.USP_GetAppData("1", returnObj);
+            if (dt.Rows.Count > 0)
+            {
+
+                returnObj.Amount = dt.Rows[0]["MoneyWallet"].ToString();
+                returnObj.TopupAmt = dt.Rows[0]["InvestAmt"].ToString();
+            }
+            else
+            {
+                returnObj.Amount = "0";
+                returnObj.TopupAmt = "0";
+            }
+
+            returnObj.Table1 = objL.USP_GetAppData("2", returnObj);
+            returnObj.Table2 = objL.USP_GetAppData("3", returnObj);
+
+            return View(returnObj);
+        }
+
+
+        public ActionResult AddFund()
+        {
+           
+
+            return View();
+        }
+
+        public ActionResult TeamReports()
+        {
+
+
+            return View();
+        }
+        public ActionResult IncomeReports()
+        {
+
+
+            return View();
+        }
+
+
+
+        public ActionResult ViewProfile(profile p)
+        {
+
+            profile Objp = new profile();
+            try
+            {
+                Objp.Action = 1;
+                Objp.Username = Convert.ToString(Session["MUserName"]);
+                DataTable dt = objL.UserProfile(Objp, "Proc_UserProfile");
+                if (dt.Rows.Count > 0)
+                {
+                    Objp.Name = dt.Rows[0]["Name"].ToString();
+                    Objp.Mobile = dt.Rows[0]["mobile"].ToString();
+                    Objp.Email = dt.Rows[0]["Email"].ToString();
+                    Objp.Password = dt.Rows[0]["psw"].ToString();
+                    Objp.ImgProfile = dt.Rows[0]["profileimgpath"].ToString();
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception exc)
+            {
+                Response.Write("<script>alert('" + exc.Message + "')</script>");
+                //throw exc;
+            }
+            return View(Objp);
+        }
+
+
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+
+
+        public ActionResult ROIIncomeReport()
+        {
+            return View();
+        }
+
+
+
+
+
+
 
     }
 }

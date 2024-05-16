@@ -1672,6 +1672,13 @@
     <Content Include="Views\shared\_Layoutapp.cshtml" />
     <Content Include="Views\shared\_LayoutUser.cshtml" />
     <Content Include="Views\Webapp\Dashboard.cshtml" />
+    <Content Include="Views\Webapp\Topup.cshtml" />
+    <Content Include="Views\Webapp\AddFund.cshtml" />
+    <Content Include="Views\Webapp\TeamReports.cshtml" />
+    <Content Include="Views\Webapp\IncomeReports.cshtml" />
+    <Content Include="Views\Webapp\ViewProfile.cshtml" />
+    <Content Include="Views\Webapp\ChangePassword.cshtml" />
+    <Content Include="Views\Webapp\ROIIncomeReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

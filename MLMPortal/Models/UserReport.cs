@@ -95,6 +95,8 @@ namespace MLMPortal.Models
         public string CreatedBy { get; set; }
         public string Role { get;  set; }
         public string Nature { get; set; }
+        public string SmemberId { get;  set; }
+        public string TopupAmt { get;  set; }
     }
     public class PinDetails
     {

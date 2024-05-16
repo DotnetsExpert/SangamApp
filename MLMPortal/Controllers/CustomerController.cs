@@ -88,6 +88,47 @@ namespace MLMPortal.Controllers
             }
             return View(returnObj);
         }
+
+
+
+        public JsonResult JsonMemberTopup(UserReport returnObj)
+        {
+            string flag = "0";
+            string msg = "Server Not Responding";
+            DataTable objdt = new DataTable();
+            if (Session["UserName"] == null)
+            {
+                msg = "Please Re-login then try again";
+                return Json(new { flag= flag, msg= msg },JsonRequestBehavior.AllowGet);
+            }
+            try
+            {
+                returnObj.memberId = Session["username"].ToString();
+                returnObj.CreatedBy = Session["username"].ToString();
+                returnObj.Role = Session["Role"].ToString();
+                objdt = objdl.Save_MemberTopup_By_Pin(returnObj);
+                if (objdt != null && objdt.Rows.Count > 0)
+                {
+                    if (objdt.Rows[0]["ID"].ToString() == "0")
+                    {
+                        flag = objdt.Rows[0]["ID"].ToString();
+                        msg = objdt.Rows[0]["MSG"].ToString();
+                    }
+                    else
+                    {
+                        string Message = "Congratulations " + objdt.Rows[0]["Name"].ToString() + ", Your ID " + returnObj.memberId + " has been successfully activated.!!";
+                        flag= "1";
+                        msg = Message;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            return Json(new { flag = flag, msg = msg }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult TopupHistory(PayoutReport objp)
         {
             if (Session["UserName"] == null)

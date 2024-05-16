@@ -1,0 +1,80 @@
+﻿@model MLMPortal.Models.PropertyClass
+@{
+    ViewBag.Title = "MyTeam";
+    Layout = "~/Views/Shared/_Layoutapp.cshtml";
+}
+
+<style>
+    .withdraw-option .list-group-item {
+        text-align: center;
+    }
+</style>
+
+
+
+
+
+<div class="container-fluid pr-0 pl-0 pt-0 bottom-space bg-color">
+
+    <div class="admin-nav">
+        <ul class="list-group">
+
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <a href="../App/Levelform?t=2">
+                    <div class="Total_Team_Members"><i class="fa fa-file-text fa-ico" aria-hidden="true"></i><span>Total Team Members </span></div>
+                    <br>
+                    <span id="lblTTeamMembers">0</span> <span style="font-size:10pt;margin-left:1px">members added in your team</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <a href="../App/Levelform?t=1">
+                    <div class="Total_Team_Members">
+                        <i class="fa fa-file-text fa-ico" aria-hidden="true"></i><span>Active Team Members </span>
+                    </div>
+                    <br>
+                    <span id="lblActiveMembers">0</span> <span style="font-size:10pt;margin-left:1px">members actively mining</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <a href="../App/Levelform?t=0">
+                    <div class="Total_Team_Members">
+                        <i class="fa fa-file-text fa-ico" aria-hidden="true"></i><span>Inactive Team Members </span>
+                    </div>
+                    <br>
+                    <span id="lblInactiveMembers">0</span> <span style="font-size:10pt;margin-left:1px">members are not actively mining</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <a href="../App/MydirectTeam">
+                    <div class="Total_Team_Members">
+                        <i class="fa fa-file-text fa-ico" aria-hidden="true"></i><span>Direct Members </span>
+                    </div>
+                    <br>
+                    <span id="lblDirectMembers">0</span> <span style="font-size:10pt;margin-left:1px">
+                        members joined through direct referral<!--/span-->
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </span>
+                </a>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <a href="../App/LevelWiseTeam">
+                    <div class="Total_Team_Members">
+                        <i class="fa fa-file-text fa-ico" aria-hidden="true"></i><span>My Level Team</span>
+                    </div>
+                    <br>
+                    <span id="lblDirectMembers"></span> <span style="font-size:10pt;margin-left:1px">
+
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+

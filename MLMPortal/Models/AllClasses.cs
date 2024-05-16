@@ -848,11 +848,12 @@ namespace MLMPortal.Models
 
     public class Report
     {
-        public DataTable dt { get; set; }
+      
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public string DepoCode { get; set; }
         public string DepoName { get; set; }
+        public DataTable dt { get; set; }
         public string FromDate { get; set; }
         public List<SelectListItem> ProductLst = new List<SelectListItem>();
 
@@ -1421,4 +1422,33 @@ namespace MLMPortal.Models
         public string Id { get; set; }
         public string msg { get; set; }
     }
+
+    #region App
+    public class profile
+    {
+        public int Action { get; set; }
+        public string Name { get; set; }
+        public string Username { get; set; }
+        public string Mobile { get; set; }
+        public string ImgProfile { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public DataTable dt { get; set; }
+        public string ToDate { get; set; }
+        public string FromDate { get; set; }
+        public string Member_Id { get; set; }
+
+        public string ifsccode { get; set; }
+        public string bankname { get; set; }
+        public string branchname { get; set; }
+        public string accountno { get; set; }
+        public string UPIID { get; set; }
+    }
+
+    #endregion
+
+
+
+
+
 }

@@ -1,0 +1,187 @@
+﻿@model MLMPortal.Models.UserReport
+
+@{
+    ViewBag.Title = "Warehouse";
+    Layout = "~/Views/Shared/_Layoutapp.cshtml";
+}
+
+@using System.Data;
+
+
+<style>
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        background: #212529;
+        border-color: #CC9966;
+    }
+
+    .fl {
+        float: left;
+        margin: 0 11px 13px;
+        max-width: fit-content;
+    }
+
+    .buy-btn a {
+        color: #0a1025 !important;
+        padding: 5px 21px;
+    }
+
+    .business-text button, .business-text input {
+        overflow: visible;
+        background: transparent;
+        border: 2px solid #f6de6e;
+        width: 100%;
+        color: #f9d86e;
+    }
+</style>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css' />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+<my-spinner>
+    <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+        <i class="fa fa-refresh fa-spin nexo-refresh-icon" style="color: rgb(0, 0, 0); font-size: 50px; position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -25px; width: 44px; height: 50px;">
+        </i>
+    </div>
+</my-spinner>
+<div class="container-fluid bg-color p-0">
+
+    <div class="container bottom-space">
+        <div class="invest-box">
+            <div class="wire-heading">
+                <h2>TopUp</h2>
+                <div class="earn-box">
+
+
+                    <div class="earn-1 d-md-flex d-block justify-content-around align-items-center">
+                        <span data-v-329cd445="" class="hall-crad-top-span">
+                            <i class="fa fa-file" aria-hidden="true"></i>
+                            Fund Wallet
+                        </span>
+                        <h4 class="amount">
+                            <label id="LblWalletAmount">@Model.Amount</label>
+
+                        </h4>
+                    </div>
+
+                    <div class="earn-1 d-md-flex d-block justify-content-around align-items-center">
+                        <span data-v-329cd445="" class="hall-crad-top-span">
+                            <i class="fa fa-dollor" aria-hidden="true"></i>
+                            Total TopUp
+                        </span>
+                        <h4 class="amount">
+                            <label id="LblEarningamount">@Model.TopupAmt</label>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+
+            @if (Model != null && Model.Table1!=null && Model.Table1.Rows.Count>0)
+            {
+
+                foreach (DataRow dr in Model.Table1.Rows)
+                {
+                    <div class="inner-invest-box">
+                        <div class="media border">
+
+                            <div class="media-body">
+                                <div class="business-text">
+                                    <h4>
+
+                                        @dr["KitName"]
+                                    </h4>
+                                    <p>Package Amount : <span>@dr["DP"] </span></p>
+                                    <p>Daily  Amount : <span>@dr["ROIAmount"] </span></p>
+                                    <p>No Of Days : <span>@dr["Days"] </span></p>
+                                    <p>Return  Amount : <span>@dr["ActualAmount"] </span></p>
+                                </div>
+                                <center class="text-center">
+                                    <div class="buy-btn fl">
+                                        <a href="javascript:void(0)" id="lnktransfer" onclick="Topup(@dr["KitCode"])">TOPUP</a>
+                                    </div>
+                                </center>
+
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+            <div class="clear"></div>
+
+
+            <div class="row">
+                <div class="col-sm-12 table table-responsive">
+                    <table id="GridView2" class="table table-bordered" BackColor="Black" ForeColor="White" AllowPaging="false" PageSize="400"
+                           BorderColor="#CC9966" BorderStyle="None" BorderWidth="1px" Font-Size="11px" CellPadding="4">
+
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Package</th>
+                                <th>Package Amt</th>
+                                <th>Per Day </th>
+                                <th>Days</th>
+                                <th>Return Amt</th>
+                                <th>TopUp Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.Table2 != null)
+                            {
+                                var i = 0;
+                                foreach (DataRow dr in Model.Table2.Rows)
+                                {
+
+                                    i++;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@dr["KitName"]</td>
+                                        <td>@dr["DP"]</td>
+
+                                        <td>@dr["ROIAmount"]</td>
+                                        <td>@dr["Days"]</td>
+                                        <td>@dr["ActualAmount"]</td>
+                                        <td>@dr["TopupDate"]</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    function Topup(PackageId) {
+        $("#showSpinner").show();
+        $.post('/Customer/JsonMemberTopup', { PackageId: PackageId }, function (data) {
+            debugger;
+            alert(data.msg);
+            if (data.flag == "1") {
+                window.location.href = window.location.href;
+            }
+
+        })
+        $("#showSpinner").hide();
+    }
+
+
+
+
+
+
+</script>
+

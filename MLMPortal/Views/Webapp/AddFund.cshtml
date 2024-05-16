@@ -1,0 +1,379 @@
+﻿@model MLMPortal.Models.PropertyClass
+@{
+    ViewBag.Title = "Fundrequest";
+    Layout = "~/Views/Shared/_Layoutapp.cshtml";
+}
+
+<style>
+    #demo {
+        text-align: center;
+        font-size: 40px;
+        margin-top: 0px;
+    }
+</style>
+
+
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css' />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+<script language="javascript">
+
+
+    function Saverecord() {
+        var res = $("#ddlDepositType").val()
+
+        if ($("#ddlDepositType").val() == "") {
+            alert("Please Select User Type  !!!");
+            $("#ddlDepositType").focus();
+            return;
+        }
+        if (res == 1) {
+
+            if ($("#FranchiseAmt").val() == 0) {
+                alert("Please Select Amount !!!");
+                $("#FranchiseAmt").focus();
+                return;
+            }
+        }
+        else {
+
+            if ($("#txtMoneyAmount").val() == "") {
+                alert("Please Enter Coin !!!");
+                $("#txtMoneyAmount").focus();
+                return;
+            }
+        }
+
+
+        if ($("#txtTransactionId").val() == "") {
+            alert("Please Enter Transaction Hash !!!");
+            $("#txtTransactionId").focus();
+            return;
+        }
+
+        var Images = $("#fileupload1").get(0).files;
+        if (Images[0] == "") {
+            alert("Please Choose Image !!!");
+            return;
+        }
+        var data = new FormData;
+        data.append("Action", "1");
+
+        data.append("UserTypevalu", res);
+        if (res == 1) {
+            data.append("MoneyAmount", $("#FranchiseAmt").val());
+        }
+        else {
+            data.append("MoneyAmount", $("#txtMoneyAmount").val());
+        }
+
+        data.append("MoneyAmount", $("#txtMoneyAmount").val());
+        data.append("TransactionId", $("#txtTransactionId").val());
+        data.append("MemberID", $("#txtChangedUserid").val());
+        data.append("DepositType", $("#ddlDepositType").val());
+        data.append("Remarks", $("#txtRemarks").val());
+        data.append("PaymentDate", $("#txtPaymentDate").val());
+        data.append("ImagePathOrignal", Images[0]);
+
+        //  $("#showSpinner").show();
+
+        $.ajax({
+            url: "../App/Insertupdatefundrequest",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (r) {
+                if (r.strId == "1") {
+                    alert(r.msg);
+                    location.reload();
+                }
+                else {
+                    alert(r.msg);
+                }
+
+                //  $("#showSpinner").hide();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                //  $("#showSpinner").hide();
+            }
+        });
+    }
+
+    function SuccessMsg(txt) {
+        Swal.fire("Fund Request", txt, "success");
+    };
+    function FailedMsg(txt) {
+        Swal.fire("Fund Request", txt, "error");
+        //  $("#lblCoinValue").focus();
+    };
+
+
+    function onlyNumbers(event) {
+        var charCode = (event.which) ? event.which : event.keyCode
+        if (charCode >= 37 && charCode <= 40) {
+            return true;
+        }
+
+        if (charCode == 127) {
+            return true;
+        }
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function onlyNumbersWithDot(evt) {
+        var e = event || evt;// for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        if (charCode == 46)
+            return true
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+
+    function myFunction() {
+        debugger;
+        /* Get the text field */
+        var copyText = document.getElementById("LblAddress");
+        /* Select the text field */
+        copyText.select();
+        //copyText[0].select();
+        // copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+        /* Alert the copied text */
+        alert("Copied the text: " + copyText.value);
+        // Swal.fire("Copied the text:", copyText.value, "success");
+
+    }
+
+    function calculation() {
+        $("#lblCoinValue").val($("#txtMoneyAmount").val());
+    }
+
+</script>
+
+
+@*<my-spinner>
+        <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
+            <div class="spinner-border m-2" role="status" style="position: absolute; top: 30%; left: 50%; margin-top: -25px; margin-left: -25px;"></div>
+        </div>
+    </my-spinner>*@
+
+
+<div class="container-fluid bg-color p-0">
+    <div class="container bottom-space">
+        <div class="invest-box">
+            <div class="wire-heading">
+
+                <div class="earn-box">
+                    <span class="team-data" style="text-align: center;">
+                        <i aria-hidden="true"></i>
+                        Add Fund
+                    </span>
+                    <center>
+                        <p style="color:gold;text-align: center !important; font-size: 16px;margin: 0;padding: 0; display:none;" id="pheader">
+
+                            <span ID="lblheader"></span>
+                            <br />
+                            <!-- Countdown Timer-->
+
+                            <span ID="lblTime" style="display:none;"></span>
+
+
+
+                            <b />
+                            Remaining Coin :
+                            <span ID="lblRemainingCoin">0</span>
+                            <br />
+                            1 Coin Value :
+                            <span ID="lblDValue"></span>
+                            $
+                        </p>
+                        <span ID="hdnddate" style="display:none;"></span>
+
+
+                        <h3 id="lblexpired" style="color:red;display:none;">Sale Expired</h3>
+
+                    </center>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="row" id="dvall">
+
+
+
+                <div class="col-md-4">
+                    <div class="level-money">
+                        <div class="medila border p-3">
+                            <center>
+                                <div class="media-body">
+
+
+                                    <img ID="imgqrcod" Width="100%" src="/App/globe-img/qrcode.jpg" />
+                                    <br />
+                                    <br />
+
+                                </div>
+                            </center>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-8">
+                    <div class="level-money">
+                        <div class="media border p-3">
+
+
+
+                            <div class="media-body">
+                                <header class="panel-heading" style="color:Red;background-color:orangered;font-weight:bold;text-align:center">
+
+                                    <span ID="lblSms">Slip is Required!</span>
+
+                                </header><br />
+                                <div class="business-text invitation-1" style="width: 100% !important;display:none">
+                                    MemberId *
+                                    <input type="text" ID="txtChangedUserid" class="form-control" value="" />
+
+                                    <span ID="lblUserName" Font-Bold="true" ForeColor="#990033" Font-Size="11"></span>
+
+                                </div>
+
+                                <div class="business-text invitation-1" onchange="FranchiseDrop()" style="width: 100% !important;">
+                                    Wallet Type *
+
+                                    <select ID="ddlDepositType" class="form-control">
+                                        <option selected="selected" value="">Select</option>
+                                        <option value="0">Fund Wallet</option>
+                                        <option value="1">Franchise Wallet</option>
+                                    </select>
+                                    <span id="lbl"></span>
+
+
+                                </div>
+
+                                <div class="business-text invitation-1" id="idAmt" style="width: 100% !important; ">
+                                    Amount($) *
+                                    <select style="display:none" ID="FranchiseAmt" class="form-control">
+                                        <option selected="selected" value="0">Select</option>
+                                        <option value="10000">₹ 10000</option>
+                                        <option value="50000">₹ 50000</option>
+                                        <option value="100000">₹ 100000</option>
+
+
+                                    </select>
+                                    <input type="text" ID="txtMoneyAmount" class="form-control" style="display: none" onchange="calculation()" />
+                                    @*<asp:TextBox runat="server" ID="txtMoneyAmount" CssClass="form-control" OnTextChanged="txtMoneyAmount_TextChanged" AutoPostBack="false"></asp:TextBox>*@
+
+                                </div>
+
+
+                                <div class="business-text invitation-1" style="width: 100% !important;display:none">
+                                    <span ID="lblrrr"></span>
+
+                                    <input type="text" ID="lblCoinValue" class="form-control" MaxLength="8" onkeypress="return onlyNumbersWithDot(event)" onchange="calculatecoinvalue()" readonly />
+
+
+                                </div>
+
+                                <div class="business-text invitation-1" style="width: 100% !important;">
+                                    Transaction ID *
+                                    <input type="text" ID="txtTransactionId" class="form-control" />
+
+                                </div>
+                                <div class="business-text invitation-1" style="width: 100% !important;display:none">
+                                    Remark:
+                                    <textarea ID="txtRemarks" class="form-control"></textarea>
+
+                                </div>
+                                <div class="business-text invitation-1" style="width: 100% !important;">
+                                    File: Attach Print Shot
+
+
+                                    <input type="file" ID="fileupload1" />
+
+                                </div>
+                                <div class="business-text invitation-1" style="width: 100% !important;">
+                                    <input type="button" ID="Button1" value="Add" class="btn send-btn btn-primary" onclick="Saverecord()" />
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function FranchiseDrop() {
+        var res = $("#ddlDepositType").val()
+
+        /*  $("#idAmt").show()*/
+        if (res == 1) {
+
+            $("#txtMoneyAmount").hide()
+            $("#FranchiseAmt").show()
+
+
+        }
+        else {
+            $("#FranchiseAmt").hide()
+            $("#txtMoneyAmount").show()
+        }
+
+
+
+    }
+
+    // Set the date we're counting down to
+    function timerr(txt) {
+        var countDownDate = new Date(txt).getTime();
+
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+
+            // Get today's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+            // alert(distance);
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in an element with id="demo"
+            document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+                + minutes + "m " + seconds + "s ";
+
+            // If the count down is over, write some text
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "EXPIRED";
+                //    $("#ContentPlaceHolder1_Button1").hide();
+            }
+        }, 1000);
+
+    }
+</script>

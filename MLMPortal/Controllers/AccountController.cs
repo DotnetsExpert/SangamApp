@@ -69,12 +69,12 @@ namespace MLMPortal.Controllers
                     aCookie.Expires = DateTime.Now.AddDays(365);
                     Response.Cookies.Add(aCookie);
 
-                    // string name = Request.Cookies["mybigcookie"]["name"];
 
                     Session["username"] = dt.Rows[0]["UserName"].ToString();
                     Session["Role"] = dt.Rows[0]["Role"].ToString();
                     Session["usercode"] = dt.Rows[0]["user_code"].ToString();
                     Session["prodilepic"] = dt.Rows[0]["profileimgpath"].ToString();
+                    Session["Name"] = dt.Rows[0]["Name"].ToString();
                     if (dt.Rows[0]["Role"].ToString() == "1" || dt.Rows[0]["Role"].ToString() == "5")
                     {
 
@@ -97,18 +97,7 @@ namespace MLMPortal.Controllers
                     ms.Type = Convert.ToString(dt.Rows[0]["group_name"]);
                     ms.Action = 1;
                     DataTable dt1 = Datalayer.setIPAddress(ms, "Proc_setIPAddress");
-                    //else if (dt.Rows[0]["Role"].ToString() == "3")
-                    //{
-
-                    //    msg[0] = "1";
-                    //    msg[1] = dt.Rows[0]["UserName"].ToString();
-                    //}
-                    //else if (dt.Rows[0]["Role"].ToString() == "4")
-                    //{
-
-                    //    msg[0] = "1";
-                    //    msg[1] = dt.Rows[0]["UserName"].ToString();
-                    //}
+                   
                 }
                 else
                 {

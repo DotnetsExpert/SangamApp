@@ -1773,13 +1773,13 @@ body {
 
     .wire-heading {
         margin-top: 5px;
-        background: linear-gradient(to bottom, #5f0010 0%,#b0001e 100%);
+        background: linear-gradient(to bottom, #3a059f 0%, #000000 100%);
     }
 
     .team {
         margin: 0 3px 21px;
         text-align: center;
-        background-color: #710416;
+        background-color: #042a50;
         border-radius: 5px;
         border: 4px solid #810606;
     }

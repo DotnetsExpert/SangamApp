@@ -1,0 +1,156 @@
+﻿@model MLMPortal.Models.profile
+@using System.Data
+
+@{
+    ViewBag.Title = "ViewProfile";
+    Layout = "~/Views/Shared/_Layoutapp.cshtml";
+}
+
+
+
+<div class="mr50px">
+
+
+    <div class="container-fluid bg-color p-0">
+        <div class="container bottom-space">
+            <div class="invest-box">
+                <div class="wire-heading">
+
+                    <div class="earn-box">
+                        <span class="team-data" style="text-align: center;">
+                            <i aria-hidden="true"></i>
+                            Profile
+                        </span>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="level-money">
+                    <div class="media border p-3">
+                        <div class="media-body">
+
+
+
+                            <div class="col-sm-5">
+                                <span style=" font-weight:300">Name :</span>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <span id="Name" class="fs1">@Model.Name</span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <h6 style=" font-weight:300">Username :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <span id="Username" class="fs1">@Model.Username</span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <h6 style=" font-weight:300">Mobile No :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <span id="Mobile" class="fs1">@Model.Mobile</span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">Gender :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <select name="ctl00$ContentPlaceHolder1$ddlGender" id="ContentPlaceHolder1_ddlGender" class="form-select form-control" data-placeholder="Choose a Gender..." readonly="true">
+                                        <option selected="selected" value="MALE">MALE</option>
+                                        <option value="FEMALE">FEMALE</option>
+                                        <option value="OTHERS">OTHERS</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">DOB :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtdob" type="text" value="15-7-1995" id="ContentPlaceHolder1_txtdob" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <h6 style=" font-weight:300">Email Id :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <span id="Email" class="fs1">@Model.Email</span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <h6 style=" font-weight:300">Password :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <span id="Password" class="fs1">*******</span>
+                                    <a href="ChangePassword"><span class="fa fa-edit" style="font-size:25px"></span></a>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">PAN No. :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtpanno" type="text" value="TEST1232" id="ContentPlaceHolder1_txtpanno" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">Address :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <textarea name="ctl00$ContentPlaceHolder1$txttaddress" rows="2" cols="20" id="ContentPlaceHolder1_txttaddress" class="form-control">HK</textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">Pin Code. :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtpincode" type="text" id="ContentPlaceHolder1_txtpincode" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">IFSC Code :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtifsccode" type="text" value="1234" id="ContentPlaceHolder1_txtifsccode" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">Bank Name :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtbankname" type="text" value="BOI" id="ContentPlaceHolder1_txtbankname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">Bank Branch :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtbranchname" type="text" value="allahabad" id="ContentPlaceHolder1_txtbranchname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-5" style="display:none">
+                                <h6 style="color:white">Account No. :</h6>
+                                <div class="business-text invitation-1" style="width:100% !important;">
+                                    <input name="ctl00$ContentPlaceHolder1$txtaccountno" type="text" value="5756756765" id="ContentPlaceHolder1_txtaccountno" class="form-control">
+                                </div>
+                            </div>
+
+                            <div id="ContentPlaceHolder1_Div2" class="col-md-3" style="display:none">
+                                <div class="control-group">
+                                    <label for="accountLastName" class="control-label">
+                                        Profile :
+                                    </label>
+                                    <div class="controls">
+
+                                        <img src="@Model.ImgProfile" id="ImgProfile" alt="Profile Pic" height="250" width="250" class="img-responsive">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

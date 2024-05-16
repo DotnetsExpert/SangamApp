@@ -4438,6 +4438,34 @@ namespace MLMPortal.Models
             dt = db.ExecProcDataTable("USP_UpdateLevelIncomePer", parm);
             return dt;
         }
+
+        public DataTable UserProfile(profile p, string ProcName)
+        {
+            DataTable dt = new DataTable();
+            SqlParameter[] param = new SqlParameter[]
+          {
+              new SqlParameter("@Action",p.Action),
+              new SqlParameter("@Member_ID",p.Username),
+          };
+            dt = db.ExecProcDataTable(ProcName, param);
+            return dt;
+        }
+
+        public DataTable USP_GetAppData(string Action,UserReport Requ)
+        {
+            DataTable dt = new DataTable();
+            SqlParameter[] param = new SqlParameter[]
+          {
+              new SqlParameter("@Action",Action),
+              new SqlParameter("@memberId",Requ.memberId),
+              new SqlParameter("@SmemberId",Requ.SmemberId),
+              new SqlParameter("@FromDate",Requ.FromDate),
+              new SqlParameter("@ToDate",Requ.ToDate),
+              new SqlParameter("@Role",Requ.Role),
+          };
+            dt = db.ExecProcDataTable("USP_GetAppData", param);
+            return dt;
+        }
     }
 }
 
