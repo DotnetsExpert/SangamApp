@@ -194,7 +194,8 @@ namespace MLMPortal.Controllers
 
         public JsonResult WalletMoneyTransfer(cls_fundmgnt cls)
         {
-            string message = "";
+            string flag = "0";
+            string msg = "Server Not Responding";
             cls.MemberId = Session["username"].ToString();
 
             if (cls != null && cls.File != null && cls.File.ContentLength > 0)
@@ -208,13 +209,10 @@ namespace MLMPortal.Controllers
             DataTable dt = objdl.Sp_InsertMoneyTransfer(cls);
             if (dt != null && dt.Rows.Count > 0)
             {
-                message = dt.Rows[0]["Msg"].ToString();
+                flag = dt.Rows[0]["ID"].ToString();
+                msg = dt.Rows[0]["Msg"].ToString();
             }
-            else
-            {
-                message = "Somthing Went Wrong";
-            }
-            return Json(message, JsonRequestBehavior.AllowGet);
+            return Json(new { flag= flag, msg= msg }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult LevelIncomeCount(string Status)
         {

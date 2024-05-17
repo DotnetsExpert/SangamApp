@@ -179,9 +179,11 @@
             processData: false,
             data: data,
             success: function (e) {
-                alert(e);
+                alert(e.msg);
 
-                window.location.href = window.location.href;
+                if (e.flag == '1') {
+                    window.location.href = window.location.href;
+                }  
             }
         })
     }

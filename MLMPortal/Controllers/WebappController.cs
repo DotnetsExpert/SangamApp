@@ -237,6 +237,36 @@ namespace MLMPortal.Controllers
         }
 
 
+        public ActionResult Withdroll()
+        {
+            Registration obj = new Registration();
+            try
+            {
+                DateTime dNow = DateTime.Now;
+                obj.Date = (dNow.ToString("dd-MMM-yyyy"));
+                if (Session["username"] != null)
+                {
+                    obj.SessionId = Convert.ToString(Session["username"]);
+                }
+                obj.Action = 1;
+                DataTable dt = objL.GetWalletDetails(obj);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    obj.MemberId = dt.Rows[0]["Member_Id"].ToString();
+                    obj.Name = dt.Rows[0]["Name"].ToString();
+                    obj.Address = dt.Rows[0]["address"].ToString();
+                    obj.MobileNo = dt.Rows[0]["mobile"].ToString();
+                    obj.CurrentWalletAmnt = dt.Rows[0]["EWallet1"].ToString();
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View(obj);
+        }
+
 
 
 
