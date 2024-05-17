@@ -419,7 +419,7 @@ i.fa.fa-globe {
         display: block;
         width: 100%;
         text-align: left;
-        margin-left: 10px;
+        /* margin-left: 10px; */
         float: right;
         font-size: 18px;
     }

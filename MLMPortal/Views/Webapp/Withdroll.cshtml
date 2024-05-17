@@ -1,0 +1,174 @@
+﻿@model MLMPortal.Models.Registration
+@{
+    ViewBag.Title = "Withdraw";
+    Layout = "~/Views/Shared/_Layoutapp.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$("#lblmsg").text("Payment will be transfer in 48 hours by NEFT");
+
+
+        //if(Model.Id=="1"){
+        //    $("#lblSmsPanal").hide();
+        //    $("#Button2").hide();
+        //}
+        //else{
+        //    $("#lblSms").text("Withdrawal is off.Please Try Later. Thank You.");
+        //    $("#Button2").hide();
+        //    $("#Button1").hide();
+        //}
+    });
+
+    function onlyNumbers(event) {
+        var charCode = (event.which) ? event.which : event.keyCode
+        if (charCode >= 37 && charCode <= 40) {
+            return true;
+        }
+
+        if (charCode == 127) {
+            return true;
+        }
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+</script>
+
+<div class="container-fluid bg-color p-0">
+    <div class="container bottom-space">
+        <div class="invest-box">
+            <div class="wire-heading">
+
+                <div class="earn-box">
+                    <span class="team-data" style="text-align: center;">
+                        <i aria-hidden="true"></i>
+                        Withdrawal Request
+                    </span>
+                </div>
+            </div>
+            <div class="clear"></div>
+
+            <div class="col-sm-12" id="lblSmsPanal" runat="server">
+                <header class="panel-heading" style="color: Red; background-color: white; font-weight: bold;">
+
+                    <span ID="lblSms"></span>
+                </header>
+            </div>
+
+            <div class="level-money">
+                <div class="media border p-3">
+                    <div class="media-body">
+                        <div class="business-text invitation-1" style="width: 100% !important;">
+                            Member ID :
+
+                            <input id="MemberId" class="form-control" placeholder="Enter Member ID" type="text" value="@Model.MemberId" readonly="readonly" />
+
+
+                        </div>
+                        <div class="business-text invitation-1" style="width: 100% !important;">
+                            Applicant Name :
+
+
+                            <input id="TxtAppName" class="form-control" placeholder="Enter Applicant Name" type="text" readonly="readonly" value="@Model.Name" />
+
+                        </div>
+
+
+                        <div class="business-text invitation-1" style="width: 100% !important;">
+                            Wallet Balance :
+
+
+                            <input id="CurrentWalletAmnt" class="form-control" placeholder="Transfer Wallet" type="text" value="@Model.CurrentWalletAmnt" readonly="readonly" />
+
+                        </div>
+                        <div class="business-text invitation-1" style="width: 100% !important;">
+                            Req. Wallet Amount :
+
+                            <input id="RequestWalletAmt" class="form-control" type="number" placeholder="Enter Req. Wallet Amount" MaxLength="8" />
+                        </div>
+
+                        <!-- OTP -->
+                        @*<div class="business-text invitation-1" style="width: 100% !important;">
+                                <div class="form-group">
+
+
+                                    <input id="txtotp" class="form-control" type="text" placeholder="Enter OTP" maxlength="10" style="display:none;" />
+
+                                    <div style="text-align: right;">
+                                        <input type="button" id="btnresend" value="Resend OTP" onclick="ReSendOtp()" class="btn send-btn btn-primary" style="display:none;" />
+
+
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*<div class="business-text invitation-1" style="width: 100% !important;">
+                                <input type="button" id="Button1" value="Send OTP" onclick="SendOtp()" class="btn send-btn btn-primary" />
+                            </div>*@
+                        <!-- OTP -->
+
+                        <div class="business-text invitation-1" style="width: 100% !important;">
+                            <span ID="lblmsg" Style="font-size: 20px; font-weight: bold; color: red; display: none;"></span>
+                            <input type="button" id="Button2" value="Submit Request" onclick="SaveDetail()" class="btn send-btn btn-primary" />
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function SaveDetail() {
+        var currWalet = $("#txtCurrentWallet").val() || 0;
+        var reqWalet = $("#txtReqWalletAmount").val() || 0;
+        if (parseFloat(reqWalet) > parseFloat(currWalet)) {
+            alert("Request Wallet Amount is less then Current Wallet Amount");
+            return false;
+        }
+        else if (reqWalet < 100) {
+
+            alert("Request Wallet Should be grater than equal 100");
+            return false;
+        }
+        else {
+            var data = new FormData();
+            data.append("MemberId", $('#txtMemberId').val());
+            data.append("Name", $('#txtApplicantName').val());
+            data.append("Address", $('#txtAddress').val());
+            data.append("CurrentWalletAmnt", $('#txtCurrentWallet').val());
+            data.append("Date", $('#txtCurrentDate').val());
+            data.append("MobileNo", $('#txtMobileNo').val());
+            data.append("RequestWalletAmt", $('#txtReqWalletAmount').val());
+            data.append("TranPass", $('#TranPass').val());
+
+            $.ajax({
+                url: "/PaymentReport/SaveInvoiceDetail",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (r) {
+                    if (r != "") {
+                        alert(r.msg);
+
+                        window.location.href = window.location.href;
+                    }
+                    if (r.Status == false) {
+                        alert(r.Msg);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    location.reload();
+                }
+            });
+        }
+    }
+
+</script>

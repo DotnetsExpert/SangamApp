@@ -19,87 +19,134 @@
 <script language="javascript">
 
 
-    function Saverecord() {
-        var res = $("#ddlDepositType").val()
+    function SaveFundTransfer() {
 
-        if ($("#ddlDepositType").val() == "") {
-            alert("Please Select User Type  !!!");
-            $("#ddlDepositType").focus();
-            return;
+        if ($('#txtamt').val() == '') {
+            alert('please enter amount');
+            $('#txtamt').focus();
+            return false;
         }
-        if (res == 1) {
-
-            if ($("#FranchiseAmt").val() == 0) {
-                alert("Please Select Amount !!!");
-                $("#FranchiseAmt").focus();
-                return;
-            }
+        if ($('#txtamt').val() <100) {
+            alert('Amount should be greater then 100');
+            $('#txtamt').focus();
+            return false;
         }
-        else {
 
-            if ($("#txtMoneyAmount").val() == "") {
-                alert("Please Enter Coin !!!");
-                $("#txtMoneyAmount").focus();
-                return;
-            }
+        if ($('#txtpic').val() == '') {
+            alert('please select slip image');
+            $('#txtpic').focus();
+            return false;
         }
 
 
-        if ($("#txtTransactionId").val() == "") {
-            alert("Please Enter Transaction Hash !!!");
-            $("#txtTransactionId").focus();
-            return;
-        }
-
-        var Images = $("#fileupload1").get(0).files;
-        if (Images[0] == "") {
-            alert("Please Choose Image !!!");
-            return;
-        }
-        var data = new FormData;
-        data.append("Action", "1");
-
-        data.append("UserTypevalu", res);
-        if (res == 1) {
-            data.append("MoneyAmount", $("#FranchiseAmt").val());
-        }
-        else {
-            data.append("MoneyAmount", $("#txtMoneyAmount").val());
-        }
-
-        data.append("MoneyAmount", $("#txtMoneyAmount").val());
-        data.append("TransactionId", $("#txtTransactionId").val());
-        data.append("MemberID", $("#txtChangedUserid").val());
-        data.append("DepositType", $("#ddlDepositType").val());
-        data.append("Remarks", $("#txtRemarks").val());
-        data.append("PaymentDate", $("#txtPaymentDate").val());
-        data.append("ImagePathOrignal", Images[0]);
-
-        //  $("#showSpinner").show();
-
+        var file = $("#txtpic").get(0).files;
+        var data = new FormData();
+     //   data.append('MemberId', $('#txtMemberId').val())
+        data.append('Amount', $('#txtamt').val())
+        data.append('DepositType', $('#ddldpst').val())
+        data.append('Remark', $('#txtremark').val())
+        data.append('tranID', $('#txttransId').val())
+        data.append('File', file[0])
         $.ajax({
-            url: "../App/Insertupdatefundrequest",
-            type: "POST",
+            url: '/Customer/WalletMoneyTransfer',
+            method: 'post',
+            //contentType:'json',
+            //processData: false,
             contentType: false,
             processData: false,
             data: data,
-            success: function (r) {
-                if (r.strId == "1") {
-                    alert(r.msg);
-                    location.reload();
-                }
-                else {
-                    alert(r.msg);
-                }
+            success: function (e) {
+                alert(e.msg);
 
-                //  $("#showSpinner").hide();
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                //  $("#showSpinner").hide();
+                if (e.flag=='1') {
+                    window.location.href = window.location.href;
+                }               
             }
-        });
+        })
     }
+
+
+    //function Saverecord() {
+    //    var res = $("#ddlDepositType").val()
+
+    //    if ($("#ddlDepositType").val() == "") {
+    //        alert("Please Select User Type  !!!");
+    //        $("#ddlDepositType").focus();
+    //        return;
+    //    }
+    //    if (res == 1) {
+
+    //        if ($("#FranchiseAmt").val() == 0) {
+    //            alert("Please Select Amount !!!");
+    //            $("#FranchiseAmt").focus();
+    //            return;
+    //        }
+    //    }
+    //    else {
+
+    //        if ($("#txtMoneyAmount").val() == "") {
+    //            alert("Please Enter Coin !!!");
+    //            $("#txtMoneyAmount").focus();
+    //            return;
+    //        }
+    //    }
+
+
+    //    if ($("#txtTransactionId").val() == "") {
+    //        alert("Please Enter Transaction Hash !!!");
+    //        $("#txtTransactionId").focus();
+    //        return;
+    //    }
+
+    //    var Images = $("#fileupload1").get(0).files;
+    //    if (Images[0] == "") {
+    //        alert("Please Choose Image !!!");
+    //        return;
+    //    }
+    //    var data = new FormData;
+    //    data.append("Action", "1");
+
+    //    data.append("UserTypevalu", res);
+    //    if (res == 1) {
+    //        data.append("MoneyAmount", $("#FranchiseAmt").val());
+    //    }
+    //    else {
+    //        data.append("MoneyAmount", $("#txtMoneyAmount").val());
+    //    }
+
+    //    data.append("MoneyAmount", $("#txtMoneyAmount").val());
+    //    data.append("TransactionId", $("#txtTransactionId").val());
+    //    data.append("MemberID", $("#txtChangedUserid").val());
+    //    data.append("DepositType", $("#ddlDepositType").val());
+    //    data.append("Remarks", $("#txtRemarks").val());
+    //    data.append("PaymentDate", $("#txtPaymentDate").val());
+    //    data.append("ImagePathOrignal", Images[0]);
+
+    //    //  $("#showSpinner").show();
+
+    //    $.ajax({
+    //        url: "../App/Insertupdatefundrequest",
+    //        type: "POST",
+    //        contentType: false,
+    //        processData: false,
+    //        data: data,
+    //        success: function (r) {
+    //            if (r.strId == "1") {
+    //                alert(r.msg);
+    //                location.reload();
+    //            }
+    //            else {
+    //                alert(r.msg);
+    //            }
+
+    //            //  $("#showSpinner").hide();
+    //        },
+    //        error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+    //            //  $("#showSpinner").hide();
+    //        }
+    //    });
+    //}
 
     function SuccessMsg(txt) {
         Swal.fire("Fund Request", txt, "success");
@@ -157,7 +204,6 @@
 
 </script>
 
-
 @*<my-spinner>
         <div ng-show="showSpinner" class="nexo-overlay ng-hide" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 5000; position: absolute; top: 0px; left: 0px;display:none" id="showSpinner">
             <div class="spinner-border m-2" role="status" style="position: absolute; top: 30%; left: 50%; margin-top: -25px; margin-left: -25px;"></div>
@@ -175,31 +221,6 @@
                         <i aria-hidden="true"></i>
                         Add Fund
                     </span>
-                    <center>
-                        <p style="color:gold;text-align: center !important; font-size: 16px;margin: 0;padding: 0; display:none;" id="pheader">
-
-                            <span ID="lblheader"></span>
-                            <br />
-                            <!-- Countdown Timer-->
-
-                            <span ID="lblTime" style="display:none;"></span>
-
-
-
-                            <b />
-                            Remaining Coin :
-                            <span ID="lblRemainingCoin">0</span>
-                            <br />
-                            1 Coin Value :
-                            <span ID="lblDValue"></span>
-                            $
-                        </p>
-                        <span ID="hdnddate" style="display:none;"></span>
-
-
-                        <h3 id="lblexpired" style="color:red;display:none;">Sale Expired</h3>
-
-                    </center>
                 </div>
             </div>
             <div class="clear"></div>
@@ -212,9 +233,7 @@
                         <div class="medila border p-3">
                             <center>
                                 <div class="media-body">
-
-
-                                    <img ID="imgqrcod" Width="100%" src="/App/globe-img/qrcode.jpg" />
+                                    <img ID="imgqrcod" Width="100%" src="/Content/WebApp/globe-img/qrcode.jpg" />
                                     <br />
                                     <br />
 
@@ -238,7 +257,7 @@
                                     <span ID="lblSms">Slip is Required!</span>
 
                                 </header><br />
-                                <div class="business-text invitation-1" style="width: 100% !important;display:none">
+                                @*<div class="business-text invitation-1" style="width: 100% !important;display:none">
                                     MemberId *
                                     <input type="text" ID="txtChangedUserid" class="form-control" value="" />
 
@@ -257,51 +276,41 @@
                                     <span id="lbl"></span>
 
 
-                                </div>
+                                </div>*@
 
                                 <div class="business-text invitation-1" id="idAmt" style="width: 100% !important; ">
                                     Amount($) *
-                                    <select style="display:none" ID="FranchiseAmt" class="form-control">
+                                    @*<select style="display:none" ID="FranchiseAmt" class="form-control">
                                         <option selected="selected" value="0">Select</option>
                                         <option value="10000">₹ 10000</option>
                                         <option value="50000">₹ 50000</option>
                                         <option value="100000">₹ 100000</option>
 
 
-                                    </select>
-                                    <input type="text" ID="txtMoneyAmount" class="form-control" style="display: none" onchange="calculation()" />
+                                    </select>*@
+                                    <input type="number" ID="txtamt" class="form-control"/>
                                     @*<asp:TextBox runat="server" ID="txtMoneyAmount" CssClass="form-control" OnTextChanged="txtMoneyAmount_TextChanged" AutoPostBack="false"></asp:TextBox>*@
 
                                 </div>
-
-
-                                <div class="business-text invitation-1" style="width: 100% !important;display:none">
-                                    <span ID="lblrrr"></span>
-
-                                    <input type="text" ID="lblCoinValue" class="form-control" MaxLength="8" onkeypress="return onlyNumbersWithDot(event)" onchange="calculatecoinvalue()" readonly />
-
-
-                                </div>
-
                                 <div class="business-text invitation-1" style="width: 100% !important;">
                                     Transaction ID *
-                                    <input type="text" ID="txtTransactionId" class="form-control" />
+                                    <input type="text" ID="txttransId" class="form-control" />
 
                                 </div>
                                 <div class="business-text invitation-1" style="width: 100% !important;display:none">
                                     Remark:
-                                    <textarea ID="txtRemarks" class="form-control"></textarea>
+                                    <textarea ID="txtremark" class="form-control"></textarea>
 
                                 </div>
                                 <div class="business-text invitation-1" style="width: 100% !important;">
                                     File: Attach Print Shot
 
 
-                                    <input type="file" ID="fileupload1" />
+                                    <input type="file" ID="txtpic" />
 
                                 </div>
                                 <div class="business-text invitation-1" style="width: 100% !important;">
-                                    <input type="button" ID="Button1" value="Add" class="btn send-btn btn-primary" onclick="Saverecord()" />
+                                    <input type="button" ID="Button1" value="Add" class="btn send-btn btn-primary" onclick="SaveFundTransfer()" />
 
 
                                 </div>
