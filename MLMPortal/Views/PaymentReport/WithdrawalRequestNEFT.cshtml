@@ -18,6 +18,7 @@
         text-align: left;
         background-color: #fff;
     }
+
     .panel {
         border: none;
         box-shadow: none;
@@ -65,6 +66,7 @@
         /* background-color: #93119324; */
         background-image: url(https://www.transparenttextures.com/patterns/hexellence.png);
     }
+
     label {
         color: #6b6b6b;
         font-size: .75rem;
@@ -77,109 +79,108 @@
 </style>
 
 
-    <div class="row">
-        <div class="col-sm-6">
-            <section class="panel">
-                <header class="panel-heading">
-                    Payout Request
-                    <span class="tools pull-right">
-                        <a href="javascript:;" class="fa fa-times"></a>
-                    </span>
-                </header>
-                <div class="panel-body">
-                   
-                    <section>
-                        <div class="form-horizontal">
-                            <h5>@TempData["msg"]</h5>
+<div class="row">
+    <div class="col-sm-6">
+        <section class="panel">
+            <header class="panel-heading">
+                Payout Request
+                <span class="tools pull-right">
+                    <a href="javascript:;" class="fa fa-times"></a>
+                </span>
+            </header>
+            <div class="panel-body">
 
-                            <div class="form-group">
-                                <label class="lab control-label">
-                                    Member Id
-                                </label>
-                                <div class="col-lg-12">
+                <section>
+                    <div class="form-horizontal">
+                        <h5>@TempData["msg"]</h5>
 
-                                    @Html.TextBoxFor(model => model.MemberId, new { @class = "form-control", @disabled = "disabled", @id = "txtMemberId" })
+                        <div class="form-group">
+                            <label class="lab control-label">
+                                Member Id
+                            </label>
+                            <div class="col-lg-12">
+
+                                @Html.TextBoxFor(model => model.MemberId, new { @class = "form-control", @disabled = "disabled", @id = "txtMemberId" })
 
 
-                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="lab control-label">
-                                    Your Name
-
-                                </label>
-                                <div class="col-lg-12">
-                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @disabled = "disabled", @id = "txtApplicantName" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="lab control-label">
-                                    Payout Wallet
-                                </label>
-                                <div class="col-lg-12">
-                                    @Html.TextBoxFor(model => model.CurrentWalletAmnt, new { @class = "form-control", @disabled = "disabled", @id = "txtCurrentWallet" , @autocomplete = "off" })
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="lab control-label">
-                                    Req.  Amount
-                                </label>
-                                <div class="col-lg-12">
-                                    @Html.TextBoxFor(model => model.RequestWalletAmt, new { @class = "form-control", @id = "txtReqWalletAmount", @autocomplete = "off" })
-                                </div>
-                            </div>
-                            <div class="form-group" style="margin-top:0px">
-                                <label class="lab control-label a1">Transaction Password</label> <div class="col-lg-12">
-                                    @Html.TextBoxFor(m => m.TranPass, new { @class = "form-control", @type = "password", @autocomplete = "off" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.HiddenFor(model => model.user_code)
-                                <input type="button" value="Request Submit" onclick="SaveDetail()" style=" height: 45px; background: #2b5970; color: white !important;" />
-                            </div>
-
                         </div>
-</section>
-                </div>
-            </section>
-        </div>
 
+                        <div class="form-group">
+                            <label class="lab control-label">
+                                Your Name
 
+                            </label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @disabled = "disabled", @id = "txtApplicantName" })
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label class="lab control-label">
+                                Payout Wallet
+                            </label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(model => model.CurrentWalletAmnt, new { @class = "form-control", @disabled = "disabled", @id = "txtCurrentWallet", @autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="lab control-label">
+                                Req.  Amount
+                            </label>
+                            <div class="col-lg-12">
+                                @Html.TextBoxFor(model => model.RequestWalletAmt, new { @class = "form-control", @id = "txtReqWalletAmount", @autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:0px">
+                            <label class="lab control-label a1">Transaction Password</label> <div class="col-lg-12">
+                                @Html.TextBoxFor(m => m.TranPass, new { @class = "form-control", @type = "password", @autocomplete = "off" })
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            @Html.HiddenFor(model => model.user_code)
+                            <input type="button" value="Request Submit" onclick="SaveDetail()" style=" height: 45px; background: #2b5970; color: white !important;" />
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+        </section>
     </div>
+
+
+
+
+</div>
 
 
 
 
 
 <script>
-    function SaveDetail() {  
+    function SaveDetail() {
         var currWalet = $("#txtCurrentWallet").val() || 0;
-        var reqWalet = $("#txtReqWalletAmount").val() || 0; 
-        if (parseFloat(reqWalet) > parseFloat(currWalet))
-        {
+        var reqWalet = $("#txtReqWalletAmount").val() || 0;
+        if (parseFloat(reqWalet) > parseFloat(currWalet)) {
             alert("Request Wallet Amount is less then Current Wallet Amount");
             return false;
-        } 
+        }
         else if (reqWalet < 100) {
 
             alert("Request Wallet Should be grater than equal 100");
-            return false; 
-        } 
-        else { 
-            var data = new FormData(); 
+            return false;
+        }
+        else {
+            var data = new FormData();
             data.append("MemberId", $('#txtMemberId').val());
             data.append("Name", $('#txtApplicantName').val());
             data.append("Address", $('#txtAddress').val());
             data.append("CurrentWalletAmnt", $('#txtCurrentWallet').val());
             data.append("Date", $('#txtCurrentDate').val());
             data.append("MobileNo", $('#txtMobileNo').val());
-            data.append("RequestWalletAmt", $('#txtReqWalletAmount').val()); 
-            data.append("TranPass", $('#TranPass').val()); 
+            data.append("RequestWalletAmt", $('#txtReqWalletAmount').val());
+            data.append("TranPass", $('#TranPass').val());
 
             $.ajax({
                 url: "/PaymentReport/SaveInvoiceDetail",
@@ -188,11 +189,11 @@
                 processData: false,
                 data: data,
                 success: function (r) {
-                    if (r!="") {
+                    if (r != "") {
                         alert(r.msg);
 
                         window.location.href = window.location.href;
-                    } 
+                    }
                     if (r.Status == false) {
                         alert(r.Msg);
                     }

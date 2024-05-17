@@ -3520,7 +3520,6 @@ namespace MLMPortal.Models
             DataTable dt = new DataTable();
             SqlParameter[] parm = new SqlParameter[] {
 
-                //new SqlParameter("@Action",cl.Action),
                 new SqlParameter("@Member_Id",cl.MemberId),
                 new SqlParameter("@Member_Name",cl.Name),
                 new SqlParameter("@Address",cl.Address),

@@ -350,7 +350,8 @@ namespace MLMPortal.Controllers
 
         public JsonResult SaveInvoiceDetail(Registration obj)
         {
-
+            obj.EntryBy = Convert.ToString(Session["username"]);
+            obj.MemberId = Convert.ToString(Session["username"]);
             DataTable dt = objdl.InsertWalletRequest(obj);
             if (dt != null && dt.Rows.Count > 0)
             {
